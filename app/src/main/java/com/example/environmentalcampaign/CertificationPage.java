@@ -18,19 +18,22 @@ public class CertificationPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_certification_page);
 
-        ListView listView;
-        MyAdapter adapter;
+        ListView listView, listView2;
+        MyAdapter adapter, adapter2;
 
         // Adapter 생성
         adapter = new MyAdapter();
+        adapter2 = new MyAdapter();
 
         // 리스트뷰 참조 및 Adapter 달기
         listView = (ListView)findViewById(R.id.lv_certi_cp);
         listView.setAdapter(adapter);
+        listView2 = (ListView)findViewById(R.id.lv_complete_cp);
+        listView2.setAdapter(adapter2);
 
         // 첫 번째 아이템 추가
         adapter.addItem(100, 28, "버리스타", "주 2일", "00:00:00", "24:00:00", "03.01(월)", ContextCompat.getDrawable(this, R.drawable.burista));
-        adapter.addItem(95, 33, "용기내", "주 5일", "09:00:00", "18:00:00", "01.01(금)", ContextCompat.getDrawable(this, R.drawable.cp1));
+        adapter2.addItem(95, 33, "용기내", "주 5일", "09:00:00", "18:00:00", "01.01(금)", ContextCompat.getDrawable(this, R.drawable.cp1));
 
     }
 }
