@@ -1,6 +1,7 @@
 package com.example.environmentalcampaign;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.os.Bundle;
 import android.view.View;
@@ -12,35 +13,24 @@ import java.util.ArrayList;
 
 public class CertificationPage extends AppCompatActivity {
 
-    ArrayList<CpData> cpDataList;
-
-//    ListView listView = (ListView)findViewById(R.id.lv_certi_cp);
-//    ListView listView2 = (ListView)findViewById(R.id.lv_complete_cp);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_certification_page);
 
-//        this.InitializeCpData();
-//
-//        final MyAdapter myAdapter = new MyAdapter(this, cpDataList);
-//
-//        listView.setAdapter(myAdapter);
-//
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView parent, View v, int position, long id) {
-//                Toast.makeText(getApplicationContext(),
-//                        myAdapter.getItem(position).getName(),
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        });
-    }
+        ListView listView;
+        MyAdapter adapter;
 
-//    public void InitializeCpData() {
-//        cpDataList = new ArrayList<CpData>();
-//
-//        cpDataList.add(new CpData(100, 28, "버리스타", "주 2일", "00:00:00", "24:00:00", "03.01(월)", R.drawable.burista));
-//    }
+        // Adapter 생성
+        adapter = new MyAdapter();
+
+        // 리스트뷰 참조 및 Adapter 달기
+        listView = (ListView)findViewById(R.id.lv_certi_cp);
+        listView.setAdapter(adapter);
+
+        // 첫 번째 아이템 추가
+        adapter.addItem(100, 28, "버리스타", "주 2일", "00:00:00", "24:00:00", "03.01(월)", ContextCompat.getDrawable(this, R.drawable.burista));
+        adapter.addItem(95, 33, "용기내", "주 5일", "09:00:00", "18:00:00", "01.01(금)", ContextCompat.getDrawable(this, R.drawable.cp1));
+
+    }
 }

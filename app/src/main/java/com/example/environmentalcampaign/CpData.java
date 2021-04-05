@@ -1,21 +1,14 @@
 package com.example.environmentalcampaign;
 
+import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 public class CpData {
     private String name, frequency, stime, etime, sdate;
-    private int rate, dDay, logo;
+    private int rate, dDay;
+    private Drawable logo;
 
-    public CpData(int rate, int dDay, String name, String frequency, String stime, String etime, String sdate, int logo) {
-        this.rate = rate;
-        this.dDay = dDay;
-        this.name = name;
-        this.frequency = frequency;
-        this.stime = stime;
-        this.etime = etime;
-        this.sdate = sdate;
-        this.logo = logo;
-    }
+    public CpData(){}
 
     public String getName() {
         return name;
@@ -73,11 +66,11 @@ public class CpData {
         this.dDay = dDay;
     }
 
-    public int getLogo() {
+    public Drawable getLogo() {
         return logo;
     }
 
-    public void setLogo(int logo) {
+    public void setLogo(Drawable logo) {
         this.logo = logo;
     }
 }
