@@ -4,8 +4,8 @@ import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 public class CpData {
-    private String name, frequency, stime, etime, sdate;
-    private int rate, dDay;
+    private String name, frequency, stime, etime;
+    private int rate, reCp, edate;
     private Drawable logo;
 
     public CpData(){}
@@ -42,12 +42,12 @@ public class CpData {
         this.etime = etime;
     }
 
-    public String getSdate() {
-        return sdate;
+    public int getEdate() {
+        return edate;
     }
 
-    public void setSdate(String sdate) {
-        this.sdate = sdate;
+    public void setEdate(int edate) {
+        this.edate = edate;
     }
 
     public int getRate() {
@@ -58,14 +58,6 @@ public class CpData {
         this.rate = rate;
     }
 
-    public int getdDay() {
-        return dDay;
-    }
-
-    public void setdDay(int dDay) {
-        this.dDay = dDay;
-    }
-
     public Drawable getLogo() {
         return logo;
     }
@@ -73,4 +65,8 @@ public class CpData {
     public void setLogo(Drawable logo) {
         this.logo = logo;
     }
+
+    public int getReCp() { return reCp; }
+
+    public void setReCp(int reCp) { this.reCp = reCp; }
 }

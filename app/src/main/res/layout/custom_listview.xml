@@ -45,6 +45,36 @@
                 android:textColor="#555555"
                 android:textSize="10dp" />
 
+            <TextView
+                android:id="@+id/tv_reCp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:background="#FFF9C5"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="2번째 참여중"
+                android:textColor="#E3CF1F"
+                android:textSize="10dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="2dp"
+                android:adjustViewBounds="true"
+                android:paddingTop="5dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
+                android:background="#FFF9C5"
+                app:srcCompat="@drawable/trophy" />
+
         </LinearLayout>
 
         <TextView
@@ -63,7 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="주 2일 00:00:00~24:00:00
-            \n03.01(월) 시작"
+            \n03.01(월) 종료"
             android:textSize="10dp"/>
 
     </LinearLayout>

@@ -32,8 +32,8 @@ public class CertificationPage extends AppCompatActivity {
         listView2.setAdapter(adapter2);
 
         // 첫 번째 아이템 추가
-        adapter.addItem(100, 28, "버리스타", "주 2일", "00:00:00", "24:00:00", "03.01(월)", ContextCompat.getDrawable(this, R.drawable.burista));
-        adapter2.addItem(95, 33, "용기내", "주 5일", "09:00:00", "18:00:00", "01.01(금)", ContextCompat.getDrawable(this, R.drawable.cp1));
+        adapter.addItem(100, 2, "버리스타", "주 2일", "00:00:00", "24:00:00", 20210501, ContextCompat.getDrawable(this, R.drawable.burista));
+        adapter2.addItem(95, 1, "용기내", "주 5일", "09:00:00", "18:00:00", 20210430, ContextCompat.getDrawable(this, R.drawable.cp1));
 
     }
 }
