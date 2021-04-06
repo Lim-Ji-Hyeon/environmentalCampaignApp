@@ -19,6 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".BookMark"></activity>
+        <activity android:name=".HomeActivity"></activity>
+        <activity android:name=".SearchPage"></activity>
+        <activity android:name=".SetUpCampaignPage"></activity>
     </application>
 
 </manifest>
