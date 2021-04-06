@@ -56,8 +56,8 @@ public class MyAdapter extends BaseAdapter {
         CpData listViewItem = sample.get(position);
 
         // 아이템 내 각 위젯에 데이터 반영
-        achievementRate.setText("예상 달성률 " + listViewItem.getRate() + "%");
-        dDay.setText("D+" + listViewItem.getdDay());
+        achievementRate.setText("현재 달성률 " + listViewItem.getRate() + "%");
+        dDay.setText("D-" + listViewItem.getdDay());
         cpName.setText(listViewItem.getName());
         cpContext.setText(listViewItem.getFrequency() + " " + listViewItem.getStime() + "~" + listViewItem.getEtime() +
         "\n" + listViewItem.getSdate() + " 시작");
