@@ -21,6 +21,7 @@ public class FragmentWay extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_way, container, false);
+        ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_way, container, false);
+        return rootView;
     }
 }

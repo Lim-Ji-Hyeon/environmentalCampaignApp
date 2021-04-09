@@ -5,11 +5,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="20dp"
     tools:context=".FragmentInfo">
 
-    <ImageView
-        android:id="@+id/imageView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/burista" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_cpInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:text="캠페인 상세페이지입니다.
+\n캠페인에 대한 설명을 입력하면 이 부분에 나타납니다.
+\n\n\n예시) 버리스타
+\n\n버리스타 캠페인은 올바른 분리배출을 위한 캠페인입니다.
+\n\n쓰레기를 분리수거하여 버리더라도
+\n올바르게 배출하지 않으면 재사용률이 현저히 떨어지게 됩니다.
+\n\n따라서 이 캠페인을 통해 올바른 분리배출에 대해 알고 실천할 수 있기를 바랍니다." />
+
+            <ImageView
+                android:id="@+id/iv_info1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/info1" />
+
+            <ImageView
+                android:id="@+id/iv_info2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/info2" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
 </LinearLayout>

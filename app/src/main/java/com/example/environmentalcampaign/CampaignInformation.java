@@ -26,7 +26,7 @@ public class CampaignInformation extends FragmentActivity {
 
         tabLayout = findViewById(R.id.layout_tab);
 //        tabLayout.addTab(tabLayout.newTab().setText("설명"));
-//        tabLayout.addTab(tabLayout.newTab().setText("인증 방법"));
+//        tabLayout.addTab(tabLayout.newTab().setText("인증방법"));
 //        tabLayout.addTab(tabLayout.newTab().setText("후기"));
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

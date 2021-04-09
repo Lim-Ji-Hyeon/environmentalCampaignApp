@@ -28,6 +28,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         android:layout_weight="1">
 
         <LinearLayout
@@ -184,7 +185,7 @@
                     android:id="@+id/tab_item2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="인증 방법" />
+                    android:text="인증방법" />
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/tab_item3"
@@ -216,7 +217,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:padding="15dp"
-            app:srcCompat="@drawable/bookmark" />
+            android:src="@drawable/bookmark" />
 
         <TextView
             android:id="@+id/tv_participation"
