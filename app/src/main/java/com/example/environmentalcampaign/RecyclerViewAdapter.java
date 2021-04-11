@@ -1,6 +1,7 @@
 package com.example.environmentalcampaign;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             super(itemView);
             title = itemView.findViewById(R.id.card_text);
             image = itemView.findViewById(R.id.card_image);
+
+            // recyclerView에 있는 image를 클릭했을 때 CampaignInformation Activity로 넘어간다.
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(view.getContext(), CampaignInformation.class);
+                    view.getContext().startActivity(intent);
+                }
+            });
         }
     }
 }

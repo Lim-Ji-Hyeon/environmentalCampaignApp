@@ -4,6 +4,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -13,6 +15,9 @@ public class CampaignInformation extends FragmentActivity {
     FragmentInfo fragmentInfo;
     FragmentWay fragmentWay;
     FragmentReview fragmentReview;
+    ImageButton bt_back;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +56,15 @@ public class CampaignInformation extends FragmentActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
+            }
+        });
+
+        // 뒤로가기 버튼 이벤트
+        bt_back = (ImageButton)findViewById(R.id.bt_back);
+        bt_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }

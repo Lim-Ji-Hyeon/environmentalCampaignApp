@@ -10,18 +10,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EnvironmentalCampaign">
         <activity android:name=".CampaignInformation">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".PointMarket" />
         <activity android:name=".MyPage" />
         <activity android:name=".FeedPage" />
         <activity android:name=".CertificationPage"></activity>
         <activity android:name=".BookMark" />
-        <activity android:name=".HomeActivity" />
+        <activity android:name=".HomeActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".SearchPage" />
         <activity android:name=".SetUpCampaignPage" />
     </application>

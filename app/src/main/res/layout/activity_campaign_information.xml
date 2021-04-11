@@ -17,12 +17,13 @@
         android:text="광                    고"
         android:textSize="24sp" />
 
-    <ImageView
-        android:id="@+id/iv_back"
+    <ImageButton
+        android:id="@+id/bt_back"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="10dp"
         android:padding="5dp"
+        android:background="@android:color/transparent"
         android:src="@drawable/sharp_navigate_before_black_18dp" />
 
     <ScrollView

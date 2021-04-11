@@ -23,13 +23,31 @@
         android:background="@drawable/edge"
         android:orientation="horizontal">
 
+        <ImageButton
+            android:id="@+id/bt_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/sharp_navigate_before_black_18dp" />
+
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_weight="1"
             android:clickable="true"
             android:gravity="center"
-            android:text="포인트 상점" />
+            android:text="포인트 상점"
+            android:textSize="20dp"
+            android:textStyle="bold"/>
+
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:visibility="invisible"
+            app:srcCompat="@drawable/sharp_navigate_before_black_18dp" />
+
 
     </LinearLayout>
 
