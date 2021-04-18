@@ -40,4 +40,8 @@ dependencies {
 
     // TabLayouy 사용하려고 추가
     implementation 'com.google.android.material:material:1.1.0'
+
+    // 피드 화면 구현하기 위해서 추가
+    implementation 'com.google.android.material:material:1.2.0-alpha03'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 }
