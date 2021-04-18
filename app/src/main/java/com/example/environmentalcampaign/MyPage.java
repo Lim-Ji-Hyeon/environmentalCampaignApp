@@ -11,13 +11,43 @@ import android.widget.TextView;
 
 public class MyPage extends AppCompatActivity {
 
-    LinearLayout lo_point;
+    LinearLayout lo_point, lo_cp_ing, lo_cp_complete, lo_cp_make;
     TextView tv_home, tv_make, tv_certi, tv_feed, tv_mypage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_page);
+
+        // 캠페인 현황 페이지 연결
+        lo_cp_ing = (LinearLayout)findViewById(R.id.lo_cp_ing);
+        lo_cp_ing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CampaignSituation.class);
+                intent.putExtra("intent_number", 1);
+                startActivity(intent);
+            }
+        });
+
+        lo_cp_complete = (LinearLayout)findViewById(R.id.lo_cp_complete);
+        lo_cp_complete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CampaignSituation.class);
+                intent.putExtra("intent_number", 2);
+                startActivity(intent);
+            }
+        });
+
+        lo_cp_make = (LinearLayout)findViewById(R.id.lo_cp_make);
+        lo_cp_make.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CpMakelist.class);
+                startActivity(intent);
+            }
+        });
 
         // 보유 포인트를 눌렀을 때 포인트 마켓으로 이동한다.
         lo_point = (LinearLayout)findViewById(R.id.lo_point);

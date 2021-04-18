@@ -9,12 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EnvironmentalCampaign">
-        <activity android:name=".CampaignInformation">
-        </activity>
+        <activity android:name=".CpMakelist" />
+        <activity android:name=".CampaignSituation"></activity>
+        <activity android:name=".CampaignInformation" />
         <activity android:name=".PointMarket" />
-        <activity android:name=".MyPage" />
+        <activity android:name=".MyPage" ></activity>
         <activity android:name=".FeedPage" />
-        <activity android:name=".CertificationPage"></activity>
+        <activity android:name=".CertificationPage" />
         <activity android:name=".BookMark" />
         <activity android:name=".HomeActivity" >
             <intent-filter>
@@ -22,6 +23,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity android:name=".SearchPage" />
         <activity android:name=".SetUpCampaignPage" />
