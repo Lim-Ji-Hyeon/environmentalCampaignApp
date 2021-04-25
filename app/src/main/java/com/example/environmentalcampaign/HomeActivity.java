@@ -73,7 +73,6 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-
             // 전달 되어온 정보를 뷰에 넣기
             TextView txt = (TextView)findViewById(R.id.realtime_text);
             txt.setText(msg);
