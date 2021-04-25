@@ -9,21 +9,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EnvironmentalCampaign">
+        <activity android:name=".Second_Certification_Page">
+        </activity>
         <activity android:name=".CpMakelist" />
-        <activity android:name=".CampaignSituation"></activity>
+        <activity android:name=".CampaignSituation" />
         <activity android:name=".CampaignInformation" />
         <activity android:name=".PointMarket" />
-        <activity android:name=".MyPage" ></activity>
+        <activity android:name=".MyPage" />
         <activity android:name=".FeedPage" />
         <activity android:name=".CertificationPage" />
         <activity android:name=".BookMark" />
-        <activity android:name=".HomeActivity" >
+        <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
+            <intent-filter>
+                <!-- 다른 액티비티가 호출할 때 사용하는 action이름 설정 -->
+                <action android:name="kr.co.hta.MyAction"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
         <activity android:name=".SearchPage" />
         <activity android:name=".SetUpCampaignPage" />

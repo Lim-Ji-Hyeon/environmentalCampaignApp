@@ -1,6 +1,8 @@
 package com.example.environmentalcampaign;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -8,7 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.List;
 
@@ -34,33 +38,29 @@ public class HomeActivity extends AppCompatActivity {
         List<Integer> images2;
         RecyclerViewAdapter recyclerViewAdapter2;
 
-//        datalist1 = findViewById(R.id.datalist1);
-//        //datalist2 = findViewById(R.id.datalist2);
-//
-//
-//        titles1 = new ArrayList<>();
-//        images1 = new ArrayList<>();
-////        titles2 = new ArrayList<>();
-////        images2 = new ArrayList<>();
-//
-//        titles1.add("버리스타 캠페인");
-//        titles1.add("용기내 캠페인");
-////        titles2.add("멸종위기 보호 캠페인");
-////        titles2.add("토양 정화 캠페인");
-//
-//        images1.add(R.drawable.burista_1);
-//        images1.add(R.drawable.campaign_image);
-////        images2.add(R.drawable.dolphin);
-////        images2.add(R.drawable.soil);
-//
-//        adapter1 = new Adapter(this, titles1, images1);
-//     //   adapter2 = new Adapter(this, titles2, images2);
-//
-//        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
-//        datalist1.setLayoutManager(gridLayoutManager);
-//        datalist1.setAdapter(adapter1);
-////        datalist2.setLayoutManager(gridLayoutManager);
-////        datalist2.setAdapter(adapter2);
+
+        // 인증하기 버튼을 누른 후 실시간 게시글에 띄워주기
+        Intent intent = getIntent();
+
+        if(intent.getAction().equals("kr.co.hta.MyAction")){
+            // 호출할 인텐트가 보내온 이미지와 메시지 얻어오기
+            //Bitmap bitmap = (Bitmap)intent.getExtras().get("img");
+            String msg = (String)intent.getExtras().get("msg");
+            byte[] arr = getIntent().getByteArrayExtra("image");
+            Bitmap image = BitmapFactory.decodeByteArray(arr, 0, arr.length);
+
+
+
+
+            // 전달 되어온 정보를 뷰에 넣기
+            TextView txt = (TextView)findViewById(R.id.realtime_text);
+            txt.setText(msg);
+            //ImageView img = (ImageView)findViewById(R.id.realtime_image);
+            //img.setImageBitmap(bitmap);
+            ImageView BigImage = (ImageView)findViewById(R.id.realtime_image);
+            BigImage.setImageBitmap(image);
+        }
+
 
         // 검색 페이지 연동
         tv_search = (TextView) findViewById(R.id.tv_search);

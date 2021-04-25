@@ -39,6 +39,14 @@ public class CertificationPage extends AppCompatActivity {
         adapter.addItem(100, 2, "버리스타", "주 2일", "00:00:00", "24:00:00", 20210501, ContextCompat.getDrawable(this, R.drawable.burista));
         adapter2.addItem(95, 1, "용기내", "주 5일", "09:00:00", "18:00:00", 20210430, ContextCompat.getDrawable(this, R.drawable.cp1));
 
+        // 리스트뷰를 클릭하면 인증할 수 있는 페이지로 넘어간다.
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getApplicationContext(), Second_Certification_Page.class);
+                startActivity(intent);
+            }
+        });
 
         // 하단 메뉴바 페이지 연동
 
