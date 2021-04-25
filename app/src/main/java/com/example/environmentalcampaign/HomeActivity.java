@@ -5,15 +5,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.viewpager2.widget.ViewPager2;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
@@ -22,11 +24,31 @@ public class HomeActivity extends AppCompatActivity {
     ImageView bookmark;
     TextView tv_make, tv_certi, tv_feed, tv_mypage;
 
+    ViewPager2 viewPager2;
+    LinearLayout layoutIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        viewPager2 = findViewById(R.id.viewPager2);
+        layoutIndicator = findViewById(R.id.layoutIndicators);
+
+        ArrayList<DataPage> list = new ArrayList<>();
+        list.add(new DataPage(ContextCompat.getDrawable(this, R.drawable.tumbler_campaign)));
+        list.add(new DataPage(ContextCompat.getDrawable(this, R.drawable.zero_waste)));
+        list.add(new DataPage(ContextCompat.getDrawable(this, R.drawable.world_eco_day)));
+
+        viewPager2.setAdapter(new ViewPagerAdapter(list));
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                setCurrentIndicator(position);
+            }
+        });
+        setupIndicators(list.size());
 
         RecyclerView datalist1;
         List<String> titles1;
@@ -120,5 +142,34 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    // cardnews indicator
+    private void setupIndicators(int count) {
+        ImageView[] indicators = new ImageView[count];
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        params.setMargins(16, 8, 16, 8);
+
+        for(int i=0; i < indicators.length; i++) {
+            indicators[i] = new ImageView(this);
+            indicators[i].setImageDrawable(ContextCompat.getDrawable(this, R.drawable.bg_indicator_inactive));
+            indicators[i].setLayoutParams(params);
+            layoutIndicator.addView(indicators[i]);
+        }
+        setCurrentIndicator(0);
+    }
+
+    private void setCurrentIndicator(int position) {
+        int childCount = layoutIndicator.getChildCount();
+        for(int i=0; i < childCount; i++) {
+            ImageView imageView = (ImageView)layoutIndicator.getChildAt(i);
+            if(i == position) {
+                imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.bg_indicator_active));
+            } else {
+                imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.bg_indicator_inactive));
+            }
+        }
     }
 }
