@@ -34,7 +34,7 @@ public class Second_Certification_Page extends AppCompatActivity {
 
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
 
                 Intent intent = new Intent(Second_Certification_Page.this, HomeActivity.class);
 
