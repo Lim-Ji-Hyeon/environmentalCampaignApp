@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +27,8 @@ public class HomeActivity extends AppCompatActivity {
 
     ViewPager2 viewPager2;
     LinearLayout layoutIndicator;
+
+   // TextView txt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,38 +53,32 @@ public class HomeActivity extends AppCompatActivity {
         });
         setupIndicators(list.size());
 
-        RecyclerView datalist1;
-        List<String> titles1;
-        List<Integer> images1;
-        RecyclerViewAdapter recyclerViewAdapter1;
+//        RecyclerView datalist1;
+//        List<String> titles1;
+//        List<Integer> images1;
+//        RecyclerViewAdapter recyclerViewAdapter1;
+//
+//        RecyclerView datalist2;
+//        List<String> titles2;
+//        List<Integer> images2;
+//        RecyclerViewAdapter recyclerViewAdapter2;
 
-        RecyclerView datalist2;
-        List<String> titles2;
-        List<Integer> images2;
-        RecyclerViewAdapter recyclerViewAdapter2;
-
-
-        // 인증하기 버튼을 누른 후 실시간 게시글에 띄워주기
         Intent intent = getIntent();
 
-        if(intent.getAction().equals("kr.co.hta.MyAction")){
+        // Second_Certification_Page에서 보내온 신호를 가지고 있으면 수행한다.
+        if (intent.hasExtra("sendData") && intent.hasExtra("image")){
             // 호출할 인텐트가 보내온 이미지와 메시지 얻어오기
-            //Bitmap bitmap = (Bitmap)intent.getExtras().get("img");
-            String msg = (String)intent.getExtras().get("msg");
-            byte[] arr = getIntent().getByteArrayExtra("image");
+
+            byte[] arr = intent.getByteArrayExtra("image");
             Bitmap image = BitmapFactory.decodeByteArray(arr, 0, arr.length);
-
-
+            String msg = (String)intent.getExtras().get("sendData");
 
             // 전달 되어온 정보를 뷰에 넣기
-            TextView txt = (TextView)findViewById(R.id.realtime_text);
-            txt.setText(msg);
-            //ImageView img = (ImageView)findViewById(R.id.realtime_image);
-            //img.setImageBitmap(bitmap);
             ImageView BigImage = (ImageView)findViewById(R.id.realtime_image);
             BigImage.setImageBitmap(image);
+            TextView txt = (TextView)findViewById(R.id.realtime_text);
+            txt.setText(msg);
         }
-
 
         // 검색 페이지 연동
         tv_search = (TextView) findViewById(R.id.tv_search);

@@ -22,13 +22,7 @@
         <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter>
-                <!-- 다른 액티비티가 호출할 때 사용하는 action이름 설정 -->
-                <action android:name="kr.co.hta.MyAction"/>
-                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity android:name=".SearchPage" />
