@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import java.io.ByteArrayOutputStream;
@@ -21,6 +22,7 @@ public class Second_Certification_Page extends AppCompatActivity {
     ImageView img1;
     Button btn1;
     EditText editText;
+    ImageButton bt_back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,15 @@ public class Second_Certification_Page extends AppCompatActivity {
 
             }
 
+        });
+
+        // 뒤로 가기
+        bt_back = (ImageButton)findViewById(R.id.bt_back);
+        bt_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
         });
 
     }
