@@ -1,4 +1,4 @@
-package com.example.environmentalcampaign;
+package com.example.environmentalcampaign.home;
 
 import android.graphics.drawable.Drawable;
 

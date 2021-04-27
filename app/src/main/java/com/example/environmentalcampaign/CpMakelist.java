@@ -1,6 +1,5 @@
 package com.example.environmentalcampaign;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -8,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.example.environmentalcampaign.mypage.FragmentCpMakeList;
+import com.example.environmentalcampaign.mypage.FragmentCpMakeList2;
 import com.google.android.material.tabs.TabLayout;
 
 public class CpMakelist extends FragmentActivity {

@@ -1,4 +1,4 @@
-package com.example.environmentalcampaign;
+package com.example.environmentalcampaign.cp_info;
 
 import android.os.Bundle;
 
@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class FragmentWay extends Fragment {
+import com.example.environmentalcampaign.R;
 
-    public FragmentWay() {
+public class FragmentInfo extends Fragment {
+
+    public FragmentInfo() {
         // Required empty public constructor
     }
 
@@ -21,7 +23,7 @@ public class FragmentWay extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_way, container, false);
+        ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_info, container, false);
         return rootView;
     }
 }

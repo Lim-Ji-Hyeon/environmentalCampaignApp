@@ -1,4 +1,4 @@
-package com.example.environmentalcampaign;
+package com.example.environmentalcampaign.mypage;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import com.example.environmentalcampaign.MyAdapter;
+import com.example.environmentalcampaign.R;
 
 public class FragmentCpMakeList extends Fragment {
 

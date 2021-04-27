@@ -1,4 +1,4 @@
-package com.example.environmentalcampaign;
+package com.example.environmentalcampaign.mypage;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import com.example.environmentalcampaign.MyCompleteAdapter;
+import com.example.environmentalcampaign.R;
 
 public class FragmentCpMakeList2 extends Fragment {
 
