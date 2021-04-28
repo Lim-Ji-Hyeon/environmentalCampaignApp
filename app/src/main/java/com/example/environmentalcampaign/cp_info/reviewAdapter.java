@@ -1,4 +1,4 @@
-package com.example.environmentalcampaign;
+package com.example.environmentalcampaign.cp_info;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.example.environmentalcampaign.R;
 
 import java.util.ArrayList;
 

@@ -9,17 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EnvironmentalCampaign">
-        <activity android:name=".Second_Certification_Page">
+        <activity android:name=".certification_page.Second_Certification_Page">
         </activity>
         <activity android:name=".CpMakelist" />
-        <activity android:name=".CampaignSituation" />
-        <activity android:name=".CampaignInformation" />
-        <activity android:name=".PointMarket" />
-        <activity android:name=".MyPage" />
-        <activity android:name=".FeedPage" />
-        <activity android:name=".CertificationPage" />
-        <activity android:name=".BookMark" />
-        <activity android:name=".HomeActivity">
+        <activity android:name=".mypage.CampaignSituation" />
+        <activity android:name=".cp_info.CampaignInformation" />
+        <activity android:name=".pointmarket.PointMarket" />
+        <activity android:name=".mypage.MyPage" />
+        <activity android:name=".feed.FeedPage" />
+        <activity android:name=".certification_page.CertificationPage" />
+        <activity android:name=".bookmark.BookMark" />
+        <activity android:name=".home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,8 +31,8 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".SearchPage" />
-        <activity android:name=".SetUpCampaignPage" />
+        <activity android:name=".search_page.SearchPage" />
+        <activity android:name=".set_up_page.SetUpCampaignPage" />
     </application>
 
 </manifest>

@@ -1,21 +1,21 @@
-package com.example.environmentalcampaign;
+package com.example.environmentalcampaign.certification_page;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.example.environmentalcampaign.R;
+import com.example.environmentalcampaign.home.HomeActivity;
+
 import java.io.ByteArrayOutputStream;
-import java.nio.channels.InterruptedByTimeoutException;
 
 public class Second_Certification_Page extends AppCompatActivity {
 
@@ -49,9 +49,7 @@ public class Second_Certification_Page extends AppCompatActivity {
                 intent.putExtra("sendData", editText.getText().toString());
                 intent.putExtra("image", byteArray);
                 startActivity(intent);
-
             }
-
         });
 
         // 뒤로 가기

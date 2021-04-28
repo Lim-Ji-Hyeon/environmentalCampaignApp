@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Second_Certification_Page"
+    tools:context=".certification_page.Second_Certification_Page"
     android:orientation="vertical">
 
     <LinearLayout

@@ -1,4 +1,4 @@
-package com.example.environmentalcampaign;
+package com.example.environmentalcampaign.search_page;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,14 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.environmentalcampaign.R;
+import com.example.environmentalcampaign.certification_page.CertificationPage;
+import com.example.environmentalcampaign.feed.FeedPage;
+import com.example.environmentalcampaign.home.HomeActivity;
+import com.example.environmentalcampaign.home.RecyclerViewAdapter;
+import com.example.environmentalcampaign.mypage.MyPage;
+import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
 
 import java.util.List;
 

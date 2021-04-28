@@ -1,4 +1,4 @@
-package com.example.environmentalcampaign;
+package com.example.environmentalcampaign.home;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,14 +10,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.environmentalcampaign.certification_page.CertificationPage;
+import com.example.environmentalcampaign.mypage.MyPage;
+import com.example.environmentalcampaign.R;
+import com.example.environmentalcampaign.search_page.SearchPage;
+import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
+import com.example.environmentalcampaign.bookmark.BookMark;
+import com.example.environmentalcampaign.feed.FeedPage;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
