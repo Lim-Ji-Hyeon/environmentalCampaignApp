@@ -9,8 +9,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import com.example.environmentalcampaign.R;
 
@@ -54,32 +57,34 @@ public class FragmentReview extends Fragment {
         rAdpter.addItem(ContextCompat.getDrawable(context, R.drawable.profile), "으쌰으쌰", 20210328, 5,
                 "느끼는 것이 많은 캠페인입니다. 계속 re캠페인 중입니다.");
 
-        setListViewHeightBasedOnChildren(rListView);
+        if(rAdpter.isEmpty()) {
+            TextView tv_noReview = (TextView)rootView.findViewById(R.id.tv_noReview);
+            LinearLayout lo_review = (LinearLayout)rootView.findViewById(R.id.lo_review);
+            tv_noReview.setVisibility(View.VISIBLE);
+            lo_review.setVisibility(View.GONE);
+        } else {
+            TextView tv_reviewN = (TextView)rootView.findViewById(R.id.tv_reviewN);
+            int n = rAdpter.getCount();
+            if(n > 100) {
+                tv_reviewN.setText("(100+)");
+            } else {
+                tv_reviewN.setText("(" + n + ")");
+            }
+
+            RatingBar ratingBar = (RatingBar)rootView.findViewById(R.id.ratingBar);
+            ratingBar.setRating(reviewAverage(rListView));
+
+            TextView tv_reviewAvr = (TextView)rootView.findViewById(R.id.tv_reviewAvr);
+            tv_reviewAvr.setText(Float.toString(reviewAverage(rListView)));
+
+            setListViewHeightBasedOnChildren(rListView);
+        }
 
         return rootView;
     }
 
     // 리스트뷰 높이 조정
     public static boolean setListViewHeightBasedOnChildren(ListView listview) {
-//        ListAdapter listAdapter = listview.getAdapter();
-//        if(listAdapter == null) {
-//            // pre-condition
-//            return;
-//        }
-//
-//        int totalHeight = 0;
-//        int desiredWidth = View.MeasureSpec.makeMeasureSpec(listview.getWidth(), View.MeasureSpec.AT_MOST);
-//
-//        for(int i=0; i<listAdapter.getCount(); i++) {
-//            View listItem = listAdapter.getView(i, null, listview);
-//            listItem.measure(desiredWidth,View.MeasureSpec.UNSPECIFIED);
-//            totalHeight += listItem.getMeasuredHeight();
-//        }
-//
-//        ViewGroup.LayoutParams params = listview.getLayoutParams();
-//        params.height = totalHeight + (listview.getDividerHeight() * (listAdapter.getCount() - 1));
-//        listview.setLayoutParams(params);
-//        listview.requestLayout();
 
         ListAdapter listAdapter = listview.getAdapter();
         if(listAdapter != null) {
@@ -106,6 +111,17 @@ public class FragmentReview extends Fragment {
         } else {
             return false;
         }
+    }
+
+    // 리뷰 평균 구하기
+    public float reviewAverage(ListView listview) {
+        ListAdapter listAdapter = listview.getAdapter();
+        double sum = 0;
+        for(int i=0; i < listAdapter.getCount(); i++) {
+            reviewData r = (reviewData)listAdapter.getItem(i);
+            sum += r.getRatingbar();
+        }
+        return Float.parseFloat(String.format("%.2f", sum / listAdapter.getCount()));
     }
 
 }

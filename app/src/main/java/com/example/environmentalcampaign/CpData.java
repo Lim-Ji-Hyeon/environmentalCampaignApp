@@ -7,6 +7,7 @@ public class CpData {
     private String name, frequency, stime, etime;
     private int rate, reCp, edate;
     private Drawable logo;
+    private boolean complete;
 
     public CpData(){}
 
@@ -69,4 +70,8 @@ public class CpData {
     public int getReCp() { return reCp; }
 
     public void setReCp(int reCp) { this.reCp = reCp; }
+
+    public boolean getComplete() { return complete; }
+
+    public void setComplete(boolean complete) { this.complete = complete; }
 }

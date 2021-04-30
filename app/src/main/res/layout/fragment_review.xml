@@ -17,7 +17,19 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
+            <TextView
+                android:id="@+id/tv_noReview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_margin="30dp"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                android:text="등록된 리뷰가 없습니다.\n캠페인에 참여하고 리뷰를 등록해 보세요!" />
+
             <LinearLayout
+                android:id="@+id/lo_review"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp"
