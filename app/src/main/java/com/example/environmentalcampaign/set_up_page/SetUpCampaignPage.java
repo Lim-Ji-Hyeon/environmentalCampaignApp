@@ -3,6 +3,7 @@ package com.example.environmentalcampaign.set_up_page;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,11 +17,22 @@ import com.example.environmentalcampaign.home.HomeActivity;
 public class SetUpCampaignPage extends AppCompatActivity {
 
     TextView tv_home, tv_make, tv_certi, tv_feed, tv_mypage;
+    ImageView iv_plus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_up_campaign_page);
+
+        // 캠페인 개설 페이지 연결
+        iv_plus = (ImageView)findViewById(R.id.iv_plus);
+        iv_plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), setup1.class);
+                startActivity(intent);
+            }
+        });
 
         // 하단 메뉴바 페이지 연동
 

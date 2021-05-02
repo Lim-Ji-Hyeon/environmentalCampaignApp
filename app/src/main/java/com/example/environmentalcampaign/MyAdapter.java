@@ -58,6 +58,7 @@ public class MyAdapter extends BaseAdapter {
         TextView cpName = (TextView)convertView.findViewById(R.id.tv_cp_name);
         TextView cpContext = (TextView)convertView.findViewById(R.id.tv_cp_content);
         ImageView logo = (ImageView)convertView.findViewById(R.id.iv_logo);
+        TextView complete = (TextView)convertView.findViewById(R.id.tv_complete_logo);
 
         // Data set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         CpData listViewItem = sample.get(position);
@@ -70,6 +71,7 @@ public class MyAdapter extends BaseAdapter {
         cpContext.setText(listViewItem.getFrequency() + " " + listViewItem.getStime() + "~" + listViewItem.getEtime() +
         "\n" + emonth(listViewItem.getEdate()) + "." + eday(listViewItem.getEdate()) + "(" + getDayOfWeek(listViewItem.getEdate()) + ") 종료");
         logo.setImageDrawable(listViewItem.getLogo());
+        if(listViewItem.getComplete()) { complete.setVisibility(View.VISIBLE); }
 
         return convertView;
     }
@@ -85,6 +87,23 @@ public class MyAdapter extends BaseAdapter {
         item.setEtime(etime);
         item.setEdate(edate);
         item.setLogo(logo);
+
+        sample.add(item);
+    }
+
+    // 이미지 위에 완료 표시 해주기 위해. 마지막에 true 넣어주면 됨.
+    public void addItem(int rate, int reCp, String name, String frequency, String stime, String etime, int edate, Drawable logo, boolean complete) {
+        CpData item = new CpData();
+
+        item.setRate(rate);
+        item.setReCp(reCp);
+        item.setName(name);
+        item.setFrequency(frequency);
+        item.setStime(stime);
+        item.setEtime(etime);
+        item.setEdate(edate);
+        item.setLogo(logo);
+        item.setComplete(complete);
 
         sample.add(item);
     }

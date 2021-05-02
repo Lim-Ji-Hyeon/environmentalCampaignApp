@@ -59,7 +59,7 @@ public class CertificationPage extends AppCompatActivity {
 
         // 첫 번째 아이템 추가
         adapter.addItem(100, 2, "버리스타", "주 2일", "00:00:00", "24:00:00", 20210501, ContextCompat.getDrawable(this, R.drawable.burista));
-        adapter2.addItem(95, 1, "용기내", "주 5일", "09:00:00", "18:00:00", 20210430, ContextCompat.getDrawable(this, R.drawable.cp1));
+        adapter2.addItem(95, 1, "용기내", "주 5일", "09:00:00", "18:00:00", 20210430, ContextCompat.getDrawable(this, R.drawable.cp1), true);
 
 
         // 리스트뷰를 클릭하면 인증할 수 있는 페이지로 넘어간다.

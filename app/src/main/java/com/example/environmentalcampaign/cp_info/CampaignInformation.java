@@ -4,14 +4,22 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.environmentalcampaign.R;
+import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
 import com.google.android.material.tabs.TabLayout;
 
 public class CampaignInformation extends FragmentActivity {
@@ -21,6 +29,10 @@ public class CampaignInformation extends FragmentActivity {
     FragmentWay fragmentWay;
     FragmentReview fragmentReview;
     ImageButton bt_back;
+
+    Intent gIntent;
+    ImageView iv_logo;
+    TextView tv_cp_name, tv_frequency, tv_period, tv_participantsN, tv_reCampaignN;
 
     TextView tv_participation;
 
@@ -65,6 +77,37 @@ public class CampaignInformation extends FragmentActivity {
             }
         });
 
+        // 뒤로가기 버튼 이벤트
+        bt_back = (ImageButton)findViewById(R.id.bt_back);
+        bt_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        iv_logo = (ImageView)findViewById(R.id.iv_logo);
+        tv_cp_name = (TextView)findViewById(R.id.tv_cp_name);
+        tv_frequency = (TextView)findViewById(R.id.tv_frequency);
+        tv_period = (TextView)findViewById(R.id.tv_period);
+        tv_participantsN = (TextView)findViewById(R.id.tv_participantsN);
+        tv_reCampaignN = (TextView)findViewById(R.id.tv_reCampaignN);
+
+        // setup의 intent면 내용 불러오기
+        gIntent = getIntent();
+        if(gIntent.hasExtra("signal")) {
+            if(gIntent.getStringExtra("signal").equals("setup")) {
+                getSetupInfo();
+                bt_back.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getApplicationContext(), SetUpCampaignPage.class);
+                        startActivity(intent);
+                    }
+                });
+            }
+        }
+
         // 참가하기 버튼 이벤트
         tv_participation = (TextView)findViewById(R.id.tv_participation);
         tv_participation.setOnClickListener(new View.OnClickListener() {
@@ -77,15 +120,54 @@ public class CampaignInformation extends FragmentActivity {
                 }
             }
         });
+    }
 
-        // 뒤로가기 버튼 이벤트
-        bt_back = (ImageButton)findViewById(R.id.bt_back);
-        bt_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+    // setup 내용 불러오기
+    void getSetupInfo() {
+        // 불러오기
+        Bitmap logo = (Bitmap)gIntent.getExtras().get("logo");
+        String cp_name = gIntent.getStringExtra("cp_name");
+        String frequency = gIntent.getStringExtra("frequency");
+        String period = gIntent.getStringExtra("period");
+//        String eDate = gIntent.getStringExtra("eDate");
+
+        Bitmap infoImage1 = (Bitmap)gIntent.getExtras().get("infoImage1");
+        Bitmap infoImage2 = (Bitmap)gIntent.getExtras().get("infoImage2");
+        Bitmap infoImage3 = (Bitmap)gIntent.getExtras().get("infoImage3");
+        Bitmap infoImage4 = (Bitmap)gIntent.getExtras().get("infoImage4");
+        Bitmap infoImage5 = (Bitmap)gIntent.getExtras().get("infoImage5");
+        String way = gIntent.getStringExtra("way");
+        Bitmap rPhoto1 = (Bitmap)gIntent.getExtras().get("rPhoto1");
+        Bitmap rPhoto2 = (Bitmap)gIntent.getExtras().get("rPhoto2");
+        String rInfo = gIntent.getStringExtra("rInfo");
+        String rInfo2 = gIntent.getStringExtra("rInfo2");
+        Bitmap wPhoto1 = (Bitmap)gIntent.getExtras().get("wPhoto1");
+        Bitmap wPhoto2 = (Bitmap)gIntent.getExtras().get("wPhoto2");
+        String wInfo = gIntent.getStringExtra("wInfo");
+        String wInfo2 = gIntent.getStringExtra("wInfo2");
+
+        // 붙이기
+//        iv_logo.setImageBitmap(logo);
+        tv_cp_name.setText(cp_name);
+        tv_frequency.setText(frequency);
+        tv_period.setText(period);
+        tv_participantsN.setText("0명");
+        tv_reCampaignN.setText("0회");
+
+        infoSetup();
+    }
+
+    // setup info
+    void infoSetup() {
+        String info = gIntent.getStringExtra("info");
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(fragmentInfo.getId());
+
+//        LayoutInflater mInflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+//        FrameLayout tabcontent = (FrameLayout)findViewById(R.id.tabcontent);
+//        fragment.getLayoutInflater().inflate(R.layout.fragment_info, tabcontent, false);
+//        TextView tv_cpInfo = (TextView)viewGroup.findViewById(R.id.tv_cpInfo);
+//        tv_cpInfo.setText(info);
     }
 
     // 참가하기 버튼 alertdialog
@@ -97,6 +179,9 @@ public class CampaignInformation extends FragmentActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         tv_participation.setText("참가완료");
+                        String tv = tv_participantsN.getText().toString();
+                        int n = Integer.parseInt(tv.substring(0, tv.length()-1)) + 1;
+                        tv_participantsN.setText( n + "명");
                         Toast.makeText(CampaignInformation.this, "캠페인 참가가 완료되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                 })

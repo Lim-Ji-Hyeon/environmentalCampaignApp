@@ -33,6 +33,8 @@ public class HomeActivity extends AppCompatActivity {
     ViewPager2 viewPager2;
     LinearLayout layoutIndicator;
 
+   // TextView txt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
