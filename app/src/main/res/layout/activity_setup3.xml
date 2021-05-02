@@ -133,6 +133,8 @@
                         android:textSize="15dp"
                         android:lines="2"
                         android:inputType="textMultiLine"
+                        android:clickable="false"
+                        android:focusable="false"
                         android:hint="인증샷 설명"/>
 
                     <EditText
@@ -144,6 +146,8 @@
                         android:textSize="15dp"
                         android:lines="2"
                         android:inputType="textMultiLine"
+                        android:clickable="false"
+                        android:focusable="false"
                         android:hint="인증샷 설명" />
 
                 </TableRow>
@@ -205,6 +209,8 @@
                         android:textSize="15dp"
                         android:lines="2"
                         android:inputType="textMultiLine"
+                        android:clickable="false"
+                        android:focusable="false"
                         android:hint="인증샷 설명"/>
 
                     <EditText
@@ -216,6 +222,8 @@
                         android:textSize="15dp"
                         android:lines="2"
                         android:inputType="textMultiLine"
+                        android:clickable="false"
+                        android:focusable="false"
                         android:hint="인증샷 설명" />
 
                 </TableRow>

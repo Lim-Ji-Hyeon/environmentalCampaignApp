@@ -74,7 +74,15 @@ public class setup3 extends AppCompatActivity {
         tv_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setup_alert();
+                if(checkEditText(et_cp_way)) {
+                    Toast.makeText(setup3.this, "캠페인 인증방법을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }
+//                else if((checkImage(iv_rightPhoto) || checkEditText(et_rightPhotoInfo)) && (checkImage(iv_rightPhoto2) || checkEditText(et_rightPhotoInfo2))) {
+//                    Toast.makeText(setup3.this, "올바른 인증방법을 입력해주세요.", Toast.LENGTH_SHORT).show();
+//                }
+                else {
+                    setup_alert();
+                }
             }
         });
 
@@ -87,6 +95,24 @@ public class setup3 extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+//        // 나중에 사진 연동되면 추가할 것. 인증샷 선택하면 해당 인증샷 설명 입력할 수 있도록 하기.
+//        if(!checkImage(iv_rightPhoto)) {
+//            et_rightPhotoInfo.setClickable(true);
+//            et_rightPhotoInfo.setFocusable(true);
+//        }
+//        if(!checkImage(iv_rightPhoto2)) {
+//            et_rightPhotoInfo2.setClickable(true);
+//            et_rightPhotoInfo2.setFocusable(true);
+//        }
+//        if(!checkImage(iv_wrongPhoto)) {
+//            et_wrongPhotoInfo.setClickable(true);
+//            et_wrongPhotoInfo.setFocusable(true);
+//        }
+//        if(!checkImage(iv_wrongPhoto2)) {
+//            et_wrongPhotoInfo2.setClickable(true);
+//            et_wrongPhotoInfo2.setFocusable(true);
+//        }
     }
 
     // 마지막 확인 팝업
@@ -163,5 +189,21 @@ public class setup3 extends AppCompatActivity {
         intent.putExtra("signal", "setup");
 
         startActivity(intent);
+    }
+
+    // edittext를 입력했는지 확인
+    boolean checkEditText(EditText editText) {
+        return editText.getText().toString().equals("") || editText.getText().toString()==null;
+    }
+
+    // 이미지 선택했는지 확인
+    boolean checkImage(ImageView imageView) {
+        BitmapDrawable imageDrawable = (BitmapDrawable)imageView.getDrawable();
+        Bitmap imageBitmap = imageDrawable.getBitmap();
+
+        BitmapDrawable checkDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.add_image);
+        Bitmap checkBitmap = checkDrawable.getBitmap();
+
+        return imageBitmap.equals(checkBitmap);
     }
 }

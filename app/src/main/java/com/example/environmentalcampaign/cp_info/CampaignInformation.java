@@ -133,22 +133,22 @@ public class CampaignInformation extends FragmentActivity {
         String period = gIntent.getStringExtra("period");
 //        String eDate = gIntent.getStringExtra("eDate");
 
-        byte[] arr1 = gIntent.getByteArrayExtra("infoImage1");
-        Bitmap infoImage1 = BitmapFactory.decodeByteArray(arr1, 0, arr1.length);
-
-        Bitmap infoImage2 = (Bitmap)gIntent.getExtras().get("infoImage2");
-        Bitmap infoImage3 = (Bitmap)gIntent.getExtras().get("infoImage3");
-        Bitmap infoImage4 = (Bitmap)gIntent.getExtras().get("infoImage4");
-        Bitmap infoImage5 = (Bitmap)gIntent.getExtras().get("infoImage5");
-        String way = gIntent.getStringExtra("way");
-        Bitmap rPhoto1 = (Bitmap)gIntent.getExtras().get("rPhoto1");
-        Bitmap rPhoto2 = (Bitmap)gIntent.getExtras().get("rPhoto2");
-        String rInfo = gIntent.getStringExtra("rInfo");
-        String rInfo2 = gIntent.getStringExtra("rInfo2");
-        Bitmap wPhoto1 = (Bitmap)gIntent.getExtras().get("wPhoto1");
-        Bitmap wPhoto2 = (Bitmap)gIntent.getExtras().get("wPhoto2");
-        String wInfo = gIntent.getStringExtra("wInfo");
-        String wInfo2 = gIntent.getStringExtra("wInfo2");
+//        String info = gIntent.getStringExtra("info");
+//        byte[] arr1 = gIntent.getByteArrayExtra("infoImage1");
+//        Bitmap infoImage1 = BitmapFactory.decodeByteArray(arr1, 0, arr1.length);
+//        Bitmap infoImage2 = (Bitmap)gIntent.getExtras().get("infoImage2");
+//        Bitmap infoImage3 = (Bitmap)gIntent.getExtras().get("infoImage3");
+//        Bitmap infoImage4 = (Bitmap)gIntent.getExtras().get("infoImage4");
+//        Bitmap infoImage5 = (Bitmap)gIntent.getExtras().get("infoImage5");
+//        String way = gIntent.getStringExtra("way");
+//        Bitmap rPhoto1 = (Bitmap)gIntent.getExtras().get("rPhoto1");
+//        Bitmap rPhoto2 = (Bitmap)gIntent.getExtras().get("rPhoto2");
+//        String rInfo = gIntent.getStringExtra("rInfo");
+//        String rInfo2 = gIntent.getStringExtra("rInfo2");
+//        Bitmap wPhoto1 = (Bitmap)gIntent.getExtras().get("wPhoto1");
+//        Bitmap wPhoto2 = (Bitmap)gIntent.getExtras().get("wPhoto2");
+//        String wInfo = gIntent.getStringExtra("wInfo");
+//        String wInfo2 = gIntent.getStringExtra("wInfo2");
 
         // 붙이기
         iv_logo.setImageBitmap(logo);

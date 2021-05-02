@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.environmentalcampaign.R;
 
@@ -78,21 +79,36 @@ public class setup1 extends AppCompatActivity {
         tv_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), setup2.class);
+//                if(checkImage(iv_cp_logo)) {
+//                    Toast.makeText(setup1.this, "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show();
+//                }
+//                else
+                    if(checkEditText(et_cp_name)) {
+                    Toast.makeText(setup1.this, "캠페인 이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }
+                else if(tv_frequency.getVisibility() == View.GONE) {
+                    Toast.makeText(setup1.this, "인증 빈도를 선택해주세요.", Toast.LENGTH_SHORT).show();
+                }
+                else if(tv_period.getVisibility() == View.GONE) {
+                    Toast.makeText(setup1.this, "인증 기간을 선택해주세요.", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Intent intent = new Intent(getApplicationContext(), setup2.class);
 
-                // 이미지 Bitmap 변환
-                BitmapDrawable drawable = (BitmapDrawable)iv_cp_logo.getDrawable();
-                Bitmap bitmap = drawable.getBitmap();
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
+                    // 이미지 Bitmap 변환
+                    BitmapDrawable drawable = (BitmapDrawable)iv_cp_logo.getDrawable();
+                    Bitmap bitmap = drawable.getBitmap();
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
 
-                intent.putExtra("logo", byteArray);
-                intent.putExtra("cp_name", et_cp_name.getText().toString());
-                intent.putExtra("frequency", tv_frequency.getText().toString());
-                intent.putExtra("period", tv_period.getText().toString());
+                    intent.putExtra("logo", byteArray);
+                    intent.putExtra("cp_name", et_cp_name.getText().toString());
+                    intent.putExtra("frequency", tv_frequency.getText().toString());
+                    intent.putExtra("period", tv_period.getText().toString());
 //                intent.putExtra("eDate", tv_eDate.getText().toString());
-                startActivity(intent);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -168,5 +184,21 @@ public class setup1 extends AppCompatActivity {
         String end = simpleDateFormat.format(eCal.getTime());
 
         return end;
+    }
+
+    // 이미지 선택했는지 확인
+    boolean checkImage(ImageView imageView) {
+        BitmapDrawable imageDrawable = (BitmapDrawable)imageView.getDrawable();
+        Bitmap imageBitmap = imageDrawable.getBitmap();
+
+        BitmapDrawable checkDrawable = (BitmapDrawable)getResources().getDrawable(R.drawable.add_image);
+        Bitmap checkBitmap = checkDrawable.getBitmap();
+
+        return imageBitmap.equals(checkBitmap);
+    }
+
+    // edittext를 입력했는지 확인
+    boolean checkEditText(EditText editText) {
+        return editText.getText().toString().equals("") || editText.getText().toString()==null;
     }
 }
