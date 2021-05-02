@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -125,13 +126,16 @@ public class CampaignInformation extends FragmentActivity {
     // setup 내용 불러오기
     void getSetupInfo() {
         // 불러오기
-        Bitmap logo = (Bitmap)gIntent.getExtras().get("logo");
+        byte[] logoArr = gIntent.getByteArrayExtra("logo");
+        Bitmap logo = BitmapFactory.decodeByteArray(logoArr, 0, logoArr.length);
         String cp_name = gIntent.getStringExtra("cp_name");
         String frequency = gIntent.getStringExtra("frequency");
         String period = gIntent.getStringExtra("period");
 //        String eDate = gIntent.getStringExtra("eDate");
 
-        Bitmap infoImage1 = (Bitmap)gIntent.getExtras().get("infoImage1");
+        byte[] arr1 = gIntent.getByteArrayExtra("infoImage1");
+        Bitmap infoImage1 = BitmapFactory.decodeByteArray(arr1, 0, arr1.length);
+
         Bitmap infoImage2 = (Bitmap)gIntent.getExtras().get("infoImage2");
         Bitmap infoImage3 = (Bitmap)gIntent.getExtras().get("infoImage3");
         Bitmap infoImage4 = (Bitmap)gIntent.getExtras().get("infoImage4");
@@ -147,7 +151,7 @@ public class CampaignInformation extends FragmentActivity {
         String wInfo2 = gIntent.getStringExtra("wInfo2");
 
         // 붙이기
-//        iv_logo.setImageBitmap(logo);
+        iv_logo.setImageBitmap(logo);
         tv_cp_name.setText(cp_name);
         tv_frequency.setText(frequency);
         tv_period.setText(period);

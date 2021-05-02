@@ -81,14 +81,13 @@ public class setup1 extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), setup2.class);
 
                 // 이미지 Bitmap 변환
-                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), iv_cp_logo.getId());
-//                Bitmap bitmap = ((BitmapDrawable)iv_cp_logo.getDrawable()).getBitmap();
-//                iv_cp_logo.setImageBitmap(bitmap);
-//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-//                byte[] byteArray = stream.toByteArray();
+                BitmapDrawable drawable = (BitmapDrawable)iv_cp_logo.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
 
-                intent.putExtra("logo", bitmap);
+                intent.putExtra("logo", byteArray);
                 intent.putExtra("cp_name", et_cp_name.getText().toString());
                 intent.putExtra("frequency", tv_frequency.getText().toString());
                 intent.putExtra("period", tv_period.getText().toString());
