@@ -24,7 +24,7 @@ public class setup2 extends AppCompatActivity {
     TextView tv_pre, tv_next;
 
     EditText et_cp_info;
-    ImageView iv_cp_info1, iv_cp_info2, iv_cp_info3, iv_cp_info4, iv_cp_info5;
+    ImageView iv_cp_info1, iv_cp_info2, iv_cp_info3, iv_cp_info4, iv_cp_info5, checkImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +37,7 @@ public class setup2 extends AppCompatActivity {
         iv_cp_info3 = (ImageView)findViewById(R.id.iv_cp_info3);
         iv_cp_info4 = (ImageView)findViewById(R.id.iv_cp_info4);
         iv_cp_info5 = (ImageView)findViewById(R.id.iv_cp_info5);
+        checkImage = (ImageView)findViewById(R.id.checkImage);
 
         // 전 페이지 내용들 불러오기
         Intent preIntent = getIntent();
@@ -72,35 +73,12 @@ public class setup2 extends AppCompatActivity {
 //                intent.putExtra("eDate", eDate);
 
                     // 이미지 Bitmap 변환
-                    BitmapDrawable drawable1 = (BitmapDrawable)iv_cp_info1.getDrawable();
-                    BitmapDrawable drawable2 = (BitmapDrawable)iv_cp_info2.getDrawable();
-                    BitmapDrawable drawable3 = (BitmapDrawable)iv_cp_info3.getDrawable();
-                    BitmapDrawable drawable4 = (BitmapDrawable)iv_cp_info4.getDrawable();
-                    BitmapDrawable drawable5 = (BitmapDrawable)iv_cp_info5.getDrawable();
-
-                    Bitmap bitmap1 = drawable1.getBitmap();
-                    Bitmap bitmap2 = drawable2.getBitmap();
-                    Bitmap bitmap3 = drawable3.getBitmap();
-                    Bitmap bitmap4 = drawable4.getBitmap();
-                    Bitmap bitmap5 = drawable5.getBitmap();
-
-                    ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
-                    ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
-                    ByteArrayOutputStream stream3 = new ByteArrayOutputStream();
-                    ByteArrayOutputStream stream4 = new ByteArrayOutputStream();
-                    ByteArrayOutputStream stream5 = new ByteArrayOutputStream();
-
-                    bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, stream1);
-                    bitmap2.compress(Bitmap.CompressFormat.JPEG, 100, stream2);
-                    bitmap3.compress(Bitmap.CompressFormat.JPEG, 100, stream3);
-                    bitmap4.compress(Bitmap.CompressFormat.JPEG, 100, stream4);
-                    bitmap5.compress(Bitmap.CompressFormat.JPEG, 100, stream5);
-
-                    byte[] byteArray1 = stream1.toByteArray();
-                    byte[] byteArray2 = stream2.toByteArray();
-                    byte[] byteArray3 = stream3.toByteArray();
-                    byte[] byteArray4 = stream4.toByteArray();
-                    byte[] byteArray5 = stream5.toByteArray();
+                    byte[] byteArray1 = bitmapToByteArray(iv_cp_info1);
+                    byte[] byteArray2 = bitmapToByteArray(iv_cp_info2);
+                    byte[] byteArray3 = bitmapToByteArray(iv_cp_info3);
+                    byte[] byteArray4 = bitmapToByteArray(iv_cp_info4);
+                    byte[] byteArray5 = bitmapToByteArray(iv_cp_info5);
+                    byte[] checkbyte = bitmapToByteArray(checkImage);
 
                     // 현재 페이지 내용 옮기기
                     intent.putExtra("info", et_cp_info.getText().toString());
@@ -109,6 +87,7 @@ public class setup2 extends AppCompatActivity {
                     intent.putExtra("infoImage3", byteArray3);
                     intent.putExtra("infoImage4", byteArray4);
                     intent.putExtra("infoImage5", byteArray5);
+                    intent.putExtra("checkImage", checkbyte);
 
                     startActivity(intent);
                 }
@@ -129,5 +108,15 @@ public class setup2 extends AppCompatActivity {
     // edittext를 입력했는지 확인
     boolean checkEditText(EditText editText) {
         return editText.getText().toString().equals("") || editText.getText().toString()==null;
+    }
+
+    // imageView에서 bitmap을 byte[]로 변환
+    public byte[] bitmapToByteArray(ImageView imageView) {
+        BitmapDrawable drawable = (BitmapDrawable)imageView.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 }

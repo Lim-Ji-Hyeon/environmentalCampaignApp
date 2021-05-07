@@ -4,15 +4,13 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,6 +24,7 @@ import com.google.android.material.tabs.TabLayout;
 public class CampaignInformation extends FragmentActivity {
 
     TabLayout tabLayout;
+    FrameLayout tabcontent;
     FragmentInfo fragmentInfo;
     FragmentWay fragmentWay;
     FragmentReview fragmentReview;
@@ -52,6 +51,7 @@ public class CampaignInformation extends FragmentActivity {
 //        tabLayout.addTab(tabLayout.newTab().setText("설명"));
 //        tabLayout.addTab(tabLayout.newTab().setText("인증방법"));
 //        tabLayout.addTab(tabLayout.newTab().setText("후기"));
+        tabcontent = (FrameLayout)findViewById(R.id.tabcontent);
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -65,6 +65,7 @@ public class CampaignInformation extends FragmentActivity {
                 else if(position == 2)
                     selected = fragmentReview;
                 getSupportFragmentManager().beginTransaction().replace(R.id.tabcontent, selected).commit();
+                if(isSetup()) { fragmentSetup(); }
             }
 
             @Override
@@ -96,17 +97,15 @@ public class CampaignInformation extends FragmentActivity {
 
         // setup의 intent면 내용 불러오기
         gIntent = getIntent();
-        if(gIntent.hasExtra("signal")) {
-            if(gIntent.getStringExtra("signal").equals("setup")) {
-                getSetupInfo();
-                bt_back.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(getApplicationContext(), SetUpCampaignPage.class);
-                        startActivity(intent);
-                    }
-                });
-            }
+        if(isSetup()) {
+            getSetupInfo();
+            bt_back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), SetUpCampaignPage.class);
+                    startActivity(intent);
+                }
+            });
         }
 
         // 참가하기 버튼 이벤트
@@ -123,6 +122,11 @@ public class CampaignInformation extends FragmentActivity {
         });
     }
 
+    // signal이 setup인지 확인
+    boolean isSetup() {
+        return gIntent.hasExtra("signal") && gIntent.getStringExtra("signal").equals("setup");
+    }
+
     // setup 내용 불러오기
     void getSetupInfo() {
         // 불러오기
@@ -133,23 +137,6 @@ public class CampaignInformation extends FragmentActivity {
         String period = gIntent.getStringExtra("period");
 //        String eDate = gIntent.getStringExtra("eDate");
 
-//        String info = gIntent.getStringExtra("info");
-//        byte[] arr1 = gIntent.getByteArrayExtra("infoImage1");
-//        Bitmap infoImage1 = BitmapFactory.decodeByteArray(arr1, 0, arr1.length);
-//        Bitmap infoImage2 = (Bitmap)gIntent.getExtras().get("infoImage2");
-//        Bitmap infoImage3 = (Bitmap)gIntent.getExtras().get("infoImage3");
-//        Bitmap infoImage4 = (Bitmap)gIntent.getExtras().get("infoImage4");
-//        Bitmap infoImage5 = (Bitmap)gIntent.getExtras().get("infoImage5");
-//        String way = gIntent.getStringExtra("way");
-//        Bitmap rPhoto1 = (Bitmap)gIntent.getExtras().get("rPhoto1");
-//        Bitmap rPhoto2 = (Bitmap)gIntent.getExtras().get("rPhoto2");
-//        String rInfo = gIntent.getStringExtra("rInfo");
-//        String rInfo2 = gIntent.getStringExtra("rInfo2");
-//        Bitmap wPhoto1 = (Bitmap)gIntent.getExtras().get("wPhoto1");
-//        Bitmap wPhoto2 = (Bitmap)gIntent.getExtras().get("wPhoto2");
-//        String wInfo = gIntent.getStringExtra("wInfo");
-//        String wInfo2 = gIntent.getStringExtra("wInfo2");
-
         // 붙이기
         iv_logo.setImageBitmap(logo);
         tv_cp_name.setText(cp_name);
@@ -158,20 +145,62 @@ public class CampaignInformation extends FragmentActivity {
         tv_participantsN.setText("0명");
         tv_reCampaignN.setText("0회");
 
-        infoSetup();
+        fragmentSetup();
     }
 
-    // setup info
-    void infoSetup() {
-        String info = gIntent.getStringExtra("info");
+    // fragment에 setup 정보 입력하기
+    void fragmentSetup() {
+//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.tabcontent);
+        if(tabLayout.getSelectedTabPosition() == 0) {
+            String info = gIntent.getStringExtra("info");
+            byte[] infoImage1 = gIntent.getByteArrayExtra("infoImage1");
+            byte[] infoImage2 = gIntent.getByteArrayExtra("infoImage2");
+            byte[] infoImage3 = gIntent.getByteArrayExtra("infoImage3");
+            byte[] infoImage4 = gIntent.getByteArrayExtra("infoImage4");
+            byte[] infoImage5 = gIntent.getByteArrayExtra("infoImage5");
+            byte[] checkImage = gIntent.getByteArrayExtra("checkImage");
 
-        Fragment fragment = getSupportFragmentManager().findFragmentById(fragmentInfo.getId());
+            Bundle bundle1 = new Bundle(); // 괄호 안에 전달하려는 값의 갯수 넣을 수 있음
+            bundle1.putString("info", info);
+            bundle1.putByteArray("infoImage1", infoImage1);
+            bundle1.putByteArray("infoImage2", infoImage2);
+            bundle1.putByteArray("infoImage3", infoImage3);
+            bundle1.putByteArray("infoImage4", infoImage4);
+            bundle1.putByteArray("infoImage5", infoImage5);
+            bundle1.putByteArray("checkImage", checkImage);
 
-//        LayoutInflater mInflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
-//        FrameLayout tabcontent = (FrameLayout)findViewById(R.id.tabcontent);
-//        fragment.getLayoutInflater().inflate(R.layout.fragment_info, tabcontent, false);
-//        TextView tv_cpInfo = (TextView)viewGroup.findViewById(R.id.tv_cpInfo);
-//        tv_cpInfo.setText(info);
+            fragmentInfo.setArguments(bundle1);
+        }
+        else if(tabLayout.getSelectedTabPosition() == 1) {
+            String way = gIntent.getStringExtra("way");
+            byte[] rPhoto1 = gIntent.getByteArrayExtra("rPhoto1");
+            byte[] rPhoto2 = gIntent.getByteArrayExtra("rPhoto2");
+            String rInfo = gIntent.getStringExtra("rInfo");
+            String rInfo2 = gIntent.getStringExtra("rInfo2");
+            byte[] wPhoto1 = gIntent.getByteArrayExtra("wPhoto1");
+            byte[] wPhoto2 = gIntent.getByteArrayExtra("wPhoto2");
+            String wInfo = gIntent.getStringExtra("wInfo");
+            String wInfo2 = gIntent.getStringExtra("wInfo2");
+            byte[] checkImage2 = gIntent.getByteArrayExtra("checkImage2");
+            String frequency = gIntent.getStringExtra("frequency");
+            String period = gIntent.getStringExtra("period");
+
+            Bundle bundle2 = new Bundle();
+            bundle2.putString("way", way);
+            bundle2.putByteArray("rPhoto1", rPhoto1);
+            bundle2.putByteArray("rPhoto2", rPhoto2);
+            bundle2.putString("rInfo", rInfo);
+            bundle2.putString("rInfo2", rInfo2);
+            bundle2.putByteArray("wPhoto1", wPhoto1);
+            bundle2.putByteArray("wPhoto2", wPhoto2);
+            bundle2.putString("wInfo", wInfo);
+            bundle2.putString("wInfo2", wInfo2);
+            bundle2.putByteArray("checkImage2", checkImage2);
+            bundle2.putString("frequency", frequency);
+            bundle2.putString("period", period);
+
+            fragmentWay.setArguments(bundle2);
+        }
     }
 
     // 참가하기 버튼 alertdialog

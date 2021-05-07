@@ -73,8 +73,7 @@
             <EditText
                 android:id="@+id/et_cp_way"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:lines="5"
+                android:layout_height="150dp"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
                 android:hint="캠페인 인증방법을 적어주세요."/>
@@ -98,7 +97,18 @@
 
                     <ImageView
                         android:id="@+id/iv_rightPhoto"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/edge"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/cp3" />
+
+                    <ImageView
+                        android:id="@+id/iv_rightPhoto2"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
                         android:layout_weight="1"
@@ -108,14 +118,15 @@
                         android:src="@drawable/add_image" />
 
                     <ImageView
-                        android:id="@+id/iv_rightPhoto2"
-                        android:layout_width="match_parent"
+                        android:id="@+id/checkImage2"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
                         android:layout_weight="1"
                         android:layout_margin="10dp"
                         android:scaleType="fitCenter"
                         android:background="@drawable/edge"
+                        android:visibility="gone"
                         android:src="@drawable/add_image" />
 
                 </TableRow>
@@ -126,7 +137,7 @@
 
                     <EditText
                         android:id="@+id/et_rightPhotoInfo"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_margin="5dp"
@@ -139,7 +150,7 @@
 
                     <EditText
                         android:id="@+id/et_rightPhotoInfo2"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_margin="5dp"
@@ -173,7 +184,7 @@
 
                     <ImageView
                         android:id="@+id/iv_wrongPhoto"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
                         android:layout_weight="1"
@@ -184,7 +195,7 @@
 
                     <ImageView
                         android:id="@+id/iv_wrongPhoto2"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
                         android:layout_weight="1"
@@ -202,7 +213,7 @@
 
                     <EditText
                         android:id="@+id/et_wrongPhotoInfo"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_margin="5dp"
@@ -215,7 +226,7 @@
 
                     <EditText
                         android:id="@+id/et_wrongPhotoInfo2"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_margin="5dp"

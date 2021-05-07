@@ -66,53 +66,59 @@
 
                 <TableLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="wrap_content" >
 
                         <ImageView
                             android:id="@+id/iv_rightPhoto"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:adjustViewBounds="true"
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
+                            android:visibility="invisible"
+                            android:scaleType="fitCenter"
                             android:src="@drawable/cp5" />
 
                         <ImageView
                             android:id="@+id/iv_rightPhoto2"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:adjustViewBounds="true"
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
-                            android:src="@drawable/cp8" />
+                            android:visibility="invisible"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/cp5" />
 
                     </TableRow>
 
                     <TableRow
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" >
+                        android:layout_height="wrap_content" >
 
                         <TextView
                             android:id="@+id/tv_rightPhotoInfo"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_margin="5dp"
+                            android:visibility="invisible"
                             android:text="재활용 분리배출 (라벨 완전 제거 형태) 사진 올리기"
                             android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/tv_rightPhotoInfo2"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_margin="5dp"
+                            android:visibility="invisible"
                             android:text="박스 분리배출 (테이프 제거 형태) 사진 올리기"
                             android:textSize="15sp" />
 
@@ -123,10 +129,12 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/tv_wrongPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -140,7 +148,7 @@
 
                 <TableLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                     <TableRow
                         android:layout_width="match_parent"
@@ -148,23 +156,26 @@
 
                         <ImageView
                             android:id="@+id/iv_wrongPhoto"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:adjustViewBounds="true"
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
-                            android:src="@drawable/wrong1" />
+                            android:visibility="invisible"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/cp5" />
 
                         <ImageView
                             android:id="@+id/iv_wrongPhoto2"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_margin="5dp"
                             android:layout_weight="1"
                             android:adjustViewBounds="true"
-                            android:src="@drawable/cp8"
+                            android:src="@drawable/cp5"
+                            android:scaleType="fitCenter"
                             android:visibility="invisible" />
 
                     </TableRow>
@@ -175,16 +186,17 @@
 
                         <TextView
                             android:id="@+id/tv_wrongPhotoInfo"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_margin="5dp"
+                            android:visibility="invisible"
                             android:text="라벨이 완전 제거되지 않은 사진"
                             android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/tv_wrongPhotoInfo2"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:layout_weight="1"
