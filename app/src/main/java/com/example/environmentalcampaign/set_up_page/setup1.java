@@ -5,10 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -19,6 +24,7 @@ import android.widget.Toast;
 import com.example.environmentalcampaign.R;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -37,6 +43,9 @@ public class setup1 extends AppCompatActivity {
     TextView tv_sDate, tv_eDate;
     SimpleDateFormat simpleDateFormat;
 
+    private final int GALLERY_CODE = 777;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +55,18 @@ public class setup1 extends AppCompatActivity {
         et_cp_name = (EditText)findViewById(R.id.et_cp_name);
         tv_frequency = (TextView)findViewById(R.id.tv_frequency);
         tv_period = (TextView)findViewById(R.id.tv_period);
+
+        // 대표사진 클릭시 갤러리앱에서 이미지 선택
+        iv_cp_logo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(intent, GALLERY_CODE);
+            }
+        });
+
 
         // 오늘 날짜 구하기
         Calendar cal = Calendar.getInstance(Locale.KOREA);
@@ -79,10 +100,10 @@ public class setup1 extends AppCompatActivity {
         tv_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if(checkImage(iv_cp_logo)) {
-//                    Toast.makeText(setup1.this, "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show();
-//                }
-//                else
+                if(checkImage(iv_cp_logo)) {
+                    Toast.makeText(setup1.this, "이미지를 선택해주세요.", Toast.LENGTH_SHORT).show();
+                }
+                else
                     if(checkEditText(et_cp_name)) {
                     Toast.makeText(setup1.this, "캠페인 이름을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
@@ -186,5 +207,67 @@ public class setup1 extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         return byteArray;
+    }
+
+    // 갤러리 연동하기 위한 메소드 1
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case GALLERY_CODE:
+                    sendPicture(data.getData()); //갤러리에서 가져오기
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    // 갤러리 연동하기 위한 메소드 2
+    private void sendPicture(Uri imgUri) {
+        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        int exifDegree = exifOrientationToDegrees(exifOrientation);
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
+        iv_cp_logo.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
+    }
+
+    // 갤러리 연동하기 위한 메소드 3
+    private int exifOrientationToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
+        }
+        return 0;
+    }
+
+    // 갤러리 연동하기 위한 메소드 4
+    private Bitmap rotate(Bitmap src, float degree) {
+        // Matrix 객체 생성
+        Matrix matrix = new Matrix();
+        // 회전 각도 셋팅
+        matrix.postRotate(degree);
+        // 이미지와 Matrix 를 셋팅해서 Bitmap 객체 생성
+        return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
+    }
+
+    // 갤러리 연동하기 위한 메소드 5
+    private String getRealPathFromURI(Uri contentUri) {
+        int column_index = 0;
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        if (cursor.moveToFirst()) {
+            column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        }
+        return cursor.getString(column_index);
     }
 }

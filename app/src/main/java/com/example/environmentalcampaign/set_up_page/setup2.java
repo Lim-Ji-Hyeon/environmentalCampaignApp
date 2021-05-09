@@ -39,6 +39,13 @@ public class setup2 extends AppCompatActivity {
         iv_cp_info5 = (ImageView)findViewById(R.id.iv_cp_info5);
         checkImage = (ImageView)findViewById(R.id.checkImage);
 
+        iv_cp_info1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         // 전 페이지 내용들 불러오기
         Intent preIntent = getIntent();
         byte[] arr = preIntent.getByteArrayExtra("logo");

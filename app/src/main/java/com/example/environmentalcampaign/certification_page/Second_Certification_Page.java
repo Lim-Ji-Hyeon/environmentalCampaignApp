@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.environmentalcampaign.R;
+import com.example.environmentalcampaign.bookmark.BookMark;
 import com.example.environmentalcampaign.home.HomeActivity;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -125,6 +126,10 @@ public class Second_Certification_Page extends AppCompatActivity {
 //                intent.putExtra("sendData", editText.getText().toString());
 //                intent.putExtra("image_path", byteArray);
 //                startActivity(intent);
+
+                Toast.makeText(Second_Certification_Page.this, "인증이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), CertificationPage.class);
+                startActivity(intent);
 
             }
         });
