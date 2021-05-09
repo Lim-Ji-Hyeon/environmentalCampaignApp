@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.environmentalcampaign.certification_page.CertificationPage;
@@ -23,6 +25,7 @@ import com.example.environmentalcampaign.bookmark.BookMark;
 import com.example.environmentalcampaign.feed.FeedPage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -58,15 +61,38 @@ public class HomeActivity extends AppCompatActivity {
         });
         setupIndicators(list.size());
 
-//        RecyclerView datalist1;
-//        List<String> titles1;
-//        List<Integer> images1;
-//        RecyclerViewAdapter recyclerViewAdapter1;
-//
-//        RecyclerView datalist2;
-//        List<String> titles2;
-//        List<Integer> images2;
-//        RecyclerViewAdapter recyclerViewAdapter2;
+
+        // 인기 캠페인, 신규 캠페인 recyclerview
+        RecyclerView famousCampaign = findViewById(R.id.famousCampaign);
+        List<String> ftitle = new ArrayList<>();
+        List<Integer> fimage = new ArrayList<>();
+        RecyclerViewAdapter fRecyclerViewAdapter = new RecyclerViewAdapter(this, ftitle, fimage);
+
+        RecyclerView newCampaign = findViewById(R.id.newCampaign);
+        List<String> ntitle = new ArrayList<>();
+        List<Integer> nimage = new ArrayList<>();
+        RecyclerViewAdapter nRecyclerViewAdapter = new RecyclerViewAdapter(this, ntitle, nimage);
+
+        ftitle.add("버리스타 캠페인");
+        ftitle.add("용기내 캠페인");
+        fimage.add(R.drawable.burista_1);
+        fimage.add(R.drawable.campaign_image);
+
+        ntitle.add("페트라떼 캠페인");
+        ntitle.add("플라스틱 프리 챌린지");
+
+        nimage.add(R.drawable.new_campaign_1);
+        nimage.add(R.drawable.new_campaign_2);
+
+        GridLayoutManager fGridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+        GridLayoutManager nGridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+
+        famousCampaign.setLayoutManager(fGridLayoutManager);
+        newCampaign.setLayoutManager(nGridLayoutManager);
+
+        famousCampaign.setAdapter(fRecyclerViewAdapter);
+        newCampaign.setAdapter(nRecyclerViewAdapter);
+
 
         Intent intent = getIntent();
 

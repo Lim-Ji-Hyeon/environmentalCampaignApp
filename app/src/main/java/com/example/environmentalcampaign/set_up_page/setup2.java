@@ -6,11 +6,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Path;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
@@ -130,7 +134,7 @@ public class setup2 extends AppCompatActivity {
                     intent.putExtra("period", period);
 //                intent.putExtra("eDate", eDate);
 
-                    // 이미지 Bitmap 변환
+//                    // 이미지 Bitmap 변환
                     byte[] byteArray1 = bitmapToByteArray(iv_cp_info1);
                     byte[] byteArray2 = bitmapToByteArray(iv_cp_info2);
                     byte[] byteArray3 = bitmapToByteArray(iv_cp_info3);
@@ -138,7 +142,7 @@ public class setup2 extends AppCompatActivity {
                     byte[] byteArray5 = bitmapToByteArray(iv_cp_info5);
                     byte[] checkbyte = bitmapToByteArray(checkImage);
 
-                    // 현재 페이지 내용 옮기기
+//                    // 현재 페이지 내용 옮기기
                     intent.putExtra("info", et_cp_info.getText().toString());
                     intent.putExtra("infoImage1", byteArray1);
                     intent.putExtra("infoImage2", byteArray2);
