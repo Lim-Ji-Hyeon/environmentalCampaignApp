@@ -26,11 +26,11 @@ public class setup3 extends AppCompatActivity {
     ImageButton bt_back;
     TextView tv_pre, tv_next;
 
-    byte[] logo, infoImage1, infoImage2, infoImage3, infoImage4, infoImage5;
+    byte[] logo, infoImage1, infoImage2, infoImage3, infoImage4, infoImage5, checkImage;
     String cp_name, frequency, period, eDate, info;
 
     EditText et_cp_way, et_rightPhotoInfo, et_rightPhotoInfo2, et_wrongPhotoInfo, et_wrongPhotoInfo2;
-    ImageView iv_rightPhoto, iv_rightPhoto2, iv_wrongPhoto, iv_wrongPhoto2;
+    ImageView iv_rightPhoto, iv_rightPhoto2, iv_wrongPhoto, iv_wrongPhoto2, checkImage2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +46,7 @@ public class setup3 extends AppCompatActivity {
         iv_wrongPhoto2 = (ImageView)findViewById(R.id.iv_wrongPhoto2);
         et_wrongPhotoInfo = (EditText)findViewById(R.id.et_wrongPhotoInfo);
         et_wrongPhotoInfo2 = (EditText)findViewById(R.id.et_wrongPhotoInfo2);
+        checkImage2 = (ImageView)findViewById(R.id.checkImage2);
 
         // 전 페이지 내용들 불러오기
         Intent preIntent = getIntent();
@@ -61,6 +62,7 @@ public class setup3 extends AppCompatActivity {
         infoImage3 = preIntent.getByteArrayExtra("infoImage3");
         infoImage4 = preIntent.getByteArrayExtra("infoImage4");
         infoImage5 = preIntent.getByteArrayExtra("infoImage5");
+        checkImage = preIntent.getByteArrayExtra("checkImage");
 
         // 이전 페이지
         tv_pre = (TextView)findViewById(R.id.tv_pre);
@@ -147,32 +149,14 @@ public class setup3 extends AppCompatActivity {
         intent.putExtra("infoImage3", infoImage3);
         intent.putExtra("infoImage4", infoImage4);
         intent.putExtra("infoImage5", infoImage5);
+        intent.putExtra("checkImage", checkImage);
 
         // 이미지 Bitmap 변환
-        BitmapDrawable drawable1 = (BitmapDrawable)iv_rightPhoto.getDrawable();
-        BitmapDrawable drawable2 = (BitmapDrawable)iv_rightPhoto2.getDrawable();
-        BitmapDrawable drawable3 = (BitmapDrawable)iv_wrongPhoto.getDrawable();
-        BitmapDrawable drawable4 = (BitmapDrawable)iv_wrongPhoto2.getDrawable();
-
-        Bitmap bitmap1 = drawable1.getBitmap();
-        Bitmap bitmap2 = drawable2.getBitmap();
-        Bitmap bitmap3 = drawable3.getBitmap();
-        Bitmap bitmap4 = drawable4.getBitmap();
-
-        ByteArrayOutputStream stream1 = new ByteArrayOutputStream();
-        ByteArrayOutputStream stream2 = new ByteArrayOutputStream();
-        ByteArrayOutputStream stream3 = new ByteArrayOutputStream();
-        ByteArrayOutputStream stream4 = new ByteArrayOutputStream();
-
-        bitmap1.compress(Bitmap.CompressFormat.JPEG, 100, stream1);
-        bitmap2.compress(Bitmap.CompressFormat.JPEG, 100, stream2);
-        bitmap3.compress(Bitmap.CompressFormat.JPEG, 100, stream3);
-        bitmap4.compress(Bitmap.CompressFormat.JPEG, 100, stream4);
-
-        byte[] byteArray1 = stream1.toByteArray();
-        byte[] byteArray2 = stream2.toByteArray();
-        byte[] byteArray3 = stream3.toByteArray();
-        byte[] byteArray4 = stream4.toByteArray();
+        byte[] byteArray1 = bitmapToByteArray(iv_rightPhoto);
+        byte[] byteArray2 = bitmapToByteArray(iv_rightPhoto2);
+        byte[] byteArray3 = bitmapToByteArray(iv_wrongPhoto);
+        byte[] byteArray4 = bitmapToByteArray(iv_wrongPhoto2);
+        byte[] checkbyte2 = bitmapToByteArray(checkImage2);
 
         // 현재 페이지 내용 옮기기
         intent.putExtra("way", et_cp_way.getText().toString());
@@ -184,6 +168,7 @@ public class setup3 extends AppCompatActivity {
         intent.putExtra("wPhoto2", byteArray4);
         intent.putExtra("wInfo", et_wrongPhotoInfo.getText().toString());
         intent.putExtra("rInfo2", et_wrongPhotoInfo2.getText().toString());
+        intent.putExtra("checkImage2", checkbyte2);
 
         // setup이라는 신호주기
         intent.putExtra("signal", "setup");
@@ -196,7 +181,7 @@ public class setup3 extends AppCompatActivity {
         return editText.getText().toString().equals("") || editText.getText().toString()==null;
     }
 
-    // 이미지 선택했는지 확인
+    // 이미지 선택했는지 확인(선택했으면 false)
     boolean checkImage(ImageView imageView) {
         BitmapDrawable imageDrawable = (BitmapDrawable)imageView.getDrawable();
         Bitmap imageBitmap = imageDrawable.getBitmap();
@@ -205,5 +190,15 @@ public class setup3 extends AppCompatActivity {
         Bitmap checkBitmap = checkDrawable.getBitmap();
 
         return imageBitmap.equals(checkBitmap);
+    }
+
+    // imageView에서 bitmap을 byte[]로 변환
+    public byte[] bitmapToByteArray(ImageView imageView) {
+        BitmapDrawable drawable = (BitmapDrawable)imageView.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 }

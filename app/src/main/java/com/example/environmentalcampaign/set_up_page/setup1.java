@@ -96,11 +96,7 @@ public class setup1 extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), setup2.class);
 
                     // 이미지 Bitmap 변환
-                    BitmapDrawable drawable = (BitmapDrawable)iv_cp_logo.getDrawable();
-                    Bitmap bitmap = drawable.getBitmap();
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
+                    byte[] byteArray = bitmapToByteArray(iv_cp_logo);
 
                     intent.putExtra("logo", byteArray);
                     intent.putExtra("cp_name", et_cp_name.getText().toString());
@@ -111,26 +107,6 @@ public class setup1 extends AppCompatActivity {
                 }
             }
         });
-
-        // 이전 페이지 버튼을 통해 돌아왔을 경우 => 그냥 onBackPressed 하면 되는 것 같다...
-//        Intent preIntent = getIntent();
-//        if(preIntent.hasExtra("logo")) {
-//            byte[] arr = preIntent.getByteArrayExtra("logo");
-//            Bitmap logo = BitmapFactory.decodeByteArray(arr, 0, arr.length);
-//            String cp_name = (String)preIntent.getExtras().get("cp_name");
-//            String frequency = (String)preIntent.getExtras().get("frequency");
-//            String period = (String)preIntent.getExtras().get("period");
-//            String eDate = (String)preIntent.getExtras().get("eDate");
-//
-//            iv_cp_logo.setImageBitmap(logo);
-//            et_cp_name.setText(cp_name);
-//            tv_frequency.setText(frequency);
-//            tv_frequency.setVisibility(View.VISIBLE);
-//            tv_period.setText(period);
-//            tv_period.setVisibility(View.VISIBLE);
-//            tv_eDate.setText(eDate);
-//            tv_eDate.setVisibility(View.VISIBLE);
-//        }
 
         // 뒤로가기 버튼 이벤트
         bt_back = (ImageButton)findViewById(R.id.bt_back);
@@ -186,7 +162,7 @@ public class setup1 extends AppCompatActivity {
         return end;
     }
 
-    // 이미지 선택했는지 확인
+    // 이미지 선택했는지 확인(선택했으면 false)
     boolean checkImage(ImageView imageView) {
         BitmapDrawable imageDrawable = (BitmapDrawable)imageView.getDrawable();
         Bitmap imageBitmap = imageDrawable.getBitmap();
@@ -200,5 +176,15 @@ public class setup1 extends AppCompatActivity {
     // edittext를 입력했는지 확인
     boolean checkEditText(EditText editText) {
         return editText.getText().toString().equals("") || editText.getText().toString()==null;
+    }
+
+    // imageView에서 bitmap을 byte[]로 변환
+    public byte[] bitmapToByteArray(ImageView imageView) {
+        BitmapDrawable drawable = (BitmapDrawable)imageView.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 }
