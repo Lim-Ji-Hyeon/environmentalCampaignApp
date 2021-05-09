@@ -7,6 +7,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.environmentalcampaign.R;
@@ -17,15 +18,10 @@ import com.example.environmentalcampaign.home.RecyclerViewAdapter;
 import com.example.environmentalcampaign.mypage.MyPage;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchPage extends AppCompatActivity {
-
-
-    RecyclerView datalist;
-    List<String> titles;
-    List<Integer> images;
-    RecyclerViewAdapter recyclerViewAdapter;
 
     ImageButton bt_back;
     TextView tv_home, tv_make, tv_certi, tv_feed, tv_mypage;
@@ -35,26 +31,26 @@ public class SearchPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_page);
-//        datalist = findViewById(R.id.datalist);
-//
-//        titles = new ArrayList<>();
-//        images = new ArrayList<>();
-//
-//        titles.add("멸종위기 보호 캠페인");
-//        titles.add("토양 정화 캠페인");
-//        titles.add("플라스틱 프리 챌린지");
-//        titles.add("용기내 캠페인");
-//
-//        images.add(R.drawable.dolphin);
-//        images.add(R.drawable.soil);
-//        images.add(R.drawable.new_campaign_2);
-//        images.add(R.drawable.campaign_image);
-//
-//        adapter = new Adapter(this, titles, images);
-//
-//        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
-//        datalist.setLayoutManager(gridLayoutManager);
-//        datalist.setAdapter(adapter);
+
+        // recyclerview
+        RecyclerView searchCampaign = findViewById(R.id.searchCampaign);
+        List<String> stitle = new ArrayList<>();
+        List<Integer> simage = new ArrayList<>();
+        RecyclerViewAdapter sRecyclerViewAdapter = new RecyclerViewAdapter(this, stitle, simage);
+
+        stitle.add("멸종위기 보호 캠페인");
+        stitle.add("토양 정화 캠페인");
+        stitle.add("플라스틱 프리 챌린지");
+        stitle.add("용기내 캠페인");
+
+        simage.add(R.drawable.dolphin);
+        simage.add(R.drawable.soil);
+        simage.add(R.drawable.new_campaign_2);
+        simage.add(R.drawable.campaign_image);
+
+        GridLayoutManager sGridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+        searchCampaign.setLayoutManager(sGridLayoutManager);
+        searchCampaign.setAdapter(sRecyclerViewAdapter);
 
         // 뒤로 가기 버튼 페이지 연동(홈화면과 연동)
         bt_back = (ImageButton)findViewById(R.id.bt_back);
