@@ -50,12 +50,12 @@ public class FragmentReview extends Fragment {
         rListView.setAdapter(rAdpter);
 
         Context context = getActivity().getApplicationContext();
-//        rAdpter.addItem(ContextCompat.getDrawable(context, R.drawable.profile), "녹색아줌마", 20210404, 5,
-//                "나름 분리수거를 잘 하고 있다고 생각했는데 아직 많이 부족하다는 걸 느꼈어요ㅠㅠ 이번 기회를 통해 올바르게 분리배출하는 방법을 알게 되어 좋았습니다!! 많은 사람들이 캠페인에 참여했으면 좋겠네요~~");
-//        rAdpter.addItem(ContextCompat.getDrawable(context, R.drawable.profile), "지구지킴이", 20210329, 4.5,
-//                "평소 분리수거만 잘하면 되겠거니 하고 살아왔는데 잘못된 분리수거 중이었다니 충격이네요.. 앞으로 더욱 신경써서 분리배출하겠습니다!!!!");
-//        rAdpter.addItem(ContextCompat.getDrawable(context, R.drawable.profile), "으쌰으쌰", 20210328, 5,
-//                "느끼는 것이 많은 캠페인입니다. 계속 re캠페인 중입니다.");
+        rAdpter.addItem(ContextCompat.getDrawable(context, R.drawable.profile), "녹색아줌마", 20210404, 5,
+                "나름 분리수거를 잘 하고 있다고 생각했는데 아직 많이 부족하다는 걸 느꼈어요ㅠㅠ 이번 기회를 통해 올바르게 분리배출하는 방법을 알게 되어 좋았습니다!! 많은 사람들이 캠페인에 참여했으면 좋겠네요~~");
+        rAdpter.addItem(ContextCompat.getDrawable(context, R.drawable.profile), "지구지킴이", 20210329, 4.5,
+                "평소 분리수거만 잘하면 되겠거니 하고 살아왔는데 잘못된 분리수거 중이었다니 충격이네요.. 앞으로 더욱 신경써서 분리배출하겠습니다!!!!");
+        rAdpter.addItem(ContextCompat.getDrawable(context, R.drawable.profile), "으쌰으쌰", 20210328, 5,
+                "느끼는 것이 많은 캠페인입니다. 계속 re캠페인 중입니다.");
 
         if(rAdpter.isEmpty()) {
             TextView tv_noReview = (TextView)rootView.findViewById(R.id.tv_noReview);
