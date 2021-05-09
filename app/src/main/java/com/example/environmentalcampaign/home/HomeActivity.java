@@ -71,16 +71,16 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         // Second_Certification_Page에서 보내온 신호를 가지고 있으면 수행한다.
-        if (intent.hasExtra("sendData") && intent.hasExtra("image")){
+        if (intent.hasExtra("sendData") && intent.hasExtra("image_path")){
             // 호출할 인텐트가 보내온 이미지와 메시지 얻어오기
 
-            byte[] arr = intent.getByteArrayExtra("image");
-            Bitmap image = BitmapFactory.decodeByteArray(arr, 0, arr.length);
+            //byte[] arr = intent.getByteArrayExtra("image");
+            Bitmap bitmap = BitmapFactory.decodeFile(intent.getStringExtra("image_path"));
             String msg = (String)intent.getExtras().get("sendData");
 
             // 전달 되어온 정보를 뷰에 넣기
             ImageView BigImage = (ImageView)findViewById(R.id.realtime_image);
-            BigImage.setImageBitmap(image);
+            BigImage.setImageBitmap(bitmap);
             TextView txt = (TextView)findViewById(R.id.realtime_text);
             txt.setText(msg);
         }
