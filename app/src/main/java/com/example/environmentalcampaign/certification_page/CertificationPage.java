@@ -1,39 +1,27 @@
 package com.example.environmentalcampaign.certification_page;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
-import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.ExifInterface;
-import android.net.Uri;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.environmentalcampaign.CpData;
 import com.example.environmentalcampaign.MyAdapter;
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.feed.FeedPage;
 import com.example.environmentalcampaign.home.HomeActivity;
 import com.example.environmentalcampaign.mypage.MyPage;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.io.ByteArrayOutputStream;
+import java.util.Calendar;
 
 public class CertificationPage extends AppCompatActivity {
 
@@ -58,17 +46,32 @@ public class CertificationPage extends AppCompatActivity {
         listView2.setAdapter(adapter2);
 
         // 첫 번째 아이템 추가
-        adapter.addItem(100, 2, "버리스타", "주 2일", "00:00:00", "24:00:00", 20210501, ContextCompat.getDrawable(this, R.drawable.burista));
-        adapter2.addItem(95, 1, "용기내", "주 5일", "09:00:00", "18:00:00", 20210430, ContextCompat.getDrawable(this, R.drawable.cp1), true);
+        adapter.addItem(70, 2, "버리스타", "2주", "주 2일", "00:00:00", "24:00:00", 20210701, ContextCompat.getDrawable(this, R.drawable.burista));
+        adapter2.addItem(95, 1, "용기내", "3주", "주 5일", "09:00:00", "18:00:00", 20210830, ContextCompat.getDrawable(this, R.drawable.cp1), true);
 
 
         // 리스트뷰를 클릭하면 인증할 수 있는 페이지로 넘어간다.
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // certification campaign으로 넘어간다
+                Intent intent = new Intent(getApplicationContext(), CertificationCampaign.class);
 
-                // second certificatio page로 넘어간다
-                Intent intent = new Intent(getApplicationContext(), Second_Certification_Page.class);
+                CpData item = (CpData)adapter.getItem(i);
+                BitmapDrawable drawable = (BitmapDrawable)item.getLogo();
+                Bitmap bitmap = drawable.getBitmap();
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+
+                intent.putExtra("name", item.getName());
+                intent.putExtra("time", item.getStime() + " ~ " + item.getEtime());
+                intent.putExtra("Dday", countdday(item.getEdate()) + "일 뒤 종료");
+                intent.putExtra("period", item.getPeriod());
+                intent.putExtra("frequency", item.getFrequency());
+                intent.putExtra("logo", byteArray);
+                intent.putExtra("rate", item.getRate());
+
                 startActivity(intent);
             }
         });
@@ -121,4 +124,34 @@ public class CertificationPage extends AppCompatActivity {
         });
 
     }
+
+    public int eyear(int edate) { return Integer.parseInt(String.valueOf(edate).substring(0,4)); }
+    public int emonth(int edate) { return Integer.parseInt(String.valueOf(edate).substring(4,6)); }
+    public int eday(int edate) { return Integer.parseInt(String.valueOf(edate).substring(6,8)); }
+
+    public int countdday(int edate) {
+        try{
+//            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            int myear = eyear(edate);
+            int mmonth = emonth(edate);
+            int mday = eday(edate);
+
+            Calendar todayCal = Calendar.getInstance(); //오늘날짜 가져오기
+            Calendar ddayCal = Calendar.getInstance(); //오늘날짜 가져와서 변경시킴
+
+            mmonth -= 1; //받아온 날짜의 달에서 -1을 해줘야함
+            ddayCal.set(myear, mmonth, mday); // 디데이 날짜 입력
+
+            long today = todayCal.getTimeInMillis()/(24*60*60*1000); // 24시간 60분 60초 밀리초로 변환
+            long dday = ddayCal.getTimeInMillis()/(24*60*60*1000);
+            long count = dday - today; // 디데이 계산
+            return (int)count;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
 }

@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.environmentalcampaign.ParticipantList;
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
 import com.google.android.material.tabs.TabLayout;
@@ -94,6 +95,15 @@ public class CampaignInformation extends FragmentActivity {
         tv_period = (TextView)findViewById(R.id.tv_period);
         tv_participantsN = (TextView)findViewById(R.id.tv_participantsN);
         tv_reCampaignN = (TextView)findViewById(R.id.tv_reCampaignN);
+
+        // 참가인원의 몇명인지 누르면 참가자 리스트 보여주기
+        tv_participantsN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ParticipantList.class);
+                startActivity(intent);
+            }
+        });
 
         // setup의 intent면 내용 불러오기
         gIntent = getIntent();
