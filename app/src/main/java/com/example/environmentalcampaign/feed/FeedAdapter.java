@@ -44,11 +44,11 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             super(itemView);
             feedImageView = itemView.findViewById(R.id.imagePost);
 
-            // Feed에 있는 image를 클릭했을 때 CampaignInformation Activity로 넘어간다.
+            // Feed에 있는 image를 클릭했을 때 피드 이미지 상세 페이지로 넘어간다.
             feedImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(view.getContext(), CampaignInformation.class);
+                    Intent intent = new Intent(view.getContext(), FeedImageDetailPage.class);
                     view.getContext().startActivity(intent);
                 }
             });

@@ -25,6 +25,7 @@
         <activity android:name=".certification_page.CertificationCampaign" />
         <activity android:name=".set_up_page.setup3" />
         <activity android:name=".set_up_page.setup2" />
+        <activity android:name=".feed.FeedImageDetailPage"></activity>
         <activity android:name=".set_up_page.setup1" />
         <activity android:name=".certification_page.Second_Certification_Page" />
         <activity android:name=".CpMakelist" />
