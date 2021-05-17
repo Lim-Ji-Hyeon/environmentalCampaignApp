@@ -1,6 +1,7 @@
 package com.example.environmentalcampaign;
 
 import android.graphics.drawable.Drawable;
+import android.widget.ImageView;
 
 public class CpData {
     private String name, period, frequency, stime, etime;

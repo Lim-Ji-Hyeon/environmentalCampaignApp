@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.environmentalcampaign.cp_info.CampaignInformation;
 import com.example.environmentalcampaign.R;
 import com.makeramen.roundedimageview.RoundedImageView;
 

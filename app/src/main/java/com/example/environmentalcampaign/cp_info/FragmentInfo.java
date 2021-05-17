@@ -2,6 +2,7 @@ package com.example.environmentalcampaign.cp_info;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -13,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.environmentalcampaign.R;
+
+import java.io.ByteArrayOutputStream;
 
 public class FragmentInfo extends Fragment {
 
