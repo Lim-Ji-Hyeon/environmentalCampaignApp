@@ -5,19 +5,28 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
 
     <application
+        android:name=".KakaoCustomApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.EnvironmentalCampaign">
+        <activity android:name=".SubLoginActivity"></activity>
         <activity android:name=".LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".ParticipantList" />
         <activity
@@ -39,11 +48,7 @@
         <activity android:name=".certification_page.CertificationPage" />
         <activity android:name=".bookmark.BookMark" />
         <activity android:name=".home.HomeActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".search_page.SearchPage" />
         <activity android:name=".set_up_page.SetUpCampaignPage" />
@@ -56,13 +61,10 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-        </provider>
-
-        <!--카카오 로그인 연동-->
+        </provider> <!-- 카카오 로그인 연동 -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="5e8a9f5c25566616ccdccb53b555964a"/>
-
+            android:value="5e8a9f5c25566616ccdccb53b555964a" />
     </application>
 
 </manifest>
