@@ -17,7 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EnvironmentalCampaign">
-        <activity android:name=".ParticipantList"></activity>
+        <activity android:name=".LoginActivity">
+        </activity>
+        <activity android:name=".ParticipantList" />
         <activity
             android:name=".certification_page.PopupActivity"
             android:screenOrientation="portrait"
@@ -25,7 +27,7 @@
         <activity android:name=".certification_page.CertificationCampaign" />
         <activity android:name=".set_up_page.setup3" />
         <activity android:name=".set_up_page.setup2" />
-        <activity android:name=".feed.FeedImageDetailPage"></activity>
+        <activity android:name=".feed.FeedImageDetailPage" />
         <activity android:name=".set_up_page.setup1" />
         <activity android:name=".certification_page.Second_Certification_Page" />
         <activity android:name=".CpMakelist" />
@@ -55,6 +57,12 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <!--카카오 로그인 연동-->
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="5e8a9f5c25566616ccdccb53b555964a"/>
+
     </application>
 
 </manifest>

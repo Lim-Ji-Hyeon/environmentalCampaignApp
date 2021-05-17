@@ -14,6 +14,9 @@ android {
         versionCode 1
         versionName "1.0"
 
+        //패키지명 바꾸고 다시 돌릴 때 오류나서 추가함
+        multiDexEnabled true
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -56,4 +59,10 @@ dependencies {
 
     // 권한을 묻는 창을 편리하게 만들 수 있다.(카메라 연동시 사용하기 위함)
     implementation 'gun0912.ted:tedpermission:2.2.3'
+
+    //카카오 로그인
+    implementation 'com.kakao.sdk:usermgmt:1.27.0'
+
+    // 패키지명 바꾸고 다시 돌릴 때 오류나서 추가함
+    implementation 'com.android.support:multidex:1.0.3'
 }
