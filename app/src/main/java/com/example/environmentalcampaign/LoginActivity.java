@@ -56,8 +56,6 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("profileImg", result.getKakaoAccount().getProfile().getProfileImageUrl());
                         intent.putExtra("email", result.getKakaoAccount().getEmail());
                         startActivity(intent);
-
-                        Toast.makeText(LoginActivity.this, "환영합니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

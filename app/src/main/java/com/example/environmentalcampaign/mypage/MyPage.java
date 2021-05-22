@@ -5,9 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.environmentalcampaign.LoginActivity;
+import com.example.environmentalcampaign.SubLoginActivity;
 import com.example.environmentalcampaign.certification_page.CertificationPage;
 import com.example.environmentalcampaign.CpMakelist;
 import com.example.environmentalcampaign.pointmarket.PointMarket;
@@ -15,16 +19,24 @@ import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.feed.FeedPage;
 import com.example.environmentalcampaign.home.HomeActivity;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
+import com.google.firebase.auth.FirebaseAuth;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
 public class MyPage extends AppCompatActivity {
 
     LinearLayout lo_point, lo_cp_ing, lo_cp_complete, lo_cp_make;
     TextView tv_home, tv_make, tv_certi, tv_feed, tv_mypage;
+    Button btn_logout;
+
+    private FirebaseAuth mFirebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_page);
+
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
         // 캠페인 현황 페이지 연결
         lo_cp_ing = (LinearLayout)findViewById(R.id.lo_cp_ing);
@@ -63,6 +75,24 @@ public class MyPage extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), PointMarket.class);
                 startActivity(intent);
+            }
+        });
+
+        btn_logout = (Button)findViewById(R.id.btn_logout);
+        btn_logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
+                    @Override
+                    public void onCompleteLogout() {
+                        // 로그아웃 성공시 수행한다,
+                        mFirebaseAuth.signOut();
+                        Toast.makeText(MyPage.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(MyPage.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish(); // 현재 엑티비티를 종료시킨다.
+                    }
+                });
             }
         });
 
