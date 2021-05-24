@@ -63,13 +63,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSessionOpenFailed(KakaoException exception) {
                 Toast.makeText(LoginActivity.this, "onSessionOpenFailed.", Toast.LENGTH_SHORT).show();
+                Log.e("SessionCallback :: ", "onSessionOpenFailed : " + exception.getMessage());
             }
         };
 
         Session.getCurrentSession().addCallback(mSessionCallback);
         Session.getCurrentSession().checkAndImplicitOpen();
 
-        //getAppKeyHash();
+//        getAppKeyHash();
 
     }
 
