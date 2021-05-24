@@ -1,11 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.makeramen.roundedimageview.RoundedImageView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/imagePost"
-    android:adjustViewBounds="true"
-    android:layout_margin="5dp"
-    app:riv_corner_radius="12dp">
 
-</com.makeramen.roundedimageview.RoundedImageView>
+<!--<com.makeramen.roundedimageview.RoundedImageView-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:id="@+id/imagePost"-->
+<!--    android:adjustViewBounds="true"-->
+<!--    android:layout_margin="5dp"-->
+<!--    app:riv_corner_radius="12dp">-->
+
+<!--</com.makeramen.roundedimageview.RoundedImageView>-->
+
+<androidx.cardview.widget.CardView
+    android:layout_margin="10dp"
+    app:cardCornerRadius="15dp"
+    app:cardElevation="0dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:scaleType="centerCrop"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:id="@+id/imagePost"
+        android:src="@drawable/cp7" />
+
+</androidx.cardview.widget.CardView>
+
+
