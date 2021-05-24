@@ -76,14 +76,14 @@ public class FragmentCertiRate extends Fragment {
         certiRecyclerView = (RecyclerView)rootView.findViewById(R.id.certiRecyclerView);
         certiRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
 
-        // 리스트 초기화
-        List<FeedItem> photos = new ArrayList<>();
-        for(int i = 0; i < count; i++) {
-            photos.add(new FeedItem(R.drawable.no_image));
-        }
-
-        certiRecyclerView.setAdapter(new FeedAdapter(photos));
-
+////        // 리스트 초기화
+////        List<FeedItem> photos = new ArrayList<>();
+////        for(int i = 0; i < count; i++) {
+////            photos.add(new FeedItem(R.drawable.no_image));
+////        }
+////
+////        certiRecyclerView.setAdapter(new FeedAdapter(photos));
+////
         return rootView;
     }
 }

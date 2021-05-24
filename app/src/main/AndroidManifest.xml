@@ -12,7 +12,7 @@
         android:required="true" />
 
     <application
-        android:name=".KakaoCustomApplication"
+        android:name=".home.KakaoCustomApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -20,8 +20,8 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.EnvironmentalCampaign">
-        <activity android:name=".SubLoginActivity"></activity>
-        <activity android:name=".LoginActivity">
+        <activity android:name=".home.SubLoginActivity"></activity>
+        <activity android:name=".home.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

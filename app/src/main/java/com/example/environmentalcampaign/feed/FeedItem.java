@@ -2,13 +2,15 @@ package com.example.environmentalcampaign.feed;
 
 public class FeedItem {
 
-    private int image;  //이미지 URL 사용한다면 String 사용해도 됨
+    private String image;  //이미지 URL 사용한다면 String 사용해도 됨
 
-    public FeedItem(int image) {
-        this.image = image;
+    public FeedItem(){}
+
+    public String getImage() {
+        return image;
     }
 
-    public int getImage(){
-        return image;
+    public void setImage(String image) {
+        this.image = image;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.environmentalcampaign.feed;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,39 +9,50 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.environmentalcampaign.cp_info.CampaignInformation;
 import com.example.environmentalcampaign.R;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder>{
 
-    private List<FeedItem> feeditems;
+    private ArrayList<FeedItem> feeditems;
+    private Context context;
 
-    public FeedAdapter(List<FeedItem> feeditems) {
+    public FeedAdapter(ArrayList<FeedItem> feeditems, Context context) {
         this.feeditems = feeditems;
+        this.context = context;
     }
 
     @NonNull
     @Override
     public FeedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new FeedViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_recyclerview_item, parent, false));
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_recyclerview_item, parent, false);
+        FeedViewHolder holder = new FeedViewHolder(view);
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull FeedViewHolder holder, int position) {
-        holder.setFeedImageView(feeditems.get(position));
+        // 각 아이템을 연결해준다.
+        Glide.with(holder.itemView)
+                .load(feeditems.get(position).getImage())
+                .into(holder.feedImageView);
+        // holder.tv_id.setText(arraylist.get(position).getId()); - 텍스트 연결
+        //holder.setFeedImageView(feeditems.get(position));
     }
 
     @Override
-    public int getItemCount() { return feeditems.size(); }
+    public int getItemCount() { return (feeditems !=null ? feeditems.size() : 0); }
 
     class FeedViewHolder extends RecyclerView.ViewHolder{
 
         RoundedImageView feedImageView;
 
-        FeedViewHolder(@NonNull View itemView) {
+        public FeedViewHolder(@NonNull View itemView) {
             super(itemView);
             feedImageView = itemView.findViewById(R.id.imagePost);
 
@@ -54,10 +66,10 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             });
         }
 
-        void setFeedImageView(FeedItem feedItem) {
-
-            //
-            feedImageView.setImageResource(feedItem.getImage());
-        }
+//        void setFeedImageView(FeedItem feedItem) {
+//
+//            //
+//            feedImageView.setImageResource(feedItem.getImage());
+//        }
     }
 }

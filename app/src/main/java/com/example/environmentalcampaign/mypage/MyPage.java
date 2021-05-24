@@ -10,8 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.environmentalcampaign.LoginActivity;
-import com.example.environmentalcampaign.SubLoginActivity;
+import com.example.environmentalcampaign.home.LoginActivity;
 import com.example.environmentalcampaign.certification_page.CertificationPage;
 import com.example.environmentalcampaign.CpMakelist;
 import com.example.environmentalcampaign.pointmarket.PointMarket;
