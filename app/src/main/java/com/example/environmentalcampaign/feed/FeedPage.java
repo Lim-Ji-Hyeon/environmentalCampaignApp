@@ -1,6 +1,7 @@
 package com.example.environmentalcampaign.feed;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,7 +10,9 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.environmentalcampaign.certification_page.CertificationPage;
@@ -43,7 +46,7 @@ public class FeedPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_page);
 
-        // 피드에 recyclerView 삽입
+//        // 피드에 recyclerView 삽입
 
         feedRecyclerView = findViewById(R.id.feedRecyclerView);
         feedRecyclerView.setHasFixedSize(true); // 성능 향상시키기위함
@@ -76,22 +79,6 @@ public class FeedPage extends AppCompatActivity {
 
         adapter = new FeedAdapter(arrayList, this);
         feedRecyclerView.setAdapter(adapter); //리사이클러뷰에 어댑터 연결
-
-
-
-
-//        // 이미지 넣음
-//        List<FeedItem> feedItems = new ArrayList<>();
-//        feedItems.add(new FeedItem(R.drawable.cp1));
-//        feedItems.add(new FeedItem(R.drawable.cp2));
-//        feedItems.add(new FeedItem(R.drawable.cp3));
-//        feedItems.add(new FeedItem(R.drawable.cp4));
-//        feedItems.add(new FeedItem(R.drawable.cp5));
-//        feedItems.add(new FeedItem(R.drawable.cp6));
-//
-//        feedRecyclerView.setAdapter(new FeedAdapter(feedItems));
-
-
 
 
         // 하단 메뉴바 페이지 연동
@@ -141,4 +128,6 @@ public class FeedPage extends AppCompatActivity {
             }
         });
     }
+
+
 }

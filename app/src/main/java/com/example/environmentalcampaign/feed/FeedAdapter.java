@@ -2,11 +2,16 @@ package com.example.environmentalcampaign.feed;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -50,11 +55,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
 
     class FeedViewHolder extends RecyclerView.ViewHolder{
 
-        RoundedImageView feedImageView;
+        ImageView feedImageView;
 
         public FeedViewHolder(@NonNull View itemView) {
             super(itemView);
             feedImageView = itemView.findViewById(R.id.imagePost);
+
+
 
             // Feed에 있는 image를 클릭했을 때 피드 이미지 상세 페이지로 넘어간다.
             feedImageView.setOnClickListener(new View.OnClickListener() {
