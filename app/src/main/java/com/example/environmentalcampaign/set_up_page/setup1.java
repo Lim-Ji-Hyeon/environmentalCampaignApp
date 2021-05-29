@@ -3,6 +3,7 @@ package com.example.environmentalcampaign.set_up_page;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.environmentalcampaign.R;
+import com.example.environmentalcampaign.cp_info.CampaignItem;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -45,11 +47,16 @@ public class setup1 extends AppCompatActivity {
 
     private final int GALLERY_CODE = 777;
 
+    // 다른 액티비티에서 접근하기 위함.
+    public static Context context_setup1;
+    public CampaignItem campaignItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup1);
+
+        context_setup1 = this;
 
         iv_cp_logo = (ImageView)findViewById(R.id.iv_cp_logo);
         et_cp_name = (EditText)findViewById(R.id.et_cp_name);
@@ -114,16 +121,25 @@ public class setup1 extends AppCompatActivity {
                     Toast.makeText(setup1.this, "인증 기간을 선택해주세요.", Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    // CampaignItem 객체 생성해서 내용 추가하기
+                    campaignItem = new CampaignItem();
+
+                    campaignItem.setLogo(byteArrayToBinaryString(bitmapToByteArray(iv_cp_logo)));
+                    campaignItem.setTitle(et_cp_name.getText().toString());
+                    campaignItem.setFrequency(tv_frequency.getText().toString());
+                    campaignItem.setPeriod(tv_period.getText().toString());
+
                     Intent intent = new Intent(getApplicationContext(), setup2.class);
 
-                    // 이미지 Bitmap 변환
-                    byte[] byteArray = bitmapToByteArray(iv_cp_logo);
+//                    // 이미지 Bitmap 변환
+//                    byte[] byteArray = bitmapToByteArray(iv_cp_logo);
+//
+//                    intent.putExtra("logo", byteArray);
+//                    intent.putExtra("cp_name", et_cp_name.getText().toString());
+//                    intent.putExtra("frequency", tv_frequency.getText().toString());
+//                    intent.putExtra("period", tv_period.getText().toString());
+////                intent.putExtra("eDate", tv_eDate.getText().toString());
 
-                    intent.putExtra("logo", byteArray);
-                    intent.putExtra("cp_name", et_cp_name.getText().toString());
-                    intent.putExtra("frequency", tv_frequency.getText().toString());
-                    intent.putExtra("period", tv_period.getText().toString());
-//                intent.putExtra("eDate", tv_eDate.getText().toString());
                     startActivity(intent);
                 }
             }
@@ -207,6 +223,26 @@ public class setup1 extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         return byteArray;
+    }
+
+    // byte[]를 String으로 변환
+    public static String byteArrayToBinaryString(byte[] b) {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < b.length; ++i) {
+            sb.append(byteToBinaryString(b[i]));
+        }
+        return sb.toString();
+    }
+
+    // byte를 String으로 변환
+    public static String byteToBinaryString(byte n) {
+        StringBuilder sb = new StringBuilder("00000000");
+        for(int bit = 0; bit < 8; bit++) {
+            if(((n >> bit) & 1) > 0) {
+                sb.setCharAt(7 - bit, '1');
+            }
+        }
+        return sb.toString();
     }
 
     // 갤러리 연동하기 위한 메소드 1

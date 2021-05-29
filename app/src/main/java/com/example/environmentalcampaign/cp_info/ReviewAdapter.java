@@ -1,6 +1,7 @@
 package com.example.environmentalcampaign.cp_info;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,12 +28,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class ParticipantAdapter extends BaseAdapter {
+public class ReviewAdapter extends BaseAdapter {
 
     Context context = null;
-    ArrayList<ParticipantItem> sample = new ArrayList<ParticipantItem>();
+    ArrayList<ReviewItem> sample = new ArrayList<ReviewItem>();
 
-    public ParticipantAdapter(ArrayList<ParticipantItem> sample, Context context){
+    public ReviewAdapter(ArrayList<ReviewItem> sample, Context context){
         this.sample = sample;
         this.context = context;
     }
@@ -40,10 +42,14 @@ public class ParticipantAdapter extends BaseAdapter {
     public int getCount() { return sample.size(); }
 
     @Override
-    public Object getItem(int position) { return sample.get(position); }
+    public Object getItem(int position) {
+        return sample.get(position);
+    }
 
     @Override
-    public long getItemId(int position) { return position; }
+    public long getItemId(int position) {
+        return position;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -53,17 +59,20 @@ public class ParticipantAdapter extends BaseAdapter {
         FirebaseDatabase database;
         DatabaseReference databaseReference;
 
-        // "participant_listview" layout을 inflate하여 convertView 참조 획득.
-        if(convertView == null) {
+        // "review_listview" Layout을 inflate하여 convertView 참조 획득.
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.participant_listview, parent, false);
+            convertView = inflater.inflate(R.layout.review_listview, parent, false);
         }
 
         // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
         ImageView profile = (ImageView)convertView.findViewById(R.id.iv_profile);
         TextView nickname = (TextView)convertView.findViewById(R.id.tv_nickname);
+        TextView date = (TextView)convertView.findViewById(R.id.tv_reviewDate);
+        RatingBar reviewRating = (RatingBar)convertView.findViewById(R.id.reviewRatingBar);
+        TextView review = (TextView)convertView.findViewById(R.id.tv_review);
 
-        ParticipantItem listViewItem = sample.get(position);
+        ReviewItem listViewItem = sample.get(position);
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
         databaseReference = database.getReference("environmentalCampaign").child("UserAccount").child(listViewItem.getUid());
@@ -78,24 +87,48 @@ public class ParticipantAdapter extends BaseAdapter {
                 profile.setBackground(new ShapeDrawable(new OvalShape()));
                 profile.setClipToOutline(true);
                 nickname.setText(userAccount.getNickName());
+                int rDatetime = listViewItem.getDatetime();
+                date.setText(ryear(rDatetime) + "." + rmonth(rDatetime) + "." + rday(rDatetime));
+                reviewRating.setRating((float)listViewItem.getRating());
+                review.setText(listViewItem.getContent());
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // DB를 가져오던 중 에러 발생 시
-                Log.e("ParticipantAdapter", String.valueOf(error.toException())); //에러문 출력
+                Log.e("ReviewAdapter", String.valueOf(error.toException())); //에러문 출력
             }
         });
+
+//        // Data set(listViewItemList)에서 position에 위치한 데이터 참조 획득
+//        reviewData listViewItem = sample.get(position);
+//
+//        // 아이템 내 각 위젯에 데이터 반영
+//        profile.setImageDrawable(listViewItem.getProfile());
+//        nickname.setText(listViewItem.getNickname());
+//        int rdate = listViewItem.getDate();
+//        date.setText(ryear(rdate) + "." + rmonth(rdate) + "." + rday(rdate));
+//        reviewRating.setRating((float)listViewItem.getRatingbar());
+//        review.setText(listViewItem.getReview());
 
         return convertView;
     }
 
-//    public void addItem(Drawable profile, String nickname) {
-//        ParticipantData item = new ParticipantData();
+//    public void addItem(Drawable profile, String nickname, int date, double ratingbar, String review) {
+//        reviewData item = new reviewData();
 //
 //        item.setProfile(profile);
 //        item.setNickname(nickname);
+//        item.setDate(date);
+//        item.setRatingbar(ratingbar);
+//        item.setReview(review);
 //
 //        sample.add(item);
 //    }
+
+    // YYYYmmDDHHMMSSsss 변환
+    public int ryear(int rdate) { return Integer.parseInt(String.valueOf(rdate).substring(0,4)); }
+    public int rmonth(int rdate) { return Integer.parseInt(String.valueOf(rdate).substring(4,6)); }
+    public int rday(int rdate) { return Integer.parseInt(String.valueOf(rdate).substring(6,8)); }
+
 }
