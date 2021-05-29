@@ -132,6 +132,7 @@
                     android:gravity="start|top"
                     android:inputType="textMultiLine"
                     android:scrollbars="vertical"
+                    android:hint="인증 사진에 대한 설명"
                     android:layout_margin="10dp"/>
 
             </LinearLayout>

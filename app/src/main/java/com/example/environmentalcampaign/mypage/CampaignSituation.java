@@ -50,7 +50,7 @@ public class CampaignSituation extends AppCompatActivity {
                 list_ing_cp = (ListView)findViewById(R.id.lv_cp_situation);
                 list_ing_cp.setAdapter(adapter1);
 
-                adapter1.addItem(100, 2, "버리스타", "2주", "주 2일", "00:00:00", "24:00:00", 20210501, ContextCompat.getDrawable(this, R.drawable.burista));
+                adapter1.addItem(100, 2, "버리스타", "2주", "주 2일",  20210501, ContextCompat.getDrawable(this, R.drawable.burista));
                 break;
             case 2:
                 tv_cp_situation.setText("완료한 캠페인");

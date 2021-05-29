@@ -129,7 +129,6 @@ public class CertificationCampaign extends AppCompatActivity {
         });
 
         tv_cp_name = (TextView)findViewById(R.id.tv_cp_name);
-        tv_certiTime = (TextView)findViewById(R.id.tv_certiTime);
         tv_certiLeftDate = (TextView)findViewById(R.id.tv_certiLeftDate);
         tv_certiFrequency = (TextView)findViewById(R.id.tv_certiFrequency);
         iv_logo = (ImageView)findViewById(R.id.iv_logo);
@@ -137,7 +136,6 @@ public class CertificationCampaign extends AppCompatActivity {
         // 리스트뷰의 캠페인 내용 불러오기
         Intent gIntent = getIntent();
         name = gIntent.getStringExtra("name");
-        time = gIntent.getStringExtra("time");
         Dday = gIntent.getStringExtra("Dday");
         period = gIntent.getStringExtra("period");
         frequency = gIntent.getStringExtra("frequency");
@@ -147,7 +145,6 @@ public class CertificationCampaign extends AppCompatActivity {
 
         // 붙이기
         tv_cp_name.setText(name);
-        tv_certiTime.setText(time);
         tv_certiLeftDate.setText(Dday);
         tv_certiFrequency.setText(period + ", " + frequency);
         iv_logo.setImageBitmap(logo);

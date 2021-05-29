@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -17,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.environmentalcampaign.ParticipantList;
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
 import com.google.android.material.tabs.TabLayout;
