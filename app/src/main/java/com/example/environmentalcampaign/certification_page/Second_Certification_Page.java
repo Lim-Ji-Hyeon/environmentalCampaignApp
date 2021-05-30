@@ -14,6 +14,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -31,6 +33,11 @@ import android.widget.Toast;
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.bookmark.BookMark;
 import com.example.environmentalcampaign.home.HomeActivity;
+import com.example.environmentalcampaign.home.UserAccount;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -53,8 +60,13 @@ public class Second_Certification_Page extends AppCompatActivity {
     private String currentPhotoPath;
     String mImageCaptureName;
     private Uri photoUri;
+    String imagePath;
     private final int GALLERY_CODE=1112;
 
+    private FirebaseAuth mFirebaseAuth; //파이어베이스 인증처리
+    private DatabaseReference mDatabaseRef;//실시간 데이터베이스
+    String contents, certiImg, publisher, certi_date;
+    private int certi_count = 0;
 
     ImageView img1;
     Button btn1;
@@ -68,11 +80,17 @@ public class Second_Certification_Page extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second__certification__page);
 
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("environmentalCampaign");
+        FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
+
         img1 = (ImageView)findViewById(R.id.certi_image);
         btn1 = (Button)findViewById(R.id.certi_button);
         editText = (EditText)findViewById(R.id.certi_text);
         camera_btn = (Button)findViewById(R.id.camera_btn);
         gallery_btn = (Button)findViewById(R.id.gallery_btn);
+
+        certi_count = 0;
 
         camera_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,20 +134,35 @@ public class Second_Certification_Page extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-//                Intent intent = new Intent(Second_Certification_Page.this, HomeActivity.class);
-//                // 이미지를 Bitmap 객체로 만들기 + 압축하기
-//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cp1);
-//                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-//                byte[] byteArray = stream.toByteArray();
-//
-//                intent.putExtra("sendData", editText.getText().toString());
-//                intent.putExtra("image_path", byteArray);
-//                startActivity(intent);
+                // realtime database에 저장한다.
+                publisher = firebaseUser.getUid();
+                contents = editText.getText().toString();
+
+                // 현재시간 가져오기
+                long now = System.currentTimeMillis();
+                Date mDate = new Date(now);
+                SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                String getTime = simpleDate.format(mDate);
+
+                // 카메라로 찍으면 photoUri를 가져오고, 갤러리로 가져왔다면 imagePath를 이용한다.
+                if(photoUri != null){
+                    certiImg = photoUri.toString();
+                }else{
+                    certiImg = imagePath;
+                }
+
+                Certi_Info certi_info = new Certi_Info();
+                certi_info.setPublisher(publisher);
+                certi_info.setContents(contents);
+                certi_info.setCerti_date(getTime);
+                certi_info.setPhotoUrl(certiImg);
+
+                mDatabaseRef.child("Certification").child(publisher).child(getTime).setValue(certi_info);
 
                 Toast.makeText(Second_Certification_Page.this, "인증이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), CertificationPage.class);
                 startActivity(intent);
+                finish();
 
             }
         });
@@ -182,7 +215,7 @@ public class Second_Certification_Page extends AppCompatActivity {
     }
 
     private void sendPicture(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        imagePath = getRealPathFromURI(imgUri); // path 경로
         ExifInterface exif = null;
         try {
             exif = new ExifInterface(imagePath);
@@ -241,5 +274,7 @@ public class Second_Certification_Page extends AppCompatActivity {
         return cursor.getString(column_index);
     }
 
-
 }
+
+
+
