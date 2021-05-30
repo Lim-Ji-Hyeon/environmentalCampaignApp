@@ -46,8 +46,8 @@ public class CertificationPage extends AppCompatActivity {
         listView2.setAdapter(adapter2);
 
         // 첫 번째 아이템 추가
-        adapter.addItem(70, 2, "버리스타", "2주", "주 2일", "00:00:00", "24:00:00", 20210701, ContextCompat.getDrawable(this, R.drawable.burista));
-        adapter2.addItem(95, 1, "용기내", "3주", "주 5일", "09:00:00", "18:00:00", 20210830, ContextCompat.getDrawable(this, R.drawable.cp1), true);
+        adapter.addItem(70, 2, "버리스타", "2주", "주 2일",  20210701, ContextCompat.getDrawable(this, R.drawable.burista));
+        adapter2.addItem(95, 1, "용기내", "3주", "주 5일",  20210830, ContextCompat.getDrawable(this, R.drawable.cp1), true);
 
 
         // 리스트뷰를 클릭하면 인증할 수 있는 페이지로 넘어간다.
@@ -65,7 +65,6 @@ public class CertificationPage extends AppCompatActivity {
                 byte[] byteArray = stream.toByteArray();
 
                 intent.putExtra("name", item.getName());
-                intent.putExtra("time", item.getStime() + " ~ " + item.getEtime());
                 intent.putExtra("Dday", countdday(item.getEdate()) + "일 뒤 종료");
                 intent.putExtra("period", item.getPeriod());
                 intent.putExtra("frequency", item.getFrequency());

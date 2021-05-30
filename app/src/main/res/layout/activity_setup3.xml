@@ -117,17 +117,17 @@
                         android:background="@drawable/edge"
                         android:src="@drawable/add_image" />
 
-                    <ImageView
-                        android:id="@+id/checkImage2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:layout_weight="1"
-                        android:layout_margin="10dp"
-                        android:scaleType="fitCenter"
-                        android:background="@drawable/edge"
-                        android:visibility="gone"
-                        android:src="@drawable/add_image" />
+<!--                    <ImageView-->
+<!--                        android:id="@+id/checkImage2"-->
+<!--                        android:layout_width="0dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:adjustViewBounds="true"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:layout_margin="10dp"-->
+<!--                        android:scaleType="fitCenter"-->
+<!--                        android:background="@drawable/edge"-->
+<!--                        android:visibility="gone"-->
+<!--                        android:src="@drawable/add_image" />-->
 
                 </TableRow>
 

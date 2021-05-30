@@ -56,7 +56,6 @@ public class MyAdapter extends BaseAdapter {
         TextView dDay = (TextView)convertView.findViewById(R.id.tv_Dday);
         TextView reCp = (TextView)convertView.findViewById(R.id.tv_reCp);
         TextView cpName = (TextView)convertView.findViewById(R.id.tv_cp_name);
-        TextView certiTime = (TextView)convertView.findViewById(R.id.tv_certiTime);
         TextView certiLastDate = (TextView)convertView.findViewById(R.id.tv_certiLastDate);
         TextView certiFrequency = (TextView)convertView.findViewById(R.id.tv_certiFrequency);
         ImageView logo = (ImageView)convertView.findViewById(R.id.iv_logo);
@@ -70,7 +69,6 @@ public class MyAdapter extends BaseAdapter {
         dDay.setText("D-" + countdday(listViewItem.getEdate()));
         reCp.setText(listViewItem.getReCp() + "번째 참여중");
         cpName.setText(listViewItem.getName());
-        certiTime.setText(listViewItem.getStime() + " ~ " + listViewItem.getEtime());
         certiLastDate.setText(emonth(listViewItem.getEdate()) + "." + eday(listViewItem.getEdate()) + "(" + getDayOfWeek(listViewItem.getEdate()) + ") 종료");
         certiFrequency.setText(listViewItem.getPeriod() + ", " + listViewItem.getFrequency());
         logo.setImageDrawable(listViewItem.getLogo());
@@ -79,7 +77,7 @@ public class MyAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void addItem(int rate, int reCp, String name, String period, String frequency, String stime, String etime, int edate, Drawable logo) {
+    public void addItem(int rate, int reCp, String name, String period, String frequency, int edate, Drawable logo) {
         CpData item = new CpData();
 
         item.setRate(rate);
@@ -87,8 +85,6 @@ public class MyAdapter extends BaseAdapter {
         item.setName(name);
         item.setPeriod(period);
         item.setFrequency(frequency);
-        item.setStime(stime);
-        item.setEtime(etime);
         item.setEdate(edate);
         item.setLogo(logo);
         item.setComplete(false);
@@ -97,7 +93,7 @@ public class MyAdapter extends BaseAdapter {
     }
 
     // 이미지 위에 완료 표시 해주기 위해. 마지막에 true 넣어주면 됨.
-    public void addItem(int rate, int reCp, String name, String period, String frequency, String stime, String etime, int edate, Drawable logo, boolean complete) {
+    public void addItem(int rate, int reCp, String name, String period, String frequency, int edate, Drawable logo, boolean complete) {
         CpData item = new CpData();
 
         item.setRate(rate);
@@ -105,8 +101,6 @@ public class MyAdapter extends BaseAdapter {
         item.setName(name);
         item.setPeriod(period);
         item.setFrequency(frequency);
-        item.setStime(stime);
-        item.setEtime(etime);
         item.setEdate(edate);
         item.setLogo(logo);
         item.setComplete(complete);

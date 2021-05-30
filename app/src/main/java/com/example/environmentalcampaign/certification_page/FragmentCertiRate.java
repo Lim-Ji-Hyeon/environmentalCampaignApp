@@ -3,6 +3,7 @@ package com.example.environmentalcampaign.certification_page;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -26,6 +27,8 @@ public class FragmentCertiRate extends Fragment {
     ProgressBar progressBar;
     LinearLayout lo_currentRate, lo_noRate;
     RecyclerView certiRecyclerView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
     int maxRate, rate;
     int count; // 총 인증해야 하는 개수
 
@@ -74,16 +77,36 @@ public class FragmentCertiRate extends Fragment {
 
         // recyclerView 삽입
         certiRecyclerView = (RecyclerView)rootView.findViewById(R.id.certiRecyclerView);
-        certiRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        certiRecyclerView.setHasFixedSize(true); // 성능 향상시키기위함
+        layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL){
+            @Override
+            public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
+                // 이미지 크기 변경
+                lp.width = (getWidth() / getSpanCount())-20;
+                lp.height = lp.width;
+                return true;
+            }
+        };
+        certiRecyclerView.setLayoutManager(layoutManager);
 
-////        // 리스트 초기화
-////        List<FeedItem> photos = new ArrayList<>();
-////        for(int i = 0; i < count; i++) {
-////            photos.add(new FeedItem(R.drawable.no_image));
-////        }
-////
-////        certiRecyclerView.setAdapter(new FeedAdapter(photos));
-////
+//        // 리스트 초기화
+//        List<FeedItem> photos = new ArrayList<>();
+//        for(int i = 0; i < count; i++) {
+//            photos.add(new FeedItem(R.drawable.no_image));
+//        }
+//
+//        certiRecyclerView.setAdapter(new FeedAdapter(photos));
+
+        ArrayList<FeedItem> photos = new ArrayList<>();
+        // no_image 붙이기
+        FeedItem photo = new FeedItem();
+        photo.setImage("https://firebasestorage.googleapis.com/v0/b/environmental-campaign.appspot.com/o/no_image.jpg?alt=media&token=f0929e4a-f161-4732-9473-fc008f436b0a");
+        for(int i = 0; i < count; i++) {
+            photos.add(photo);
+        }
+        adapter = new FeedAdapter(photos, getContext());
+        certiRecyclerView.setAdapter(adapter);
+
         return rootView;
     }
 }

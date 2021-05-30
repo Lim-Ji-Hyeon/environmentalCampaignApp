@@ -51,15 +51,17 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     }
 
     @Override
-    public int getItemCount() { return (feeditems !=null ? feeditems.size() : 0); }
+    public int getItemCount() { return (feeditems != null ? feeditems.size() : 0); }
 
     class FeedViewHolder extends RecyclerView.ViewHolder{
 
         ImageView feedImageView;
 
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         public FeedViewHolder(@NonNull View itemView) {
             super(itemView);
             feedImageView = itemView.findViewById(R.id.imagePost);
+            feedImageView.setClipToOutline(true);
 
 
 

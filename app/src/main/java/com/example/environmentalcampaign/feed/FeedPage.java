@@ -1,18 +1,14 @@
 package com.example.environmentalcampaign.feed;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.environmentalcampaign.certification_page.CertificationPage;
@@ -27,7 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FeedPage extends AppCompatActivity {
 
@@ -50,10 +45,18 @@ public class FeedPage extends AppCompatActivity {
 
         feedRecyclerView = findViewById(R.id.feedRecyclerView);
         feedRecyclerView.setHasFixedSize(true); // 성능 향상시키기위함
-        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL){
+            @Override
+            public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
+                // 이미지 크기 변경
+                lp.width = (getWidth() / getSpanCount())-40;
+                lp.height = lp.width;
+                return true;
+            }
+        };
         feedRecyclerView.setLayoutManager(layoutManager);
 
-        arrayList = new ArrayList<>(); //Feed 객체를 담을 ArrayList
+        arrayList = new ArrayList<>(); //FeedItem 객체를 담을 ArrayList
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
 
@@ -128,6 +131,4 @@ public class FeedPage extends AppCompatActivity {
             }
         });
     }
-
-
 }

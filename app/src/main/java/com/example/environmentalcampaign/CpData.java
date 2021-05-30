@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 public class CpData {
-    private String name, period, frequency, stime, etime;
+    private String name, period, frequency;
     private int rate, reCp, edate;
     private Drawable logo;
     private boolean complete;
@@ -29,22 +29,6 @@ public class CpData {
 
     public void setFrequency(String frequency) {
         this.frequency = frequency;
-    }
-
-    public String getStime() {
-        return stime;
-    }
-
-    public void setStime(String stime) {
-        this.stime = stime;
-    }
-
-    public String getEtime() {
-        return etime;
-    }
-
-    public void setEtime(String etime) {
-        this.etime = etime;
     }
 
     public int getEdate() {

@@ -28,7 +28,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ParticipantList" />
+        <activity android:name=".cp_info.ParticipantList" />
         <activity
             android:name=".certification_page.PopupActivity"
             android:screenOrientation="portrait"
