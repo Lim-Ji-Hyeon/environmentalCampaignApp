@@ -6,7 +6,7 @@ public class CampaignItem {
     // CampaignInformation
     String logo, title, frequency, period;
     int participantsN, reCampaignN;
-    ArrayList<ParticipantItem> participants=null;
+//    ArrayList<ParticipantItem> participants=null;
 
     // FragmentInfo
     String cpInfo, infoImage1=null, infoImage2=null, infoImage3=null, infoImage4=null, infoImage5=null;
@@ -16,7 +16,7 @@ public class CampaignItem {
             wrongPhoto1=null, wrongPhoto2=null, wrongPhotoInfo1=null, wrongPhotoInfo2=null;
 
     // FragmentReview
-    ArrayList<ReviewItem> reviews=null;
+//    ArrayList<ReviewItem> reviews=null;
 
     // 생성날짜로 캠페인 구분 + 신규 캠페인 확인에 사용
     String datetime; // YYYYmmDDHHMMSSsss 식으로 생성
@@ -47,9 +47,9 @@ public class CampaignItem {
 
     public void setReCampaignN(int reCampaignN) { this.reCampaignN = reCampaignN; }
 
-    public ArrayList<ParticipantItem> getParticipants() { return participants; }
-
-    public void setParticipants(ArrayList<ParticipantItem> participants) { this.participants = participants; }
+//    public ArrayList<ParticipantItem> getParticipants() { return participants; }
+//
+//    public void setParticipants(ArrayList<ParticipantItem> participants) { this.participants = participants; }
 
     public String getCpInfo() { return cpInfo; }
 
@@ -111,9 +111,9 @@ public class CampaignItem {
 
     public void setWrongPhotoInfo2(String wrongPhotoInfo2) { this.wrongPhotoInfo2 = wrongPhotoInfo2; }
 
-    public ArrayList<ReviewItem> getReviews() { return reviews; }
-
-    public void setReviews(ArrayList<ReviewItem> reviews) { this.reviews = reviews; }
+//    public ArrayList<ReviewItem> getReviews() { return reviews; }
+//
+//    public void setReviews(ArrayList<ReviewItem> reviews) { this.reviews = reviews; }
 
     public String getDatetime() { return datetime; }
 

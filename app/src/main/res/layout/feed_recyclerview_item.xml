@@ -22,7 +22,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="wrap_content"
     android:layout_width="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp">
 
     <ImageView
         android:scaleType="centerCrop"
@@ -30,6 +32,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/imagePost"
         android:src="@drawable/cp7"
-        android:background="@drawable/background_rounding"/>
+        android:background="@drawable/background_rounding" />
 
 </LinearLayout>

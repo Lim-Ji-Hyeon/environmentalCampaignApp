@@ -43,13 +43,6 @@
 
     </LinearLayout>
 
-<!--    <ListView-->
-<!--        android:id="@+id/lv_certi_challenge"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_weight="1">-->
-
-<!--    </ListView>-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -60,11 +53,7 @@
             android:id="@+id/feedRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:paddingLeft="15dp"
-            android:paddingRight="5dp"
-            android:paddingTop="0dp"
-            android:paddingBottom="15dp" />
+            android:clipToPadding="false" />
     </ScrollView>
 
     <LinearLayout

@@ -90,6 +90,17 @@ public class SubLoginActivity extends AppCompatActivity {
                             // 로그인 성공
                             Toast.makeText(SubLoginActivity.this, "환영합니다.", Toast.LENGTH_SHORT).show();;
 
+                            FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
+                            UserAccount account = new UserAccount();
+                            account.setIdToken(firebaseUser.getUid());
+                            account.setEmailId(firebaseUser.getEmail());
+                            account.setPassword(password);
+                            account.setNickName(strNick);
+                            account.setProfileImg(strProfileImg);
+
+                            // setValue : database에 insert(삽입)
+                            mDatabaseRef.child("UserAccount").child(firebaseUser.getUid()).setValue(account);
+
                             Intent intent = new Intent(SubLoginActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();

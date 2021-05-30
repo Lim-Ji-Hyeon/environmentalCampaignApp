@@ -191,7 +191,7 @@ public class CampaignInformation extends FragmentActivity {
         tv_participantsN.setText(campaignItem.getParticipantsN() + "명");
         tv_reCampaignN.setText(campaignItem.getReCampaignN() + "회");
 
-        participants = campaignItem.getParticipants();
+//        participants = campaignItem.getParticipants();
 
 //        // 불러오기
 //        byte[] logoArr = gIntent.getByteArrayExtra("logo");

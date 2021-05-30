@@ -50,8 +50,8 @@ public class PointMarket extends AppCompatActivity {
             @Override
             public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
                 // 내용 크기 변경
-                lp.width = (getWidth() / getSpanCount()) - 20;
-                lp.height = (getHeight() / getSpanCount()) - 70;
+//                lp.width = (getWidth() / getSpanCount()) - 20;
+//                lp.height = (getHeight() / getSpanCount()) - 70;
                 return true;
             }
         };

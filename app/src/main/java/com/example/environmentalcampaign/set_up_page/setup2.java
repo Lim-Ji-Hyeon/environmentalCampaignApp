@@ -68,7 +68,7 @@ public class setup2 extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
+                intent.setType("image_1/*");
                 startActivityForResult(intent, GALLERY_CODE1);
             }
         });
@@ -77,7 +77,7 @@ public class setup2 extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
+                intent.setType("image_2/*");
                 startActivityForResult(intent, GALLERY_CODE2);
             }
         });
@@ -86,7 +86,7 @@ public class setup2 extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
+                intent.setType("image_3/*");
                 startActivityForResult(intent, GALLERY_CODE3);
             }
         });
@@ -95,7 +95,7 @@ public class setup2 extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
+                intent.setType("image_4/*");
                 startActivityForResult(intent, GALLERY_CODE4);
             }
         });
@@ -104,7 +104,7 @@ public class setup2 extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType("image/*");
+                intent.setType("image_5/*");
                 startActivityForResult(intent, GALLERY_CODE5);
             }
         });
