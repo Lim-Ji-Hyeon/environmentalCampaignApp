@@ -129,12 +129,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/tv_wrongPhoto"
+                android:id="@+id/lo_wrongPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"

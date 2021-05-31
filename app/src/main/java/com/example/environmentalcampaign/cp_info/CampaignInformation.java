@@ -179,6 +179,16 @@ public class CampaignInformation extends FragmentActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // 파이어베이스 데이터베이스의 데이터를 받아오는 곳
                 campaignItem = snapshot.getValue(CampaignItem.class);
+
+                // 내용 붙이기
+                iv_logo.setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(campaignItem.getLogo())));
+                tv_cp_name.setText(campaignItem.getTitle());
+                tv_frequency.setText(campaignItem.getFrequency());
+                tv_period.setText(campaignItem.getPeriod());
+                tv_participantsN.setText(campaignItem.getParticipantsN() + "명");
+                tv_reCampaignN.setText(campaignItem.getReCampaignN() + "회");
+
+                fragmentSetup();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -186,34 +196,6 @@ public class CampaignInformation extends FragmentActivity {
                 Log.e("CampaignInformation", String.valueOf(error.toException())); //에러문 출력
             }
         });
-
-        // 내용 붙이기
-        iv_logo.setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(campaignItem.getLogo())));
-        tv_cp_name.setText(campaignItem.getTitle());
-        tv_frequency.setText(campaignItem.getFrequency());
-        tv_period.setText(campaignItem.getPeriod());
-        tv_participantsN.setText(campaignItem.getParticipantsN() + "명");
-        tv_reCampaignN.setText(campaignItem.getReCampaignN() + "회");
-
-//        participants = campaignItem.getParticipants();
-
-//        // 불러오기
-//        byte[] logoArr = gIntent.getByteArrayExtra("logo");
-//        Bitmap logo = BitmapFactory.decodeByteArray(logoArr, 0, logoArr.length);
-//        String cp_name = gIntent.getStringExtra("cp_name");
-//        String frequency = gIntent.getStringExtra("frequency");
-//        String period = gIntent.getStringExtra("period");
-////        String eDate = gIntent.getStringExtra("eDate");
-//
-//        // 붙이기
-//        iv_logo.setImageBitmap(logo);
-//        tv_cp_name.setText(cp_name);
-//        tv_frequency.setText(frequency);
-//        tv_period.setText(period);
-//        tv_participantsN.setText("0명");
-//        tv_reCampaignN.setText("0회");
-
-        fragmentSetup();
     }
 
     // fragment에 setup 정보 입력하기
@@ -222,35 +204,19 @@ public class CampaignInformation extends FragmentActivity {
         if(tabLayout.getSelectedTabPosition() == 0) {
             String info = campaignItem.getCpInfo();
 
-            String sInfoImage1 = campaignItem.getInfoImage1();
-            String sInfoImage2 = campaignItem.getInfoImage2();
-            String sInfoImage3 = campaignItem.getInfoImage3();
-            String sInfoImage4 = campaignItem.getInfoImage4();
-            String sInfoImage5 = campaignItem.getInfoImage5();
-            byte[] infoImage1, infoImage2, infoImage3, infoImage4, infoImage5;
-
-            if(!(sInfoImage1.equals("") || sInfoImage1 == null)) { infoImage1 = binaryStringToByteArray(sInfoImage1); } else { infoImage1 = new byte[]{}; }
-            if(!(sInfoImage2.equals("") || sInfoImage2 == null)) { infoImage2 = binaryStringToByteArray(sInfoImage2); } else { infoImage2 = new byte[]{}; }
-            if(!(sInfoImage3.equals("") || sInfoImage3 == null)) { infoImage3 = binaryStringToByteArray(sInfoImage3); } else { infoImage3 = new byte[]{}; }
-            if(!(sInfoImage4.equals("") || sInfoImage4 == null)) { infoImage4 = binaryStringToByteArray(sInfoImage4); } else { infoImage4 = new byte[]{}; }
-            if(!(sInfoImage5.equals("") || sInfoImage5 == null)) { infoImage5 = binaryStringToByteArray(sInfoImage5); } else { infoImage5 = new byte[]{}; }
-
-//            String info = gIntent.getStringExtra("info");
-//            byte[] infoImage1 = gIntent.getByteArrayExtra("infoImage1");
-//            byte[] infoImage2 = gIntent.getByteArrayExtra("infoImage2");
-//            byte[] infoImage3 = gIntent.getByteArrayExtra("infoImage3");
-//            byte[] infoImage4 = gIntent.getByteArrayExtra("infoImage4");
-//            byte[] infoImage5 = gIntent.getByteArrayExtra("infoImage5");
-//            byte[] checkImage = gIntent.getByteArrayExtra("checkImage");
+            String infoImage1 = campaignItem.getInfoImage1();
+            String infoImage2 = campaignItem.getInfoImage2();
+            String infoImage3 = campaignItem.getInfoImage3();
+            String infoImage4 = campaignItem.getInfoImage4();
+            String infoImage5 = campaignItem.getInfoImage5();
 
             Bundle bundle1 = new Bundle(); // 괄호 안에 전달하려는 값의 갯수 넣을 수 있음
             bundle1.putString("info", info);
-            bundle1.putByteArray("infoImage1", infoImage1);
-            bundle1.putByteArray("infoImage2", infoImage2);
-            bundle1.putByteArray("infoImage3", infoImage3);
-            bundle1.putByteArray("infoImage4", infoImage4);
-            bundle1.putByteArray("infoImage5", infoImage5);
-//            bundle1.putByteArray("checkImage", checkImage);
+            bundle1.putString("infoImage1", infoImage1);
+            bundle1.putString("infoImage2", infoImage2);
+            bundle1.putString("infoImage3", infoImage3);
+            bundle1.putString("infoImage4", infoImage4);
+            bundle1.putString("infoImage5", infoImage5);
 
             fragmentInfo.setArguments(bundle1);
         }
@@ -263,41 +229,21 @@ public class CampaignInformation extends FragmentActivity {
             String frequency = campaignItem.getFrequency();
             String period = campaignItem.getPeriod();
 
-            String srPhoto1 = campaignItem.getRightPhoto1();
-            String srPhoto2 = campaignItem.getRightPhoto2();
-            String swPhoto1 = campaignItem.getWrongPhoto1();
-            String swPhoto2 = campaignItem.getWrongPhoto2();
-            byte[] rPhoto1, rPhoto2, wPhoto1, wPhoto2;
-
-            if(!(srPhoto1.equals("") || srPhoto1 == null)) { rPhoto1 = binaryStringToByteArray(srPhoto1); } else { rPhoto1 = new byte[]{}; }
-            if(!(srPhoto2.equals("") || srPhoto2 == null)) { rPhoto2 = binaryStringToByteArray(srPhoto2); } else { rPhoto2 = new byte[]{}; }
-            if(!(swPhoto1.equals("") || swPhoto1 == null)) { wPhoto1 = binaryStringToByteArray(swPhoto1); } else { wPhoto1 = new byte[]{}; }
-            if(!(swPhoto2.equals("") || swPhoto2 == null)) { wPhoto2 = binaryStringToByteArray(swPhoto2); } else { wPhoto2 = new byte[]{}; }
-
-//            String way = gIntent.getStringExtra("way");
-//            byte[] rPhoto1 = gIntent.getByteArrayExtra("rPhoto1");
-//            byte[] rPhoto2 = gIntent.getByteArrayExtra("rPhoto2");
-//            String rInfo = gIntent.getStringExtra("rInfo");
-//            String rInfo2 = gIntent.getStringExtra("rInfo2");
-//            byte[] wPhoto1 = gIntent.getByteArrayExtra("wPhoto1");
-//            byte[] wPhoto2 = gIntent.getByteArrayExtra("wPhoto2");
-//            String wInfo = gIntent.getStringExtra("wInfo");
-//            String wInfo2 = gIntent.getStringExtra("wInfo2");
-//            byte[] checkImage2 = gIntent.getByteArrayExtra("checkImage2");
-//            String frequency = gIntent.getStringExtra("frequency");
-//            String period = gIntent.getStringExtra("period");
+            String rPhoto1 = campaignItem.getRightPhoto1();
+            String rPhoto2 = campaignItem.getRightPhoto2();
+            String wPhoto1 = campaignItem.getWrongPhoto1();
+            String wPhoto2 = campaignItem.getWrongPhoto2();
 
             Bundle bundle2 = new Bundle();
             bundle2.putString("way", way);
-            bundle2.putByteArray("rPhoto1", rPhoto1);
-            bundle2.putByteArray("rPhoto2", rPhoto2);
+            bundle2.putString("rPhoto1", rPhoto1);
+            bundle2.putString("rPhoto2", rPhoto2);
             bundle2.putString("rInfo", rInfo);
             bundle2.putString("rInfo2", rInfo2);
-            bundle2.putByteArray("wPhoto1", wPhoto1);
-            bundle2.putByteArray("wPhoto2", wPhoto2);
+            bundle2.putString("wPhoto1", wPhoto1);
+            bundle2.putString("wPhoto2", wPhoto2);
             bundle2.putString("wInfo", wInfo);
             bundle2.putString("wInfo2", wInfo2);
-//            bundle2.putByteArray("checkImage2", checkImage2);
             bundle2.putString("frequency", frequency);
             bundle2.putString("period", period);
 
@@ -314,7 +260,7 @@ public class CampaignInformation extends FragmentActivity {
     public static byte[] binaryStringToByteArray(String s) {
         int count = s.length() / 8;
         byte[] b = new byte[count];
-        for(int i = 0; i < count; ++i) {
+        for(int i = 1; i < count; ++i) {
             String t = s.substring((i-1)*8, i*8);
             b[i-1] = binaryStringToByte(t);
         }

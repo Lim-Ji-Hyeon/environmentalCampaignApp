@@ -15,6 +15,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,6 +25,10 @@ import android.widget.Toast;
 
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.cp_info.CampaignItem;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -47,16 +52,13 @@ public class setup1 extends AppCompatActivity {
 
     private final int GALLERY_CODE = 777;
 
-    // 다른 액티비티에서 접근하기 위함.
-//    public static Context context_setup1;
-//    public CampaignItem campaignItem;
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup1);
-
-//        context_setup1 = this;
 
         iv_cp_logo = (ImageView)findViewById(R.id.iv_cp_logo);
         et_cp_name = (EditText)findViewById(R.id.et_cp_name);
@@ -121,25 +123,20 @@ public class setup1 extends AppCompatActivity {
                     Toast.makeText(setup1.this, "인증 기간을 선택해주세요.", Toast.LENGTH_SHORT).show();
                 }
                 else{
-//                    // CampaignItem 객체 생성해서 내용 추가하기
-//                    campaignItem = new CampaignItem();
-//
-//                    campaignItem.setLogo(byteArrayToBinaryString(bitmapToByteArray(iv_cp_logo)));
-//                    campaignItem.setTitle(et_cp_name.getText().toString());
-//                    campaignItem.setFrequency(tv_frequency.getText().toString());
-//                    campaignItem.setPeriod(tv_period.getText().toString());
+                    // uid 가져오기
+                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                    String uid = firebaseUser.getUid();
+
+                     // TemporarySave - uid에 저장
+                     database = FirebaseDatabase.getInstance();
+                     databaseReference = database.getReference("environmentalCampaign").child("TemporarySave").child(uid);
+                     databaseReference.child("logo").setValue(byteArrayToBinaryString(bitmapToByteArray(iv_cp_logo)));
+                     databaseReference.child("title").setValue(et_cp_name.getText().toString());
+                     databaseReference.child("frequency").setValue(tv_frequency.getText().toString());
+                     databaseReference.child("period").setValue(tv_period.getText().toString());
 
                     Intent intent = new Intent(getApplicationContext(), setup2.class);
-
-//                    // 이미지 Bitmap 변환
-//                    byte[] byteArray = bitmapToByteArray(iv_cp_logo);
-//
-                    intent.putExtra("logo", byteArrayToBinaryString(bitmapToByteArray(iv_cp_logo)));
-                    intent.putExtra("cp_name", et_cp_name.getText().toString());
-                    intent.putExtra("frequency", tv_frequency.getText().toString());
-                    intent.putExtra("period", tv_period.getText().toString());
-////                intent.putExtra("eDate", tv_eDate.getText().toString());
-
+                    intent.putExtra("uid", uid);
                     startActivity(intent);
                 }
             }

@@ -1,5 +1,6 @@
 package com.example.environmentalcampaign.set_up_page;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -20,8 +22,12 @@ import android.widget.Toast;
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.cp_info.CampaignInformation;
 import com.example.environmentalcampaign.cp_info.CampaignItem;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
@@ -31,25 +37,20 @@ public class setup3 extends AppCompatActivity {
     ImageButton bt_back;
     TextView tv_pre, tv_next;
 
-    String logo, infoImage1, infoImage2, infoImage3, infoImage4, infoImage5, checkImage;
-    String cp_name, frequency, period, eDate, info;
+//    String logo, infoImage1, infoImage2, infoImage3, infoImage4, infoImage5, checkImage;
+//    String cp_name, frequency, period, eDate, info;
 
     EditText et_cp_way, et_rightPhotoInfo, et_rightPhotoInfo2, et_wrongPhotoInfo, et_wrongPhotoInfo2;
     ImageView iv_rightPhoto, iv_rightPhoto2, iv_wrongPhoto, iv_wrongPhoto2, checkImage2;
 
     private FirebaseDatabase database;
-    private DatabaseReference databaseReference;
-
-//    // 다른 액티비티에서 접근하기 위함.
-//    public static Context context_setup3;
-//    public CampaignItem campaignItem;
+    private DatabaseReference temporaryRef, databaseReference;
+    String uid, datetime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup3);
-
-//        context_setup3 = this;
 
         et_cp_way = (EditText)findViewById(R.id.et_cp_way);
         iv_rightPhoto = (ImageView)findViewById(R.id.iv_rightPhoto);
@@ -62,21 +63,9 @@ public class setup3 extends AppCompatActivity {
         et_wrongPhotoInfo2 = (EditText)findViewById(R.id.et_wrongPhotoInfo2);
 //        checkImage2 = (ImageView)findViewById(R.id.checkImage2);
 
-        // 전 페이지 내용들 불러오기
+        // uid 불러오기
         Intent preIntent = getIntent();
-        logo = preIntent.getStringExtra("logo");
-        cp_name = preIntent.getStringExtra("cp_name");
-        frequency = preIntent.getStringExtra("frequency");
-        period = preIntent.getStringExtra("period");
-//        eDate = preIntent.getStringExtra("eDate");
-
-        info = preIntent.getStringExtra("info");
-        infoImage1 = preIntent.getStringExtra("infoImage1");
-        infoImage2 = preIntent.getStringExtra("infoImage2");
-        infoImage3 = preIntent.getStringExtra("infoImage3");
-        infoImage4 = preIntent.getStringExtra("infoImage4");
-        infoImage5 = preIntent.getStringExtra("infoImage5");
-        checkImage = preIntent.getStringExtra("checkImage");
+        uid = preIntent.getStringExtra("uid");
 
         // 이전 페이지
         tv_pre = (TextView)findViewById(R.id.tv_pre);
@@ -139,7 +128,9 @@ public class setup3 extends AppCompatActivity {
                 .setPositiveButton("개설", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        datetime = getTimeMilli();
                         setup();
+
                         Toast.makeText(setup3.this, "캠페인이 개설되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                 }).setNegativeButton("취소", null);
@@ -149,28 +140,22 @@ public class setup3 extends AppCompatActivity {
 
     // 캠페인 정보 페이지로 intent
     void setup() {
-//        // setup2의 campaignItem 가져오기
-//        campaignItem = ((setup2)setup2.context_setup2).campaignItem;
-
+        // setup3의 정보 가져오기
         String rPhoto1="", rPhoto2="", wPhoto1="", wPhoto2="";
         ImageView[] photos = {iv_rightPhoto, iv_rightPhoto2, iv_wrongPhoto, iv_wrongPhoto2};
         for(int i = 0; i < photos.length; i++) {
             if(!checkImage(photos[i])) {
                 switch (i) {
                     case 0 :
-//                        campaignItem.setRightPhoto1(byteArrayToBinaryString(bitmapToByteArray(iv_rightPhoto)));
                         rPhoto1 = byteArrayToBinaryString(bitmapToByteArray(iv_rightPhoto));
                         break;
                     case 1 :
-//                        campaignItem.setRightPhoto2(byteArrayToBinaryString(bitmapToByteArray(iv_rightPhoto2)));
                         rPhoto2 = byteArrayToBinaryString(bitmapToByteArray(iv_rightPhoto2));
                         break;
                     case 2 :
-//                        campaignItem.setWrongPhoto1(byteArrayToBinaryString(bitmapToByteArray(iv_wrongPhoto)));
                         wPhoto1 = byteArrayToBinaryString(bitmapToByteArray(iv_wrongPhoto));
                         break;
                     case 3 :
-//                        campaignItem.setWrongPhoto2(byteArrayToBinaryString(bitmapToByteArray(iv_wrongPhoto2)));
                         wPhoto2 = byteArrayToBinaryString(bitmapToByteArray(iv_wrongPhoto2));
                         break;
                 }
@@ -183,100 +168,65 @@ public class setup3 extends AppCompatActivity {
             if(!checkEditText(photoInfos[i])) {
                 switch (i) {
                     case 0 :
-//                        campaignItem.setRightPhotoInfo1(et_rightPhotoInfo.getText().toString());
                         rInfo1 = et_rightPhotoInfo.getText().toString();
                         break;
                     case 1 :
-//                        campaignItem.setRightPhotoInfo2(et_rightPhotoInfo2.getText().toString());
                         rInfo2 = et_rightPhotoInfo2.getText().toString();
                         break;
                     case 2 :
-//                        campaignItem.setWrongPhotoInfo1(et_wrongPhotoInfo.getText().toString());
                         wInfo1 = et_wrongPhotoInfo.getText().toString();
                         break;
                     case 3 :
-//                        campaignItem.setWrongPhotoInfo2(et_wrongPhotoInfo2.getText().toString());
                         wInfo2 = et_wrongPhotoInfo2.getText().toString();
                         break;
                 }
             }
         }
 
-        // CampaignItem 객체 생성해서 내용 추가하기
-        CampaignItem campaignItem = new CampaignItem();
-
-        campaignItem.setLogo(logo);
-        campaignItem.setTitle(cp_name);
-        campaignItem.setFrequency(frequency);
-        campaignItem.setPeriod(period);
-
-        campaignItem.setCpInfo(info);
-        campaignItem.setInfoImage1(infoImage1);
-        campaignItem.setInfoImage2(infoImage2);
-        campaignItem.setInfoImage3(infoImage3);
-        campaignItem.setInfoImage4(infoImage4);
-        campaignItem.setInfoImage5(infoImage5);
-
-        campaignItem.setWayInfo(et_cp_way.getText().toString());
-        campaignItem.setRightPhoto1(rPhoto1);
-        campaignItem.setRightPhoto2(rPhoto2);
-        campaignItem.setWrongPhoto1(wPhoto1);
-        campaignItem.setWrongPhoto2(wPhoto2);
-        campaignItem.setRightPhotoInfo1(rInfo1);
-        campaignItem.setRightPhotoInfo2(rInfo2);
-        campaignItem.setWrongPhotoInfo1(wInfo1);
-        campaignItem.setWrongPhotoInfo2(wInfo2);
-
-        String datetime = getTimeMilli();
-        campaignItem.setDatetime(datetime);
-        campaignItem.setParticipantsN(0);
-        campaignItem.setReCampaignN(0);
-
-        // 데이터베이스에 삽입
+        // TemporarySave - uid 에 나머지 내용 저장하기
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("environmentalCampaign");
-        databaseReference.child("Campaign").child(datetime).child("campaign").setValue(campaignItem);
+        temporaryRef = database.getReference("environmentalCampaign").child("TemporarySave").child(uid);
+        temporaryRef.child("wayInfo").setValue(et_cp_way.getText().toString());
+        temporaryRef.child("datetime").setValue(datetime);
+        temporaryRef.child("participantsN").setValue(0);
+        temporaryRef.child("reCampaignN").setValue(0);
+        temporaryRef.child("rightPhoto1").setValue(rPhoto1);
+        temporaryRef.child("rightPhoto2").setValue(rPhoto2);
+        temporaryRef.child("wrongPhoto1").setValue(wPhoto1);
+        temporaryRef.child("wrongPhoto2").setValue(wPhoto2);
+        temporaryRef.child("rightPhotoInfo1").setValue(rInfo1);
+        temporaryRef.child("rightPhotoInfo2").setValue(rInfo2);
+        temporaryRef.child("wrongPhotoInfo1").setValue(wInfo1);
+        temporaryRef.child("wrongPhotoInfo2").setValue(wInfo2);
 
-        Intent intent = new Intent(getApplicationContext(), CampaignInformation.class);
+        temporaryRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                CampaignItem campaignItem = snapshot.getValue(CampaignItem.class);
 
-//        // 전 페이지 내용 그대로 옮겨주기
-//        intent.putExtra("logo", logo);
-//        intent.putExtra("cp_name", cp_name);
-//        intent.putExtra("frequency", frequency);
-//        intent.putExtra("period", period);
-////        intent.putExtra("eDate", eDate);
-//        intent.putExtra("info", info);
-//        intent.putExtra("infoImage1", infoImage1);
-//        intent.putExtra("infoImage2", infoImage2);
-//        intent.putExtra("infoImage3", infoImage3);
-//        intent.putExtra("infoImage4", infoImage4);
-//        intent.putExtra("infoImage5", infoImage5);
-//        intent.putExtra("checkImage", checkImage);
-//
-//        // 이미지 Bitmap 변환
-//        byte[] byteArray1 = bitmapToByteArray(iv_rightPhoto);
-//        byte[] byteArray2 = bitmapToByteArray(iv_rightPhoto2);
-//        byte[] byteArray3 = bitmapToByteArray(iv_wrongPhoto);
-//        byte[] byteArray4 = bitmapToByteArray(iv_wrongPhoto2);
-//        byte[] checkbyte2 = bitmapToByteArray(checkImage2);
-//
-//        // 현재 페이지 내용 옮기기
-//        intent.putExtra("way", et_cp_way.getText().toString());
-//        intent.putExtra("rPhoto1", byteArray1);
-//        intent.putExtra("rPhoto2", byteArray2);
-//        intent.putExtra("rInfo1", et_rightPhotoInfo.getText().toString());
-//        intent.putExtra("rInfo2", et_rightPhotoInfo2.getText().toString());
-//        intent.putExtra("wPhoto1", byteArray3);
-//        intent.putExtra("wPhoto2", byteArray4);
-//        intent.putExtra("wInfo1", et_wrongPhotoInfo.getText().toString());
-//        intent.putExtra("wInfo2", et_wrongPhotoInfo2.getText().toString());
-//        intent.putExtra("checkImage2", checkbyte2);
+                // 데이터베이스에 삽입
+                databaseReference = database.getReference("environmentalCampaign");
+                databaseReference.child("Campaign").child(datetime).child("campaign").setValue(campaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // 데이터 삽입이 성공하면 실행
+                        Intent intent = new Intent(getApplicationContext(), CampaignInformation.class);
 
-        // setup이라는 신호주기
-        intent.putExtra("signal", "setup");
-        intent.putExtra("datetime", datetime);
+                        // setup이라는 신호주기
+                        intent.putExtra("signal", "setup");
+                        intent.putExtra("datetime", datetime);
 
-        startActivity(intent);
+                        startActivity(intent);
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // DB를 가져오던 중 에러 발생 시
+                Log.e("SetUpActivity", String.valueOf(error.toException())); //에러문 출력
+            }
+        });
     }
 
     // edittext를 입력했는지 확인
