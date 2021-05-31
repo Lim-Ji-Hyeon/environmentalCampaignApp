@@ -31,8 +31,8 @@ public class setup3 extends AppCompatActivity {
     ImageButton bt_back;
     TextView tv_pre, tv_next;
 
-//    byte[] logo, infoImage1, infoImage2, infoImage3, infoImage4, infoImage5, checkImage;
-//    String cp_name, frequency, period, eDate, info;
+    String logo, infoImage1, infoImage2, infoImage3, infoImage4, infoImage5, checkImage;
+    String cp_name, frequency, period, eDate, info;
 
     EditText et_cp_way, et_rightPhotoInfo, et_rightPhotoInfo2, et_wrongPhotoInfo, et_wrongPhotoInfo2;
     ImageView iv_rightPhoto, iv_rightPhoto2, iv_wrongPhoto, iv_wrongPhoto2, checkImage2;
@@ -40,16 +40,16 @@ public class setup3 extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
-    // 다른 액티비티에서 접근하기 위함.
-    public static Context context_setup3;
-    public CampaignItem campaignItem;
+//    // 다른 액티비티에서 접근하기 위함.
+//    public static Context context_setup3;
+//    public CampaignItem campaignItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup3);
 
-        context_setup3 = this;
+//        context_setup3 = this;
 
         et_cp_way = (EditText)findViewById(R.id.et_cp_way);
         iv_rightPhoto = (ImageView)findViewById(R.id.iv_rightPhoto);
@@ -62,21 +62,21 @@ public class setup3 extends AppCompatActivity {
         et_wrongPhotoInfo2 = (EditText)findViewById(R.id.et_wrongPhotoInfo2);
 //        checkImage2 = (ImageView)findViewById(R.id.checkImage2);
 
-//        // 전 페이지 내용들 불러오기
-//        Intent preIntent = getIntent();
-//        logo = preIntent.getByteArrayExtra("logo");
-//        cp_name = preIntent.getStringExtra("cp_name");
-//        frequency = preIntent.getStringExtra("frequency");
-//        period = preIntent.getStringExtra("period");
-////        eDate = preIntent.getStringExtra("eDate");
-//        info = preIntent.getStringExtra("info");
-//
-//        infoImage1 = preIntent.getByteArrayExtra("infoImage1");
-//        infoImage2 = preIntent.getByteArrayExtra("infoImage2");
-//        infoImage3 = preIntent.getByteArrayExtra("infoImage3");
-//        infoImage4 = preIntent.getByteArrayExtra("infoImage4");
-//        infoImage5 = preIntent.getByteArrayExtra("infoImage5");
-//        checkImage = preIntent.getByteArrayExtra("checkImage");
+        // 전 페이지 내용들 불러오기
+        Intent preIntent = getIntent();
+        logo = preIntent.getStringExtra("logo");
+        cp_name = preIntent.getStringExtra("cp_name");
+        frequency = preIntent.getStringExtra("frequency");
+        period = preIntent.getStringExtra("period");
+//        eDate = preIntent.getStringExtra("eDate");
+
+        info = preIntent.getStringExtra("info");
+        infoImage1 = preIntent.getStringExtra("infoImage1");
+        infoImage2 = preIntent.getStringExtra("infoImage2");
+        infoImage3 = preIntent.getStringExtra("infoImage3");
+        infoImage4 = preIntent.getStringExtra("infoImage4");
+        infoImage5 = preIntent.getStringExtra("infoImage5");
+        checkImage = preIntent.getStringExtra("checkImage");
 
         // 이전 페이지
         tv_pre = (TextView)findViewById(R.id.tv_pre);
@@ -149,50 +149,83 @@ public class setup3 extends AppCompatActivity {
 
     // 캠페인 정보 페이지로 intent
     void setup() {
-        // setup2의 campaignItem 가져오기
-        campaignItem = ((setup2)setup2.context_setup2).campaignItem;
+//        // setup2의 campaignItem 가져오기
+//        campaignItem = ((setup2)setup2.context_setup2).campaignItem;
 
-        campaignItem.setWayInfo(et_cp_way.getText().toString());
-
+        String rPhoto1="", rPhoto2="", wPhoto1="", wPhoto2="";
         ImageView[] photos = {iv_rightPhoto, iv_rightPhoto2, iv_wrongPhoto, iv_wrongPhoto2};
         for(int i = 0; i < photos.length; i++) {
             if(!checkImage(photos[i])) {
                 switch (i) {
                     case 0 :
-                        campaignItem.setRightPhoto1(byteArrayToBinaryString(bitmapToByteArray(iv_rightPhoto)));
+//                        campaignItem.setRightPhoto1(byteArrayToBinaryString(bitmapToByteArray(iv_rightPhoto)));
+                        rPhoto1 = byteArrayToBinaryString(bitmapToByteArray(iv_rightPhoto));
                         break;
                     case 1 :
-                        campaignItem.setRightPhoto2(byteArrayToBinaryString(bitmapToByteArray(iv_rightPhoto2)));
+//                        campaignItem.setRightPhoto2(byteArrayToBinaryString(bitmapToByteArray(iv_rightPhoto2)));
+                        rPhoto2 = byteArrayToBinaryString(bitmapToByteArray(iv_rightPhoto2));
                         break;
                     case 2 :
-                        campaignItem.setWrongPhoto1(byteArrayToBinaryString(bitmapToByteArray(iv_wrongPhoto)));
+//                        campaignItem.setWrongPhoto1(byteArrayToBinaryString(bitmapToByteArray(iv_wrongPhoto)));
+                        wPhoto1 = byteArrayToBinaryString(bitmapToByteArray(iv_wrongPhoto));
                         break;
                     case 3 :
-                        campaignItem.setWrongPhoto2(byteArrayToBinaryString(bitmapToByteArray(iv_wrongPhoto2)));
+//                        campaignItem.setWrongPhoto2(byteArrayToBinaryString(bitmapToByteArray(iv_wrongPhoto2)));
+                        wPhoto2 = byteArrayToBinaryString(bitmapToByteArray(iv_wrongPhoto2));
                         break;
                 }
             }
         }
 
+        String rInfo1="", rInfo2="", wInfo1="", wInfo2="";
         EditText[] photoInfos = {et_rightPhotoInfo, et_rightPhotoInfo2, et_wrongPhotoInfo, et_wrongPhotoInfo2};
         for(int i = 0; i < photoInfos.length; i++) {
             if(!checkEditText(photoInfos[i])) {
                 switch (i) {
                     case 0 :
-                        campaignItem.setRightPhotoInfo1(et_rightPhotoInfo.getText().toString());
+//                        campaignItem.setRightPhotoInfo1(et_rightPhotoInfo.getText().toString());
+                        rInfo1 = et_rightPhotoInfo.getText().toString();
                         break;
                     case 1 :
-                        campaignItem.setRightPhotoInfo2(et_rightPhotoInfo2.getText().toString());
+//                        campaignItem.setRightPhotoInfo2(et_rightPhotoInfo2.getText().toString());
+                        rInfo2 = et_rightPhotoInfo2.getText().toString();
                         break;
                     case 2 :
-                        campaignItem.setWrongPhotoInfo1(et_wrongPhotoInfo.getText().toString());
+//                        campaignItem.setWrongPhotoInfo1(et_wrongPhotoInfo.getText().toString());
+                        wInfo1 = et_wrongPhotoInfo.getText().toString();
                         break;
                     case 3 :
-                        campaignItem.setWrongPhotoInfo2(et_wrongPhotoInfo2.getText().toString());
+//                        campaignItem.setWrongPhotoInfo2(et_wrongPhotoInfo2.getText().toString());
+                        wInfo2 = et_wrongPhotoInfo2.getText().toString();
                         break;
                 }
             }
         }
+
+        // CampaignItem 객체 생성해서 내용 추가하기
+        CampaignItem campaignItem = new CampaignItem();
+
+        campaignItem.setLogo(logo);
+        campaignItem.setTitle(cp_name);
+        campaignItem.setFrequency(frequency);
+        campaignItem.setPeriod(period);
+
+        campaignItem.setCpInfo(info);
+        campaignItem.setInfoImage1(infoImage1);
+        campaignItem.setInfoImage2(infoImage2);
+        campaignItem.setInfoImage3(infoImage3);
+        campaignItem.setInfoImage4(infoImage4);
+        campaignItem.setInfoImage5(infoImage5);
+
+        campaignItem.setWayInfo(et_cp_way.getText().toString());
+        campaignItem.setRightPhoto1(rPhoto1);
+        campaignItem.setRightPhoto2(rPhoto2);
+        campaignItem.setWrongPhoto1(wPhoto1);
+        campaignItem.setWrongPhoto2(wPhoto2);
+        campaignItem.setRightPhotoInfo1(rInfo1);
+        campaignItem.setRightPhotoInfo2(rInfo2);
+        campaignItem.setWrongPhotoInfo1(wInfo1);
+        campaignItem.setWrongPhotoInfo2(wInfo2);
 
         String datetime = getTimeMilli();
         campaignItem.setDatetime(datetime);
@@ -231,12 +264,12 @@ public class setup3 extends AppCompatActivity {
 //        intent.putExtra("way", et_cp_way.getText().toString());
 //        intent.putExtra("rPhoto1", byteArray1);
 //        intent.putExtra("rPhoto2", byteArray2);
-//        intent.putExtra("rInfo", et_rightPhotoInfo.getText().toString());
+//        intent.putExtra("rInfo1", et_rightPhotoInfo.getText().toString());
 //        intent.putExtra("rInfo2", et_rightPhotoInfo2.getText().toString());
 //        intent.putExtra("wPhoto1", byteArray3);
 //        intent.putExtra("wPhoto2", byteArray4);
-//        intent.putExtra("wInfo", et_wrongPhotoInfo.getText().toString());
-//        intent.putExtra("rInfo2", et_wrongPhotoInfo2.getText().toString());
+//        intent.putExtra("wInfo1", et_wrongPhotoInfo.getText().toString());
+//        intent.putExtra("wInfo2", et_wrongPhotoInfo2.getText().toString());
 //        intent.putExtra("checkImage2", checkbyte2);
 
         // setup이라는 신호주기

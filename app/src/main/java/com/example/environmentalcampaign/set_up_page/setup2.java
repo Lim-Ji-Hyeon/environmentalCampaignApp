@@ -44,16 +44,16 @@ public class setup2 extends AppCompatActivity {
     private final int GALLERY_CODE4 = 444;
     private final int GALLERY_CODE5 = 555;
 
-    // 다른 액티비티에서 접근하기 위함.
-    public static Context context_setup2;
-    public CampaignItem campaignItem;
+//    // 다른 액티비티에서 접근하기 위함.
+//    public static Context context_setup2;
+//    public CampaignItem campaignItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup2);
 
-        context_setup2 = this;
+//        context_setup2 = this;
 
         et_cp_info = (EditText)findViewById(R.id.et_cp_info);
         iv_cp_info1 = (ImageView)findViewById(R.id.iv_cp_info1);
@@ -109,12 +109,13 @@ public class setup2 extends AppCompatActivity {
             }
         });
 
-//        // 전 페이지 내용들 불러오기
-//        Intent preIntent = getIntent();
+        // 전 페이지 내용들 불러오기
+        Intent preIntent = getIntent();
 //        byte[] arr = preIntent.getByteArrayExtra("logo");
-//        String cp_name = preIntent.getStringExtra("cp_name");
-//        String frequency = preIntent.getStringExtra("frequency");
-//        String period = preIntent.getStringExtra("period");
+        String logo = preIntent.getStringExtra("logo");
+        String cp_name = preIntent.getStringExtra("cp_name");
+        String frequency = preIntent.getStringExtra("frequency");
+        String period = preIntent.getStringExtra("period");
 ////        String eDate = preIntent.getStringExtra("eDate");
 
         // 이전 페이지
@@ -133,29 +134,35 @@ public class setup2 extends AppCompatActivity {
                     Toast.makeText(setup2.this, "캠페인 설명을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    // setup1의 campaignItem 가져오기
-                    campaignItem = ((setup1)setup1.context_setup1).campaignItem;
+//                    // setup1의 campaignItem 가져오기
+//                    campaignItem = ((setup1)setup1.context_setup1).campaignItem;
 
-                    campaignItem.setCpInfo(et_cp_info.getText().toString());
+//                    campaignItem.setCpInfo(et_cp_info.getText().toString());
 
+                    String infoImage1="", infoImage2="", infoImage3="", infoImage4="", infoImage5="";
                     ImageView[] infoImages = {iv_cp_info1, iv_cp_info2, iv_cp_info3, iv_cp_info4, iv_cp_info5};
                     for(int i = 0; i < infoImages.length; i++) {
                         if(!checkImage(infoImages[i])) {
                             switch (i) {
                                 case 0 :
-                                    campaignItem.setInfoImage1(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info1)));
+//                                    campaignItem.setInfoImage1(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info1)));
+                                    infoImage1 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info1));
                                     break;
                                 case 1 :
-                                    campaignItem.setInfoImage2(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info2)));
+//                                    campaignItem.setInfoImage2(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info2)));
+                                    infoImage2 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info2));
                                     break;
                                 case 2 :
-                                    campaignItem.setInfoImage3(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info3)));
+//                                    campaignItem.setInfoImage3(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info3)));
+                                    infoImage3 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info3));
                                     break;
                                 case 3 :
-                                    campaignItem.setInfoImage4(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info4)));
+//                                    campaignItem.setInfoImage4(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info4)));
+                                    infoImage4 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info4));
                                     break;
                                 case 4 :
-                                    campaignItem.setInfoImage5(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info5)));
+//                                    campaignItem.setInfoImage5(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info5)));
+                                    infoImage5 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info5));
                                     break;
                             }
                         }
@@ -163,11 +170,11 @@ public class setup2 extends AppCompatActivity {
 
                     Intent intent = new Intent(getApplicationContext(), setup3.class);
 
-//                    // 전 페이지 내용 그대로 옮겨주기
-//                    intent.putExtra("logo", arr);
-//                    intent.putExtra("cp_name", cp_name);
-//                    intent.putExtra("frequency", frequency);
-//                    intent.putExtra("period", period);
+                    // 전 페이지 내용 그대로 옮겨주기
+                    intent.putExtra("logo", logo);
+                    intent.putExtra("cp_name", cp_name);
+                    intent.putExtra("frequency", frequency);
+                    intent.putExtra("period", period);
 ////                intent.putExtra("eDate", eDate);
 //
 ////                    // 이미지 Bitmap 변환
@@ -177,14 +184,14 @@ public class setup2 extends AppCompatActivity {
 //                    byte[] byteArray4 = bitmapToByteArray(iv_cp_info4);
 //                    byte[] byteArray5 = bitmapToByteArray(iv_cp_info5);
 //                    byte[] checkbyte = bitmapToByteArray(checkImage);
-//
-////                    // 현재 페이지 내용 옮기기
-//                    intent.putExtra("info", et_cp_info.getText().toString());
-//                    intent.putExtra("infoImage1", byteArray1);
-//                    intent.putExtra("infoImage2", byteArray2);
-//                    intent.putExtra("infoImage3", byteArray3);
-//                    intent.putExtra("infoImage4", byteArray4);
-//                    intent.putExtra("infoImage5", byteArray5);
+
+                    // 현재 페이지 내용 옮기기
+                    intent.putExtra("info", et_cp_info.getText().toString());
+                    intent.putExtra("infoImage1", infoImage1);
+                    intent.putExtra("infoImage2", infoImage2);
+                    intent.putExtra("infoImage3", infoImage3);
+                    intent.putExtra("infoImage4", infoImage4);
+                    intent.putExtra("infoImage5", infoImage5);
 //                    intent.putExtra("checkImage", checkbyte);
 
                     startActivity(intent);
