@@ -32,6 +32,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         this.context = context;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @NonNull
     @Override
     public FeedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

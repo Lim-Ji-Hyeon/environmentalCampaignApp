@@ -32,6 +32,8 @@ import android.widget.Toast;
 
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.bookmark.BookMark;
+import com.example.environmentalcampaign.feed.FeedItem;
+import com.example.environmentalcampaign.feed.FeedPage;
 import com.example.environmentalcampaign.home.HomeActivity;
 import com.example.environmentalcampaign.home.UserAccount;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,7 +68,6 @@ public class Second_Certification_Page extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth; //파이어베이스 인증처리
     private DatabaseReference mDatabaseRef;//실시간 데이터베이스
     String contents, certiImg, publisher, certi_date;
-    private int certi_count = 0;
 
     ImageView img1;
     Button btn1;
@@ -89,8 +90,6 @@ public class Second_Certification_Page extends AppCompatActivity {
         editText = (EditText)findViewById(R.id.certi_text);
         camera_btn = (Button)findViewById(R.id.camera_btn);
         gallery_btn = (Button)findViewById(R.id.gallery_btn);
-
-        certi_count = 0;
 
         camera_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,7 +156,12 @@ public class Second_Certification_Page extends AppCompatActivity {
                 certi_info.setCerti_date(getTime);
                 certi_info.setPhotoUrl(certiImg);
 
+                FeedItem feedItem = new FeedItem();
+                feedItem.setImage(certiImg);
+
                 mDatabaseRef.child("Certification").child(publisher).child(getTime).setValue(certi_info);
+                mDatabaseRef.child("Feed").child(getTime).setValue(feedItem);
+
 
                 Toast.makeText(Second_Certification_Page.this, "인증이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), CertificationPage.class);
