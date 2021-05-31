@@ -67,7 +67,7 @@ public class CampaignInformation extends FragmentActivity {
         fragmentReview = new FragmentReview();
 
         // datetime 받아오는 부분 만들어야 함.
-        getSetupInfo(datetime);
+//        getSetupInfo(datetime);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
 
@@ -91,8 +91,8 @@ public class CampaignInformation extends FragmentActivity {
                 else if(position == 2)
                     selected = fragmentReview;
                 getSupportFragmentManager().beginTransaction().replace(R.id.tabcontent, selected).commit();
-                fragmentSetup();
-//                if(isSetup()) { fragmentSetup(); }
+//                fragmentSetup();
+                if(isSetup()) { fragmentSetup(); }
             }
 
             @Override
@@ -121,6 +121,10 @@ public class CampaignInformation extends FragmentActivity {
         tv_period = (TextView)findViewById(R.id.tv_period);
         tv_participantsN = (TextView)findViewById(R.id.tv_participantsN);
         tv_reCampaignN = (TextView)findViewById(R.id.tv_reCampaignN);
+
+//        if(이미 참가중인 캠페인이라면) {
+//            tv_participation.setText("참가완료");
+//        }
 
         // 참가인원의 몇명인지 누르면 참가자 리스트 보여주기
         tv_participantsN.setOnClickListener(new View.OnClickListener() {
@@ -170,7 +174,7 @@ public class CampaignInformation extends FragmentActivity {
     void getSetupInfo(String datetime) {
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("environmentalCampaign").child("Campaign").child(datetime);
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.child("campaign").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // 파이어베이스 데이터베이스의 데이터를 받아오는 곳
@@ -225,11 +229,11 @@ public class CampaignInformation extends FragmentActivity {
             String sInfoImage5 = campaignItem.getInfoImage5();
             byte[] infoImage1, infoImage2, infoImage3, infoImage4, infoImage5;
 
-            if(!(sInfoImage1.equals("") || sInfoImage1 == null)) { infoImage1 = binaryStringToByteArray(sInfoImage1); } else { infoImage1 = null; }
-            if(!(sInfoImage2.equals("") || sInfoImage2 == null)) { infoImage2 = binaryStringToByteArray(sInfoImage2); } else { infoImage2 = null; }
-            if(!(sInfoImage3.equals("") || sInfoImage3 == null)) { infoImage3 = binaryStringToByteArray(sInfoImage3); } else { infoImage3 = null; }
-            if(!(sInfoImage4.equals("") || sInfoImage4 == null)) { infoImage4 = binaryStringToByteArray(sInfoImage4); } else { infoImage4 = null; }
-            if(!(sInfoImage5.equals("") || sInfoImage5 == null)) { infoImage5 = binaryStringToByteArray(sInfoImage5); } else { infoImage5 = null; }
+            if(!(sInfoImage1.equals("") || sInfoImage1 == null)) { infoImage1 = binaryStringToByteArray(sInfoImage1); } else { infoImage1 = new byte[]{}; }
+            if(!(sInfoImage2.equals("") || sInfoImage2 == null)) { infoImage2 = binaryStringToByteArray(sInfoImage2); } else { infoImage2 = new byte[]{}; }
+            if(!(sInfoImage3.equals("") || sInfoImage3 == null)) { infoImage3 = binaryStringToByteArray(sInfoImage3); } else { infoImage3 = new byte[]{}; }
+            if(!(sInfoImage4.equals("") || sInfoImage4 == null)) { infoImage4 = binaryStringToByteArray(sInfoImage4); } else { infoImage4 = new byte[]{}; }
+            if(!(sInfoImage5.equals("") || sInfoImage5 == null)) { infoImage5 = binaryStringToByteArray(sInfoImage5); } else { infoImage5 = new byte[]{}; }
 
 //            String info = gIntent.getStringExtra("info");
 //            byte[] infoImage1 = gIntent.getByteArrayExtra("infoImage1");
@@ -265,10 +269,10 @@ public class CampaignInformation extends FragmentActivity {
             String swPhoto2 = campaignItem.getWrongPhoto2();
             byte[] rPhoto1, rPhoto2, wPhoto1, wPhoto2;
 
-            if(!(srPhoto1.equals("") || srPhoto1 == null)) { rPhoto1 = binaryStringToByteArray(srPhoto1); } else { rPhoto1 = null; }
-            if(!(srPhoto2.equals("") || srPhoto2 == null)) { rPhoto2 = binaryStringToByteArray(srPhoto2); } else { rPhoto2 = null; }
-            if(!(swPhoto1.equals("") || swPhoto1 == null)) { wPhoto1 = binaryStringToByteArray(swPhoto1); } else { wPhoto1 = null; }
-            if(!(swPhoto2.equals("") || swPhoto2 == null)) { wPhoto2 = binaryStringToByteArray(swPhoto2); } else { wPhoto2 = null; }
+            if(!(srPhoto1.equals("") || srPhoto1 == null)) { rPhoto1 = binaryStringToByteArray(srPhoto1); } else { rPhoto1 = new byte[]{}; }
+            if(!(srPhoto2.equals("") || srPhoto2 == null)) { rPhoto2 = binaryStringToByteArray(srPhoto2); } else { rPhoto2 = new byte[]{}; }
+            if(!(swPhoto1.equals("") || swPhoto1 == null)) { wPhoto1 = binaryStringToByteArray(swPhoto1); } else { wPhoto1 = new byte[]{}; }
+            if(!(swPhoto2.equals("") || swPhoto2 == null)) { wPhoto2 = binaryStringToByteArray(swPhoto2); } else { wPhoto2 = new byte[]{}; }
 
 //            String way = gIntent.getStringExtra("way");
 //            byte[] rPhoto1 = gIntent.getByteArrayExtra("rPhoto1");
@@ -347,9 +351,11 @@ public class CampaignInformation extends FragmentActivity {
                         int n = Integer.parseInt(tv.substring(0, tv.length()-1)) + 1;
                         tv_participantsN.setText( n + "명");
                         // 데이터 수정
-                        campaignItem.setParticipantsN(n);
-                        databaseReference.setValue(campaignItem);
+//                        campaignItem.setParticipantsN(n);
+//                        databaseReference.setValue(campaignItem);
+                        databaseReference.child("campaign").child("participantsN").setValue(n);
                         // 평균 참여 횟수 구하는 방법 구현해야함.
+                        // 내가 참가한 캠페인에 넣을 방법 구현해야함.
                         Toast.makeText(CampaignInformation.this, "캠페인 참가가 완료되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                 })

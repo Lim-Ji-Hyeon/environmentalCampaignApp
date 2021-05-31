@@ -202,7 +202,7 @@ public class setup3 extends AppCompatActivity {
         // 데이터베이스에 삽입
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference("environmentalCampaign");
-        databaseReference.child("Campaign").child(datetime).setValue(campaignItem);
+        databaseReference.child("Campaign").child(datetime).child("campaign").setValue(campaignItem);
 
         Intent intent = new Intent(getApplicationContext(), CampaignInformation.class);
 

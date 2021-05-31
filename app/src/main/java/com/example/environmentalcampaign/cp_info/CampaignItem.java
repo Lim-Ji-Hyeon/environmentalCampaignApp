@@ -9,11 +9,11 @@ public class CampaignItem {
 //    ArrayList<ParticipantItem> participants=null;
 
     // FragmentInfo
-    String cpInfo, infoImage1=null, infoImage2=null, infoImage3=null, infoImage4=null, infoImage5=null;
+    String cpInfo, infoImage1="", infoImage2="", infoImage3="", infoImage4="", infoImage5="";
 
     // FragmentWay ( + frequency, period )
-    String wayInfo, rightPhoto1=null, rightPhoto2=null, rightPhotoInfo1=null, rightPhotoInfo2=null,
-            wrongPhoto1=null, wrongPhoto2=null, wrongPhotoInfo1=null, wrongPhotoInfo2=null;
+    String wayInfo, rightPhoto1="", rightPhoto2="", rightPhotoInfo1="", rightPhotoInfo2="",
+            wrongPhoto1="", wrongPhoto2="", wrongPhotoInfo1="", wrongPhotoInfo2="";
 
     // FragmentReview
 //    ArrayList<ReviewItem> reviews=null;

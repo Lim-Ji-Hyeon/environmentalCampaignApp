@@ -58,6 +58,7 @@ public class FragmentWay extends Fragment {
             byte[] arr2 = bundle.getByteArray("rPhoto2");
             byte[] arr3 = bundle.getByteArray("wPhoto1");
             byte[] arr4 = bundle.getByteArray("wPhoto2");
+            byte[] checkByteArray = new byte[]{};
 //            Bitmap rPhoto1 = BitmapFactory.decodeByteArray(arr1, 0, arr1.length);
 //            Bitmap rPhoto2 = BitmapFactory.decodeByteArray(arr2, 0, arr2.length);
 //            Bitmap wPhoto1 = BitmapFactory.decodeByteArray(arr3, 0, arr3.length);
@@ -71,23 +72,23 @@ public class FragmentWay extends Fragment {
             String frequency = bundle.getString("frequency");
             String period = bundle.getString("period");
 
-            if(arr1 != null) {
+            if(arr1 != checkByteArray) {
                 iv_rightPhoto.setImageDrawable(byteArrayToDrawable(arr1));
                 iv_rightPhoto.setVisibility(View.VISIBLE);
             }
-            if(arr2 != null) {
+            if(arr2 != checkByteArray) {
                 iv_rightPhoto2.setImageDrawable(byteArrayToDrawable(arr2));
                 iv_rightPhoto2.setVisibility(View.VISIBLE);
             }
-            if(arr3 != null) {
+            if(arr3 != checkByteArray) {
                 iv_wrongPhoto.setImageDrawable(byteArrayToDrawable(arr3));
                 iv_wrongPhoto.setVisibility(View.VISIBLE);
             }
-            if(arr4 != null) {
+            if(arr4 != checkByteArray) {
                 iv_wrongPhoto2.setImageDrawable(byteArrayToDrawable(arr4));
                 iv_wrongPhoto2.setVisibility(View.VISIBLE);
             }
-            if((arr3 != null) || (arr4 != null)) { tv_wrongPhoto.setVisibility(View.VISIBLE); }
+            if((arr3 != checkByteArray) || (arr4 != checkByteArray)) { tv_wrongPhoto.setVisibility(View.VISIBLE); }
 
 //            Bitmap[] photos = {rPhoto1, rPhoto2, wPhoto1, wPhoto2};
 //            ImageView[] imageViews = {iv_rightPhoto, iv_rightPhoto2, iv_wrongPhoto, iv_wrongPhoto2};

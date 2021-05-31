@@ -52,24 +52,25 @@ public class FragmentInfo extends Fragment {
             byte[] arr3 = bundle.getByteArray("infoImage3");
             byte[] arr4 = bundle.getByteArray("infoImage4");
             byte[] arr5 = bundle.getByteArray("infoImage5");
+            byte[] checkByteArray = new byte[]{};
 
-            if(arr1 != null) {
+            if(arr1 != checkByteArray) {
                 iv_info1.setImageDrawable(byteArrayToDrawable(arr1));
                 iv_info1.setVisibility(View.VISIBLE);
             }
-            if(arr2 != null) {
+            if(arr2 != checkByteArray) {
                 iv_info2.setImageDrawable(byteArrayToDrawable(arr2));
                 iv_info2.setVisibility(View.VISIBLE);
             }
-            if(arr3 != null) {
+            if(arr3 != checkByteArray) {
                 iv_info3.setImageDrawable(byteArrayToDrawable(arr3));
                 iv_info3.setVisibility(View.VISIBLE);
             }
-            if(arr4 != null) {
+            if(arr4 != checkByteArray) {
                 iv_info4.setImageDrawable(byteArrayToDrawable(arr4));
                 iv_info4.setVisibility(View.VISIBLE);
             }
-            if(arr5 != null) {
+            if(arr5 != checkByteArray) {
                 iv_info5.setImageDrawable(byteArrayToDrawable(arr5));
                 iv_info5.setVisibility(View.VISIBLE);
             }
