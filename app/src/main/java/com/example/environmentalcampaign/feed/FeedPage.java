@@ -30,7 +30,7 @@ public class FeedPage extends AppCompatActivity {
 
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<FeedItem> arrayList;
+    public ArrayList<FeedItem> arrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private RecyclerView feedRecyclerView;
