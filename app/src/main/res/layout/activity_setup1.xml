@@ -82,7 +82,7 @@
                     android:layout_height="100dp"
                     android:background="@drawable/edge"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/cp4" />
+                    android:src="@drawable/burista" />
 
             </LinearLayout>
 

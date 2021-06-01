@@ -32,25 +32,25 @@ public class SearchPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_page);
 
-        // recyclerview
-        RecyclerView searchCampaign = findViewById(R.id.searchCampaign);
-        List<String> stitle = new ArrayList<>();
-        List<Integer> simage = new ArrayList<>();
-        RecyclerViewAdapter sRecyclerViewAdapter = new RecyclerViewAdapter(this, stitle, simage);
-
-        stitle.add("멸종위기 보호 캠페인");
-        stitle.add("토양 정화 캠페인");
-        stitle.add("플라스틱 프리 챌린지");
-        stitle.add("용기내 캠페인");
-
-        simage.add(R.drawable.dolphin);
-        simage.add(R.drawable.soil);
-        simage.add(R.drawable.new_campaign_2);
-        simage.add(R.drawable.campaign_image);
-
-        GridLayoutManager sGridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
-        searchCampaign.setLayoutManager(sGridLayoutManager);
-        searchCampaign.setAdapter(sRecyclerViewAdapter);
+//        // recyclerview
+//        RecyclerView searchCampaign = findViewById(R.id.searchCampaign);
+//        List<String> stitle = new ArrayList<>();
+//        List<Integer> simage = new ArrayList<>();
+//        RecyclerViewAdapter sRecyclerViewAdapter = new RecyclerViewAdapter(this, stitle, simage);
+//
+//        stitle.add("멸종위기 보호 캠페인");
+//        stitle.add("토양 정화 캠페인");
+//        stitle.add("플라스틱 프리 챌린지");
+//        stitle.add("용기내 캠페인");
+//
+//        simage.add(R.drawable.dolphin);
+//        simage.add(R.drawable.soil);
+//        simage.add(R.drawable.new_campaign_2);
+//        simage.add(R.drawable.campaign_image);
+//
+//        GridLayoutManager sGridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+//        searchCampaign.setLayoutManager(sGridLayoutManager);
+//        searchCampaign.setAdapter(sRecyclerViewAdapter);
 
         // 뒤로 가기 버튼 페이지 연동(홈화면과 연동)
         bt_back = (ImageButton)findViewById(R.id.bt_back);

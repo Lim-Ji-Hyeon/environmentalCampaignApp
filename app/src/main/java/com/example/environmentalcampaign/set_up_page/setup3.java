@@ -101,23 +101,27 @@ public class setup3 extends AppCompatActivity {
             }
         });
 
-//        // 나중에 사진 연동되면 추가할 것. 인증샷 선택하면 해당 인증샷 설명 입력할 수 있도록 하기.
-//        if(!checkImage(iv_rightPhoto)) {
-//            et_rightPhotoInfo.setClickable(true);
-//            et_rightPhotoInfo.setFocusable(true);
-//        }
-//        if(!checkImage(iv_rightPhoto2)) {
-//            et_rightPhotoInfo2.setClickable(true);
-//            et_rightPhotoInfo2.setFocusable(true);
-//        }
-//        if(!checkImage(iv_wrongPhoto)) {
-//            et_wrongPhotoInfo.setClickable(true);
-//            et_wrongPhotoInfo.setFocusable(true);
-//        }
-//        if(!checkImage(iv_wrongPhoto2)) {
-//            et_wrongPhotoInfo2.setClickable(true);
-//            et_wrongPhotoInfo2.setFocusable(true);
-//        }
+        // 인증샷 선택하면 해당 인증샷 설명 입력할 수 있도록 하기.
+        if(!checkImage(iv_rightPhoto)) {
+            et_rightPhotoInfo.setFocusableInTouchMode(true);
+            et_rightPhotoInfo.setClickable(true);
+            et_rightPhotoInfo.setFocusable(true);
+        }
+        if(!checkImage(iv_rightPhoto2)) {
+            et_rightPhotoInfo2.setFocusableInTouchMode(true);
+            et_rightPhotoInfo2.setClickable(true);
+            et_rightPhotoInfo2.setFocusable(true);
+        }
+        if(!checkImage(iv_wrongPhoto)) {
+            et_wrongPhotoInfo.setFocusableInTouchMode(true);
+            et_wrongPhotoInfo.setClickable(true);
+            et_wrongPhotoInfo.setFocusable(true);
+        }
+        if(!checkImage(iv_wrongPhoto2)) {
+            et_wrongPhotoInfo2.setFocusableInTouchMode(true);
+            et_wrongPhotoInfo2.setClickable(true);
+            et_wrongPhotoInfo2.setFocusable(true);
+        }
     }
 
     // 마지막 확인 팝업

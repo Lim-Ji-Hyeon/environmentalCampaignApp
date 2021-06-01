@@ -36,20 +36,20 @@ public class BookMark extends AppCompatActivity {
         setContentView(R.layout.activity_book_mark);
         datalist = findViewById(R.id.datalist);
 
-        titles = new ArrayList<>();
-        images = new ArrayList<>();
-
-        titles.add("버리스타 캠페인");
-        titles.add("페트라떼 캠페인");
-
-        images.add(R.drawable.burista);
-        images.add(R.drawable.new_campaign_1);
-
-        recyclerViewAdapter = new RecyclerViewAdapter(this, titles, images);
-
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
-        datalist.setLayoutManager(gridLayoutManager);
-        datalist.setAdapter(recyclerViewAdapter);
+//        titles = new ArrayList<>();
+//        images = new ArrayList<>();
+//
+//        titles.add("버리스타 캠페인");
+//        titles.add("페트라떼 캠페인");
+//
+//        images.add(R.drawable.burista);
+//        images.add(R.drawable.new_campaign_1);
+//
+//        recyclerViewAdapter = new RecyclerViewAdapter(this, titles, images);
+//
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+//        datalist.setLayoutManager(gridLayoutManager);
+//        datalist.setAdapter(recyclerViewAdapter);
 
         // 뒤로 가기 버튼 페이지 연동
         bt_back = (ImageButton)findViewById(R.id.bt_back);

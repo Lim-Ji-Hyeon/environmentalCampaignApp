@@ -58,11 +58,6 @@ public class FragmentWay extends Fragment {
             String rPhoto2 = bundle.getString("rPhoto2");
             String wPhoto1 = bundle.getString("wPhoto1");
             String wPhoto2 = bundle.getString("wPhoto2");
-//            byte[] arr1 = bundle.getByteArray("rPhoto1");
-//            byte[] arr2 = bundle.getByteArray("rPhoto2");
-//            byte[] arr3 = bundle.getByteArray("wPhoto1");
-//            byte[] arr4 = bundle.getByteArray("wPhoto2");
-//            byte[] checkByteArray = new byte[]{};
             String rInfo = bundle.getString("rInfo");
             String rInfo2 = bundle.getString("rInfo2");
             String wInfo = bundle.getString("wInfo");
@@ -70,67 +65,24 @@ public class FragmentWay extends Fragment {
             String frequency = bundle.getString("frequency");
             String period = bundle.getString("period");
 
-            if(rPhoto1 != "") {
-                iv_rightPhoto.setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(rPhoto1)));
-                iv_rightPhoto.setVisibility(View.VISIBLE);
+            String[] photos = {rPhoto1, rPhoto2, wPhoto1, wPhoto2};
+            ImageView[] imageViews = {iv_rightPhoto, iv_rightPhoto2, iv_wrongPhoto, iv_wrongPhoto2};
+            for(int i = 0; i < photos.length; i++) {
+                if(!photos[i].equals("")) {
+                    imageViews[i].setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(photos[i])));
+                    imageViews[i].setVisibility(View.VISIBLE);
+                } else { imageViews[i].setVisibility(View.INVISIBLE); }
             }
-            if(rPhoto2 != "") {
-                iv_rightPhoto2.setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(rPhoto2)));
-                iv_rightPhoto2.setVisibility(View.VISIBLE);
-            }
-            if(wPhoto1 != "") {
-                iv_wrongPhoto.setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(wPhoto1)));
-                iv_wrongPhoto.setVisibility(View.VISIBLE);
-            }
-            if(wPhoto2 != "") {
-                iv_wrongPhoto2.setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(wPhoto2)));
-                iv_wrongPhoto2.setVisibility(View.VISIBLE);
-            }
-            if((wPhoto1 != "") || (wPhoto2 != "")) { lo_wrongPhoto.setVisibility(View.VISIBLE); }
+            if((!wPhoto1.equals("")) || (!wPhoto2.equals(""))) { lo_wrongPhoto.setVisibility(View.VISIBLE); }
             else { lo_wrongPhoto.setVisibility(View.GONE); }
 
-//            if(arr1 != checkByteArray) {
-//                iv_rightPhoto.setImageDrawable(byteArrayToDrawable(arr1));
-//                iv_rightPhoto.setVisibility(View.VISIBLE);
-//            }
-//            if(arr2 != checkByteArray) {
-//                iv_rightPhoto2.setImageDrawable(byteArrayToDrawable(arr2));
-//                iv_rightPhoto2.setVisibility(View.VISIBLE);
-//            }
-//            if(arr3 != checkByteArray) {
-//                iv_wrongPhoto.setImageDrawable(byteArrayToDrawable(arr3));
-//                iv_wrongPhoto.setVisibility(View.VISIBLE);
-//            }
-//            if(arr4 != checkByteArray) {
-//                iv_wrongPhoto2.setImageDrawable(byteArrayToDrawable(arr4));
-//                iv_wrongPhoto2.setVisibility(View.VISIBLE);
-//            }
-//            if((arr3 != checkByteArray) || (arr4 != checkByteArray)) { tv_wrongPhoto.setVisibility(View.VISIBLE); }
-
-//            Bitmap[] photos = {rPhoto1, rPhoto2, wPhoto1, wPhoto2};
-//            ImageView[] imageViews = {iv_rightPhoto, iv_rightPhoto2, iv_wrongPhoto, iv_wrongPhoto2};
             String[] photoInfos = {rInfo, rInfo2, wInfo, wInfo2};
             TextView[] textViews = {tv_rightPhotoInfo, tv_rightPhotoInfo2, tv_wrongPhotoInfo, tv_wrongPhotoInfo2};
-
-//            for(int i = 0; i < photos.length; i++) {
-//                if(!(photos[i].sameAs(checkImage2))) {
-//                    imageViews[i].setImageBitmap(photos[i]);
-//                    imageViews[i].setVisibility(View.VISIBLE);
-//                    if(!(photos[2].sameAs(checkImage2)) || !(photos[3].sameAs(checkImage2))) {
-//                        tv_wrongPhoto.setVisibility(View.VISIBLE);
-//                    }
-//                }
-//                if(photoInfos[i] != null) {
-//                    textViews[i].setText(photoInfos[i]);
-//                    textViews[i].setVisibility(View.VISIBLE);
-//                }
-//            }
-
             for(int i = 0; i < photoInfos.length; i++) {
                 if(photoInfos[i] != null) {
                     textViews[i].setText(photoInfos[i]);
                     textViews[i].setVisibility(View.VISIBLE);
-                }
+                } else { textViews[i].setVisibility(View.INVISIBLE); }
             }
 
             tv_wayInfo.setText(way);
