@@ -36,10 +36,17 @@ import com.example.environmentalcampaign.feed.FeedItem;
 import com.example.environmentalcampaign.feed.FeedPage;
 import com.example.environmentalcampaign.home.HomeActivity;
 import com.example.environmentalcampaign.home.UserAccount;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -68,6 +75,7 @@ public class Second_Certification_Page extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth; //파이어베이스 인증처리
     private DatabaseReference mDatabaseRef;//실시간 데이터베이스
     String contents, certiImg, publisher, certi_date;
+    FirebaseStorage storage;
 
     ImageView img1;
     Button btn1;
@@ -84,6 +92,7 @@ public class Second_Certification_Page extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("environmentalCampaign");
         FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
+        storage = FirebaseStorage.getInstance();
 
         img1 = (ImageView)findViewById(R.id.certi_image);
         btn1 = (Button)findViewById(R.id.certi_button);
@@ -208,9 +217,44 @@ public class Second_Certification_Page extends AppCompatActivity {
             switch (requestCode) {
                 case GALLERY_CODE:
                     sendPicture(data.getData()); //갤러리에서 가져오기
+
+                    // Storage에 저장하기
+                   StorageReference storageRef = storage.getReference();
+
+                    Uri file = Uri.fromFile(new File(getRealPathFromURI(data.getData())));
+                    StorageReference riversRef = storageRef.child("Feed/").child("images/"+file.getLastPathSegment());
+                    UploadTask uploadTask = riversRef.putFile(file);
+
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                        }
+                    }).addOnSuccessListener
+                            (new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                }
+                            });
                      break;
                      case CAMERA_CODE:
                          getPictureForPhoto(); //카메라에서 가져오기
+                         StorageReference storageRef1 = storage.getReference();
+
+                         StorageReference riversRef1 = storageRef1.child("Feed/").child("images/"+photoUri.getLastPathSegment());
+                         UploadTask uploadTask1 = riversRef1.putFile(photoUri);
+
+                         // Register observers to listen for when the download is done or if it fails
+                         uploadTask1.addOnFailureListener(new OnFailureListener() {
+                             @Override
+                             public void onFailure(@NonNull Exception exception) {
+                             }
+                         }).addOnSuccessListener
+                                 (new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                     @Override
+                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                     }
+                                 });
+
                           break;
                           default:
                               break;
