@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,7 +32,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class CampaignInformation extends FragmentActivity {
 
@@ -54,8 +58,7 @@ public class CampaignInformation extends FragmentActivity {
     private FirebaseUser firebaseUser;
 
     public CampaignItem campaignItem;
-    String datetime;
-    ArrayList<ParticipantItem> participants=null;
+    String datetime, uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +69,33 @@ public class CampaignInformation extends FragmentActivity {
         fragmentWay = new FragmentWay();
         fragmentReview = new FragmentReview();
 
-        // datetime 받아오는 부분 만들어야 함.
-//        getSetupInfo(datetime);
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
+        uid = firebaseUser.getUid();
+
+        // datetime 받아오는 부분 만들어야 함.
+        gIntent = getIntent();
+        if(isRecyclerView()) {
+            datetime = gIntent.getStringExtra("campaignCode");
+//            getSetupInfo(datetime);
+        }
+
+        // setup의 intent면 내용 불러오기
+        if(isSetup()) {
+            datetime = gIntent.getStringExtra("datetime");
+//            getSetupInfo(datetime);
+
+            bt_back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), SetUpCampaignPage.class);
+                    startActivity(intent);
+                }
+            });
+        }
 
         getSupportFragmentManager().beginTransaction().add(R.id.tabcontent, fragmentInfo).commit();
+        getSetupInfo(datetime);
 
         tabLayout = findViewById(R.id.layout_tab);
 //        tabLayout.addTab(tabLayout.newTab().setText("설명"));
@@ -91,8 +115,8 @@ public class CampaignInformation extends FragmentActivity {
                 else if(position == 2)
                     selected = fragmentReview;
                 getSupportFragmentManager().beginTransaction().replace(R.id.tabcontent, selected).commit();
-//                fragmentSetup();
-                if(isSetup()) { fragmentSetup(); }
+                fragmentSetup();
+//                if(isSetup()) { fragmentSetup(); }
             }
 
             @Override
@@ -136,21 +160,6 @@ public class CampaignInformation extends FragmentActivity {
             }
         });
 
-        // setup의 intent면 내용 불러오기
-        gIntent = getIntent();
-        if(isSetup()) {
-            datetime = gIntent.getStringExtra("datetime");
-            getSetupInfo(datetime);
-
-            bt_back.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), SetUpCampaignPage.class);
-                    startActivity(intent);
-                }
-            });
-        }
-
         // 참가하기 버튼 이벤트
         tv_participation = (TextView)findViewById(R.id.tv_participation);
         tv_participation.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +172,11 @@ public class CampaignInformation extends FragmentActivity {
                 }
             }
         });
+    }
+
+    // signal이 recyclerView인지 확인
+    boolean isRecyclerView() {
+        return gIntent.hasExtra("signal") && gIntent.getStringExtra("signal").equals("recyclerView");
     }
 
     // signal이 setup인지 확인
@@ -179,6 +193,16 @@ public class CampaignInformation extends FragmentActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // 파이어베이스 데이터베이스의 데이터를 받아오는 곳
                 campaignItem = snapshot.getValue(CampaignItem.class);
+
+                // 내용 붙이기
+                iv_logo.setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(campaignItem.getLogo())));
+                tv_cp_name.setText(campaignItem.getTitle());
+                tv_frequency.setText(campaignItem.getFrequency());
+                tv_period.setText(campaignItem.getPeriod());
+                tv_participantsN.setText(campaignItem.getParticipantsN() + "명");
+                tv_reCampaignN.setText(campaignItem.getReCampaignN() + "회");
+
+                fragmentSetup();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -186,34 +210,6 @@ public class CampaignInformation extends FragmentActivity {
                 Log.e("CampaignInformation", String.valueOf(error.toException())); //에러문 출력
             }
         });
-
-        // 내용 붙이기
-        iv_logo.setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(campaignItem.getLogo())));
-        tv_cp_name.setText(campaignItem.getTitle());
-        tv_frequency.setText(campaignItem.getFrequency());
-        tv_period.setText(campaignItem.getPeriod());
-        tv_participantsN.setText(campaignItem.getParticipantsN() + "명");
-        tv_reCampaignN.setText(campaignItem.getReCampaignN() + "회");
-
-//        participants = campaignItem.getParticipants();
-
-//        // 불러오기
-//        byte[] logoArr = gIntent.getByteArrayExtra("logo");
-//        Bitmap logo = BitmapFactory.decodeByteArray(logoArr, 0, logoArr.length);
-//        String cp_name = gIntent.getStringExtra("cp_name");
-//        String frequency = gIntent.getStringExtra("frequency");
-//        String period = gIntent.getStringExtra("period");
-////        String eDate = gIntent.getStringExtra("eDate");
-//
-//        // 붙이기
-//        iv_logo.setImageBitmap(logo);
-//        tv_cp_name.setText(cp_name);
-//        tv_frequency.setText(frequency);
-//        tv_period.setText(period);
-//        tv_participantsN.setText("0명");
-//        tv_reCampaignN.setText("0회");
-
-        fragmentSetup();
     }
 
     // fragment에 setup 정보 입력하기
@@ -222,40 +218,28 @@ public class CampaignInformation extends FragmentActivity {
         if(tabLayout.getSelectedTabPosition() == 0) {
             String info = campaignItem.getCpInfo();
 
-            String sInfoImage1 = campaignItem.getInfoImage1();
-            String sInfoImage2 = campaignItem.getInfoImage2();
-            String sInfoImage3 = campaignItem.getInfoImage3();
-            String sInfoImage4 = campaignItem.getInfoImage4();
-            String sInfoImage5 = campaignItem.getInfoImage5();
-            byte[] infoImage1, infoImage2, infoImage3, infoImage4, infoImage5;
-
-            if(!(sInfoImage1.equals("") || sInfoImage1 == null)) { infoImage1 = binaryStringToByteArray(sInfoImage1); } else { infoImage1 = new byte[]{}; }
-            if(!(sInfoImage2.equals("") || sInfoImage2 == null)) { infoImage2 = binaryStringToByteArray(sInfoImage2); } else { infoImage2 = new byte[]{}; }
-            if(!(sInfoImage3.equals("") || sInfoImage3 == null)) { infoImage3 = binaryStringToByteArray(sInfoImage3); } else { infoImage3 = new byte[]{}; }
-            if(!(sInfoImage4.equals("") || sInfoImage4 == null)) { infoImage4 = binaryStringToByteArray(sInfoImage4); } else { infoImage4 = new byte[]{}; }
-            if(!(sInfoImage5.equals("") || sInfoImage5 == null)) { infoImage5 = binaryStringToByteArray(sInfoImage5); } else { infoImage5 = new byte[]{}; }
-
-//            String info = gIntent.getStringExtra("info");
-//            byte[] infoImage1 = gIntent.getByteArrayExtra("infoImage1");
-//            byte[] infoImage2 = gIntent.getByteArrayExtra("infoImage2");
-//            byte[] infoImage3 = gIntent.getByteArrayExtra("infoImage3");
-//            byte[] infoImage4 = gIntent.getByteArrayExtra("infoImage4");
-//            byte[] infoImage5 = gIntent.getByteArrayExtra("infoImage5");
-//            byte[] checkImage = gIntent.getByteArrayExtra("checkImage");
+            String infoImage1 = campaignItem.getInfoImage1();
+            String infoImage2 = campaignItem.getInfoImage2();
+            String infoImage3 = campaignItem.getInfoImage3();
+            String infoImage4 = campaignItem.getInfoImage4();
+            String infoImage5 = campaignItem.getInfoImage5();
 
             Bundle bundle1 = new Bundle(); // 괄호 안에 전달하려는 값의 갯수 넣을 수 있음
             bundle1.putString("info", info);
-            bundle1.putByteArray("infoImage1", infoImage1);
-            bundle1.putByteArray("infoImage2", infoImage2);
-            bundle1.putByteArray("infoImage3", infoImage3);
-            bundle1.putByteArray("infoImage4", infoImage4);
-            bundle1.putByteArray("infoImage5", infoImage5);
-//            bundle1.putByteArray("checkImage", checkImage);
+            bundle1.putString("infoImage1", infoImage1);
+            bundle1.putString("infoImage2", infoImage2);
+            bundle1.putString("infoImage3", infoImage3);
+            bundle1.putString("infoImage4", infoImage4);
+            bundle1.putString("infoImage5", infoImage5);
 
             fragmentInfo.setArguments(bundle1);
         }
         else if(tabLayout.getSelectedTabPosition() == 1) {
             String way = campaignItem.getWayInfo();
+            String rPhoto1 = campaignItem.getRightPhoto1();
+            String rPhoto2 = campaignItem.getRightPhoto2();
+            String wPhoto1 = campaignItem.getWrongPhoto1();
+            String wPhoto2 = campaignItem.getWrongPhoto2();
             String rInfo = campaignItem.getRightPhotoInfo1();
             String rInfo2 = campaignItem.getRightPhotoInfo2();
             String wInfo = campaignItem.getWrongPhotoInfo1();
@@ -263,41 +247,16 @@ public class CampaignInformation extends FragmentActivity {
             String frequency = campaignItem.getFrequency();
             String period = campaignItem.getPeriod();
 
-            String srPhoto1 = campaignItem.getRightPhoto1();
-            String srPhoto2 = campaignItem.getRightPhoto2();
-            String swPhoto1 = campaignItem.getWrongPhoto1();
-            String swPhoto2 = campaignItem.getWrongPhoto2();
-            byte[] rPhoto1, rPhoto2, wPhoto1, wPhoto2;
-
-            if(!(srPhoto1.equals("") || srPhoto1 == null)) { rPhoto1 = binaryStringToByteArray(srPhoto1); } else { rPhoto1 = new byte[]{}; }
-            if(!(srPhoto2.equals("") || srPhoto2 == null)) { rPhoto2 = binaryStringToByteArray(srPhoto2); } else { rPhoto2 = new byte[]{}; }
-            if(!(swPhoto1.equals("") || swPhoto1 == null)) { wPhoto1 = binaryStringToByteArray(swPhoto1); } else { wPhoto1 = new byte[]{}; }
-            if(!(swPhoto2.equals("") || swPhoto2 == null)) { wPhoto2 = binaryStringToByteArray(swPhoto2); } else { wPhoto2 = new byte[]{}; }
-
-//            String way = gIntent.getStringExtra("way");
-//            byte[] rPhoto1 = gIntent.getByteArrayExtra("rPhoto1");
-//            byte[] rPhoto2 = gIntent.getByteArrayExtra("rPhoto2");
-//            String rInfo = gIntent.getStringExtra("rInfo");
-//            String rInfo2 = gIntent.getStringExtra("rInfo2");
-//            byte[] wPhoto1 = gIntent.getByteArrayExtra("wPhoto1");
-//            byte[] wPhoto2 = gIntent.getByteArrayExtra("wPhoto2");
-//            String wInfo = gIntent.getStringExtra("wInfo");
-//            String wInfo2 = gIntent.getStringExtra("wInfo2");
-//            byte[] checkImage2 = gIntent.getByteArrayExtra("checkImage2");
-//            String frequency = gIntent.getStringExtra("frequency");
-//            String period = gIntent.getStringExtra("period");
-
             Bundle bundle2 = new Bundle();
             bundle2.putString("way", way);
-            bundle2.putByteArray("rPhoto1", rPhoto1);
-            bundle2.putByteArray("rPhoto2", rPhoto2);
+            bundle2.putString("rPhoto1", rPhoto1);
+            bundle2.putString("rPhoto2", rPhoto2);
             bundle2.putString("rInfo", rInfo);
             bundle2.putString("rInfo2", rInfo2);
-            bundle2.putByteArray("wPhoto1", wPhoto1);
-            bundle2.putByteArray("wPhoto2", wPhoto2);
+            bundle2.putString("wPhoto1", wPhoto1);
+            bundle2.putString("wPhoto2", wPhoto2);
             bundle2.putString("wInfo", wInfo);
             bundle2.putString("wInfo2", wInfo2);
-//            bundle2.putByteArray("checkImage2", checkImage2);
             bundle2.putString("frequency", frequency);
             bundle2.putString("period", period);
 
@@ -314,7 +273,7 @@ public class CampaignInformation extends FragmentActivity {
     public static byte[] binaryStringToByteArray(String s) {
         int count = s.length() / 8;
         byte[] b = new byte[count];
-        for(int i = 0; i < count; ++i) {
+        for(int i = 1; i < count; ++i) {
             String t = s.substring((i-1)*8, i*8);
             b[i-1] = binaryStringToByte(t);
         }
@@ -346,21 +305,179 @@ public class CampaignInformation extends FragmentActivity {
                 .setPositiveButton("참가", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        tv_participation.setText("참가완료");
-                        String tv = tv_participantsN.getText().toString();
-                        int n = Integer.parseInt(tv.substring(0, tv.length()-1)) + 1;
-                        tv_participantsN.setText( n + "명");
-                        // 데이터 수정
-//                        campaignItem.setParticipantsN(n);
-//                        databaseReference.setValue(campaignItem);
-                        databaseReference.child("campaign").child("participantsN").setValue(n);
-                        // 평균 참여 횟수 구하는 방법 구현해야함.
                         // 내가 참가한 캠페인에 넣을 방법 구현해야함.
+                        String sDate = getTimeMilli();
+                        DatabaseReference myCampaignRef = database.getReference("environmentalCampaign").child("MyCampaign").child(uid);
+                        myCampaignRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                // 참여한 적이 있다면
+                                if(snapshot.hasChild(datetime)) {
+                                    // 이전 내용 가져오기
+                                    MyCampaignItem myCampaignItem = snapshot.child(datetime).child("myCampaign").getValue(MyCampaignItem.class);
+                                    myCampaignItem.setStartDate(sDate);
+                                    myCampaignItem.setEndDate(getEndDate(sDate));
+                                    int reCount = myCampaignItem.getReCount();
+                                    myCampaignItem.setReCount(reCount + 1);
+
+                                    // 다시 올리기
+                                    myCampaignRef.child(datetime).child("myCampaign").setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // 버튼 '참가완료'로 바꾸기
+                                            tv_participation.setText("참가완료");
+                                            // 평균 참여 횟수 수정하기
+                                            double r = reCampaignAvg();
+                                            tv_reCampaignN.setText(r + "회");
+                                            databaseReference.child("campaign").child("reCampaignN").setValue(r);
+                                        }
+                                    });
+                                }
+                                // 참여한 적이 없다면
+                                else {
+                                    // MyCampaignItem 객체 생성해서 데이터베이스에 삽입
+                                    MyCampaignItem myCampaignItem = new MyCampaignItem();
+                                    myCampaignItem.setCampaignCode(datetime);
+                                    myCampaignItem.setCertiCount(getCertiCount());
+                                    myCampaignItem.setStartDate(sDate);
+                                    myCampaignItem.setEndDate(getEndDate(sDate));
+                                    myCampaignItem.setReCount(1);
+                                    myCampaignRef.child(datetime).child("myCampaign").setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // 버튼 '참가완료'로 바꾸기
+                                            tv_participation.setText("참가완료");
+                                            // 평균 참여 횟수 수정하기
+                                            double r = reCampaignAvg();
+                                            tv_reCampaignN.setText(r + "회");
+                                            databaseReference.child("campaign").child("reCampaignN").setValue(r);
+                                        }
+                                    });
+
+                                    // 참가자 리스트에 추가하기
+                                    databaseReference.child("participants").child(uid).setValue(uid).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // 참가 인원 수정하기
+                                            String tv = tv_participantsN.getText().toString();
+                                            int n = Integer.parseInt(tv.substring(0, tv.length()-1)) + 1;
+                                            tv_participantsN.setText( n + "명");
+                                            databaseReference.child("campaign").child("participantsN").setValue(n);
+                                        }
+                                    });
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                // DB를 가져오던 중 에러 발생 시
+                                Log.e("checkMyCampaign", String.valueOf(error.toException())); //에러문 출력
+                            }
+                        });
+
                         Toast.makeText(CampaignInformation.this, "캠페인 참가가 완료되었습니다.", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("취소", null);
         AlertDialog alertDlg = alertBuilder.create();
         alertDlg.show();
+    }
+
+    // 생성날짜 구하기
+    public String getTimeMilli() {
+        String result = "";
+        String month_str, day_str, hour_str, minute_str, second_str, milliSecond_str;
+        Calendar c = Calendar.getInstance();
+
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH) + 1;
+        int day = c.get(Calendar.DATE);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+        int second = c.get(Calendar.SECOND);
+        int milliSecond = c.get(Calendar.MILLISECOND);
+
+        if(month < 10) { month_str = "0" + month; } else { month_str = "" + month; }
+        if(day < 10) { day_str = "0" + day; } else { day_str = "" + day; }
+        if(hour < 10) { hour_str = "0" + hour; } else { hour_str = "" + hour; }
+        if(minute < 10) { minute_str = "0" + minute; } else { minute_str = "" + minute; }
+        if(second < 10) { second_str = "0" + second; } else { second_str = "" + second; }
+        if(milliSecond < 10) {
+            milliSecond_str = "00" + milliSecond;
+        } else {
+            if(milliSecond < 100) {
+                milliSecond_str = "0" + milliSecond;
+            } else {
+                milliSecond_str = "" + milliSecond;
+            }
+        }
+
+        result = year + month_str + day_str + hour_str + minute_str + second_str + milliSecond_str;
+
+        return result;
+    }
+
+    // 인증 마지막 날짜 구하기
+    String getEndDate(String sDate) {
+        int year = Integer.parseInt(sDate.substring(0, 4));
+        int month = Integer.parseInt(sDate.substring(4, 6));
+        int day = Integer.parseInt(sDate.substring(6, 8));
+
+        int certiCount = getCertiCount();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        Calendar cal = new GregorianCalendar(year, month-1, day);
+        cal.add(Calendar.DAY_OF_MONTH, certiCount);
+
+        return sdf.format(cal.getTime());
+    }
+
+    // 인증해야하는 횟수 구하기
+    int getCertiCount() {
+        String sFrequency = tv_frequency.getText().toString();
+        String sPeriod = tv_period.getText().toString();
+
+        int frequency = Integer.parseInt(sFrequency.substring(2, sFrequency.length()-1));
+        int period = Integer.parseInt(sPeriod.substring(0, sPeriod.length()-1));
+
+        return frequency * period;
+    }
+
+    // 평균 참여 횟수 구하기
+    double reCampaignAvg() {
+        ArrayList<ParticipantItem> participants = new ArrayList<>();
+        databaseReference.child("participants").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ParticipantItem participantItem = snapshot.getValue(ParticipantItem.class);
+                participants.add(participantItem);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // DB를 가져오던 중 에러 발생 시
+                Log.e("participantsAdd", String.valueOf(error.toException())); //에러문 출력
+            }
+        });
+
+        ArrayList<MyCampaignItem> myCampaigns = new ArrayList<>();
+        for(int i = 0; i < participants.size(); i++) {
+            String uid = participants.get(i).getUid();
+            database.getReference("environmentalCampaign").child("MyCampaign").child(uid).child(datetime).child("myCampaign").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    MyCampaignItem myCampaignItem = snapshot.getValue(MyCampaignItem.class);
+                    myCampaigns.add(myCampaignItem);
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // DB를 가져오던 중 에러 발생 시
+                    Log.e("myCampaignsAdd", String.valueOf(error.toException())); //에러문 출력
+                }
+            });
+        }
+
+        double sum = 0;
+        for(int i = 0; i < myCampaigns.size(); i++) {
+            sum += myCampaigns.get(i).getReCount();
+        }
+        return Double.parseDouble(String.format("%.2f", sum / myCampaigns.size()));
     }
 }

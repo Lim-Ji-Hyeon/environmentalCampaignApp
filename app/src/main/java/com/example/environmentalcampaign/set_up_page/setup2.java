@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.cp_info.CampaignItem;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -44,16 +46,13 @@ public class setup2 extends AppCompatActivity {
     private final int GALLERY_CODE4 = 444;
     private final int GALLERY_CODE5 = 555;
 
-//    // 다른 액티비티에서 접근하기 위함.
-//    public static Context context_setup2;
-//    public CampaignItem campaignItem;
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup2);
-
-//        context_setup2 = this;
 
         et_cp_info = (EditText)findViewById(R.id.et_cp_info);
         iv_cp_info1 = (ImageView)findViewById(R.id.iv_cp_info1);
@@ -61,7 +60,6 @@ public class setup2 extends AppCompatActivity {
         iv_cp_info3 = (ImageView)findViewById(R.id.iv_cp_info3);
         iv_cp_info4 = (ImageView)findViewById(R.id.iv_cp_info4);
         iv_cp_info5 = (ImageView)findViewById(R.id.iv_cp_info5);
-//        checkImage = (ImageView)findViewById(R.id.checkImage);
 
         iv_cp_info1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,14 +107,9 @@ public class setup2 extends AppCompatActivity {
             }
         });
 
-        // 전 페이지 내용들 불러오기
+        // uid 불러오기
         Intent preIntent = getIntent();
-//        byte[] arr = preIntent.getByteArrayExtra("logo");
-        String logo = preIntent.getStringExtra("logo");
-        String cp_name = preIntent.getStringExtra("cp_name");
-        String frequency = preIntent.getStringExtra("frequency");
-        String period = preIntent.getStringExtra("period");
-////        String eDate = preIntent.getStringExtra("eDate");
+        String uid = preIntent.getStringExtra("uid");
 
         // 이전 페이지
         tv_pre = (TextView)findViewById(R.id.tv_pre);
@@ -134,66 +127,42 @@ public class setup2 extends AppCompatActivity {
                     Toast.makeText(setup2.this, "캠페인 설명을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
                 else {
-//                    // setup1의 campaignItem 가져오기
-//                    campaignItem = ((setup1)setup1.context_setup1).campaignItem;
-
-//                    campaignItem.setCpInfo(et_cp_info.getText().toString());
-
                     String infoImage1="", infoImage2="", infoImage3="", infoImage4="", infoImage5="";
                     ImageView[] infoImages = {iv_cp_info1, iv_cp_info2, iv_cp_info3, iv_cp_info4, iv_cp_info5};
                     for(int i = 0; i < infoImages.length; i++) {
                         if(!checkImage(infoImages[i])) {
                             switch (i) {
                                 case 0 :
-//                                    campaignItem.setInfoImage1(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info1)));
                                     infoImage1 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info1));
                                     break;
                                 case 1 :
-//                                    campaignItem.setInfoImage2(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info2)));
                                     infoImage2 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info2));
                                     break;
                                 case 2 :
-//                                    campaignItem.setInfoImage3(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info3)));
                                     infoImage3 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info3));
                                     break;
                                 case 3 :
-//                                    campaignItem.setInfoImage4(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info4)));
                                     infoImage4 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info4));
                                     break;
                                 case 4 :
-//                                    campaignItem.setInfoImage5(byteArrayToBinaryString(bitmapToByteArray(iv_cp_info5)));
                                     infoImage5 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info5));
                                     break;
                             }
                         }
                     }
 
+                    // TemporarySave - uid에 저장
+                    database = FirebaseDatabase.getInstance();
+                    databaseReference = database.getReference("environmentalCampaign").child("TemporarySave").child(uid);
+                    databaseReference.child("cpInfo").setValue(et_cp_info.getText().toString());
+                    databaseReference.child("infoImage1").setValue(infoImage1);
+                    databaseReference.child("infoImage2").setValue(infoImage2);
+                    databaseReference.child("infoImage3").setValue(infoImage3);
+                    databaseReference.child("infoImage4").setValue(infoImage4);
+                    databaseReference.child("infoImage5").setValue(infoImage5);
+
                     Intent intent = new Intent(getApplicationContext(), setup3.class);
-
-                    // 전 페이지 내용 그대로 옮겨주기
-                    intent.putExtra("logo", logo);
-                    intent.putExtra("cp_name", cp_name);
-                    intent.putExtra("frequency", frequency);
-                    intent.putExtra("period", period);
-////                intent.putExtra("eDate", eDate);
-//
-////                    // 이미지 Bitmap 변환
-//                    byte[] byteArray1 = bitmapToByteArray(iv_cp_info1);
-//                    byte[] byteArray2 = bitmapToByteArray(iv_cp_info2);
-//                    byte[] byteArray3 = bitmapToByteArray(iv_cp_info3);
-//                    byte[] byteArray4 = bitmapToByteArray(iv_cp_info4);
-//                    byte[] byteArray5 = bitmapToByteArray(iv_cp_info5);
-//                    byte[] checkbyte = bitmapToByteArray(checkImage);
-
-                    // 현재 페이지 내용 옮기기
-                    intent.putExtra("info", et_cp_info.getText().toString());
-                    intent.putExtra("infoImage1", infoImage1);
-                    intent.putExtra("infoImage2", infoImage2);
-                    intent.putExtra("infoImage3", infoImage3);
-                    intent.putExtra("infoImage4", infoImage4);
-                    intent.putExtra("infoImage5", infoImage5);
-//                    intent.putExtra("checkImage", checkbyte);
-
+                    intent.putExtra("uid", uid);
                     startActivity(intent);
                 }
             }

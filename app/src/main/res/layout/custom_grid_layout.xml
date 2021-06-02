@@ -23,11 +23,19 @@
             android:gravity="center|top"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/tv_campaignCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="캠페인 코드"/>
+
             <ImageView
                 android:id="@+id/card_image"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                app:srcCompat="@drawable/dolphin"
+                android:src="@drawable/dolphin"
+                android:scaleType="fitCenter"
                 android:background="@drawable/edge"/>
 
             <TextView

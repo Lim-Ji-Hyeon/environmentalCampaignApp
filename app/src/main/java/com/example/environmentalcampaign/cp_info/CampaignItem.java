@@ -2,10 +2,11 @@ package com.example.environmentalcampaign.cp_info;
 
 import java.util.ArrayList;
 
-public class CampaignItem {
+public class CampaignItem implements Comparable<CampaignItem>{
     // CampaignInformation
     String logo, title, frequency, period;
-    int participantsN, reCampaignN;
+    int participantsN;
+    double reCampaignN;
 //    ArrayList<ParticipantItem> participants=null;
 
     // FragmentInfo
@@ -43,9 +44,9 @@ public class CampaignItem {
 
     public void setParticipantsN(int participantsN) { this.participantsN = participantsN; }
 
-    public int getReCampaignN() { return reCampaignN; }
+    public double getReCampaignN() { return reCampaignN; }
 
-    public void setReCampaignN(int reCampaignN) { this.reCampaignN = reCampaignN; }
+    public void setReCampaignN(double reCampaignN) { this.reCampaignN = reCampaignN; }
 
 //    public ArrayList<ParticipantItem> getParticipants() { return participants; }
 //
@@ -118,4 +119,20 @@ public class CampaignItem {
     public String getDatetime() { return datetime; }
 
     public void setDatetime(String datetime) { this.datetime = datetime; }
+
+    @Override
+    public int compareTo(CampaignItem campaignItem) {
+        // reCampaignN을 기준으로 내림차순 정렬
+        if(this.reCampaignN < campaignItem.reCampaignN) {
+            return -1; // 1로 하면 오름차순
+        } else if(this.reCampaignN == campaignItem.reCampaignN) {
+            return 0;
+        } else {
+            return 1; // -1로 하면 오름차순
+        }
+
+        // 문자열 정렬
+        // return this.name.compareTo(people.name); 내림차순
+        // return people.name.compareTo(this.name); 오름차순
+    }
 }
