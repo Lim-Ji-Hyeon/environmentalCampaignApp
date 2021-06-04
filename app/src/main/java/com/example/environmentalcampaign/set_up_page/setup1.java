@@ -142,7 +142,7 @@ public class setup1 extends AppCompatActivity {
                      // TemporarySave - uid에 저장
                      database = FirebaseDatabase.getInstance();
                      databaseReference = database.getReference("environmentalCampaign").child("TemporarySave").child(uid);
-                     databaseReference.child("logo").setValue(imagePath);
+                     databaseReference.child("logo").setValue(makeToken(imagePath));
                      databaseReference.child("title").setValue(et_cp_name.getText().toString());
                      databaseReference.child("frequency").setValue(tv_frequency.getText().toString());
                      databaseReference.child("period").setValue(tv_period.getText().toString());
@@ -332,5 +332,15 @@ public class setup1 extends AppCompatActivity {
             column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         }
         return cursor.getString(column_index);
+    }
+
+    // 토큰 만들기
+    String makeToken(String imagePath) {
+        int index = imagePath.lastIndexOf("/");
+        String imageName = imagePath.substring(index+1);
+        String token = "https://firebasestorage.googleapis.com/v0/b/environmental-campaign.appspot.com/o/Campaign%2Fimages%2F"
+                 + imageName + "?alt=media";
+
+        return token;
     }
 }

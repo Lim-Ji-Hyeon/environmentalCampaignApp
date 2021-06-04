@@ -187,16 +187,16 @@ public class setup3 extends AppCompatActivity {
             if(!checkImage(photos[i])) {
                 switch (i) {
                     case 0 :
-                        rPhoto1 = imagePath1;
+                        rPhoto1 = makeToken(imagePath1);
                         break;
                     case 1 :
-                        rPhoto2 = imagePath2;
+                        rPhoto2 = makeToken(imagePath2);
                         break;
                     case 2 :
-                        wPhoto1 = imagePath3;
+                        wPhoto1 = makeToken(imagePath3);
                         break;
                     case 3 :
-                        wPhoto2 = imagePath4;
+                        wPhoto2 = makeToken(imagePath4);
                         break;
                 }
             }
@@ -512,5 +512,15 @@ public class setup3 extends AppCompatActivity {
         result = year + month_str + day_str + hour_str + minute_str + second_str + milliSecond_str;
 
         return result;
+    }
+
+    // 토큰 만들기
+    String makeToken(String imagePath) {
+        int index = imagePath.lastIndexOf("/");
+        String imageName = imagePath.substring(index+1);
+        String token = "https://firebasestorage.googleapis.com/v0/b/environmental-campaign.appspot.com/o/Campaign%2Fimages%2F"
+                + imageName + "?alt=media";
+
+        return token;
     }
 }
