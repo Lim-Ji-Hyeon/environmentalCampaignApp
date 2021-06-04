@@ -104,7 +104,7 @@
                         android:adjustViewBounds="true"
                         android:background="@drawable/edge"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/cp7" />
+                        android:src="@drawable/add_image" />
 
                     <ImageView
                         android:id="@+id/iv_rightPhoto2"

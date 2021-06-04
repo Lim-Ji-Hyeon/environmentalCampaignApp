@@ -7,10 +7,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -22,6 +27,7 @@ import android.widget.Toast;
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.cp_info.CampaignInformation;
 import com.example.environmentalcampaign.cp_info.CampaignItem;
+import com.example.environmentalcampaign.home.RecyclerViewItem;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +36,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.Calendar;
 
 public class setup3 extends AppCompatActivity {
@@ -37,11 +44,13 @@ public class setup3 extends AppCompatActivity {
     ImageButton bt_back;
     TextView tv_pre, tv_next;
 
-//    String logo, infoImage1, infoImage2, infoImage3, infoImage4, infoImage5, checkImage;
-//    String cp_name, frequency, period, eDate, info;
-
     EditText et_cp_way, et_rightPhotoInfo, et_rightPhotoInfo2, et_wrongPhotoInfo, et_wrongPhotoInfo2;
-    ImageView iv_rightPhoto, iv_rightPhoto2, iv_wrongPhoto, iv_wrongPhoto2, checkImage2;
+    ImageView iv_rightPhoto, iv_rightPhoto2, iv_wrongPhoto, iv_wrongPhoto2;
+
+    private final int GALLERY_CODE1 = 111;
+    private final int GALLERY_CODE2 = 222;
+    private final int GALLERY_CODE3 = 333;
+    private final int GALLERY_CODE4 = 444;
 
     private FirebaseDatabase database;
     private DatabaseReference temporaryRef, databaseReference;
@@ -63,6 +72,43 @@ public class setup3 extends AppCompatActivity {
         et_wrongPhotoInfo2 = (EditText)findViewById(R.id.et_wrongPhotoInfo2);
 //        checkImage2 = (ImageView)findViewById(R.id.checkImage2);
 
+        iv_rightPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(intent, GALLERY_CODE1);
+            }
+        });
+        iv_rightPhoto2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(intent, GALLERY_CODE2);
+            }
+        });
+        iv_wrongPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(intent, GALLERY_CODE3);
+            }
+        });
+        iv_wrongPhoto2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setData(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                intent.setType("image/*");
+                startActivityForResult(intent, GALLERY_CODE4);
+            }
+        });
+
         // uid 불러오기
         Intent preIntent = getIntent();
         uid = preIntent.getStringExtra("uid");
@@ -82,9 +128,9 @@ public class setup3 extends AppCompatActivity {
                 if(checkEditText(et_cp_way)) {
                     Toast.makeText(setup3.this, "캠페인 인증방법을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }
-//                else if((checkImage(iv_rightPhoto) || checkEditText(et_rightPhotoInfo)) && (checkImage(iv_rightPhoto2) || checkEditText(et_rightPhotoInfo2))) {
-//                    Toast.makeText(setup3.this, "올바른 인증방법을 입력해주세요.", Toast.LENGTH_SHORT).show();
-//                }
+                else if((checkImage(iv_rightPhoto) || checkEditText(et_rightPhotoInfo)) && (checkImage(iv_rightPhoto2) || checkEditText(et_rightPhotoInfo2))) {
+                    Toast.makeText(setup3.this, "올바른 인증방법을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }
                 else {
                     setup_alert();
                 }
@@ -101,27 +147,6 @@ public class setup3 extends AppCompatActivity {
             }
         });
 
-        // 인증샷 선택하면 해당 인증샷 설명 입력할 수 있도록 하기.
-        if(!checkImage(iv_rightPhoto)) {
-            et_rightPhotoInfo.setFocusableInTouchMode(true);
-            et_rightPhotoInfo.setClickable(true);
-            et_rightPhotoInfo.setFocusable(true);
-        }
-        if(!checkImage(iv_rightPhoto2)) {
-            et_rightPhotoInfo2.setFocusableInTouchMode(true);
-            et_rightPhotoInfo2.setClickable(true);
-            et_rightPhotoInfo2.setFocusable(true);
-        }
-        if(!checkImage(iv_wrongPhoto)) {
-            et_wrongPhotoInfo.setFocusableInTouchMode(true);
-            et_wrongPhotoInfo.setClickable(true);
-            et_wrongPhotoInfo.setFocusable(true);
-        }
-        if(!checkImage(iv_wrongPhoto2)) {
-            et_wrongPhotoInfo2.setFocusableInTouchMode(true);
-            et_wrongPhotoInfo2.setClickable(true);
-            et_wrongPhotoInfo2.setFocusable(true);
-        }
     }
 
     // 마지막 확인 팝업
@@ -207,9 +232,16 @@ public class setup3 extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 CampaignItem campaignItem = snapshot.getValue(CampaignItem.class);
+                RecyclerViewItem recyclerViewItem = new RecyclerViewItem();
+                recyclerViewItem.setTitle(campaignItem.getTitle());
+                recyclerViewItem.setImage(campaignItem.getLogo());
+                recyclerViewItem.setCampaignCode(campaignItem.getDatetime());
+                recyclerViewItem.setReCampaignN(campaignItem.getReCampaignN());
 
                 // 데이터베이스에 삽입
                 databaseReference = database.getReference("environmentalCampaign");
+                databaseReference.child("SetUpCampaign").child(uid).child(datetime).child("campaignCode").setValue(datetime); // 내가 개설한 캠페인 확인하기 위함.
+                databaseReference.child("HomeCampaign").child(datetime).setValue(recyclerViewItem); // 홈화면에 신규캠페인, 인기캠페인을 위함.
                 databaseReference.child("Campaign").child(datetime).child("campaign").setValue(campaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -233,6 +265,123 @@ public class setup3 extends AppCompatActivity {
         });
     }
 
+    // 갤러리 연동하기 위한 메소드 1
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case GALLERY_CODE1:
+                    sendPicture1(data.getData()); //갤러리에서 가져오기
+                    break;
+                case GALLERY_CODE2:
+                    sendPicture2(data.getData()); //갤러리에서 가져오기
+                    break;
+                case GALLERY_CODE3:
+                    sendPicture3(data.getData()); //갤러리에서 가져오기
+                    break;
+                case GALLERY_CODE4:
+                    sendPicture4(data.getData()); //갤러리에서 가져오기
+                    break;
+                default:
+                    break;
+            }
+        }
+        imageInfo();
+    }
+
+    // 갤러리 연동하기 위한 메소드 2-1
+    private void sendPicture1(Uri imgUri) {
+        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        int exifDegree = exifOrientationToDegrees(exifOrientation);
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
+        iv_rightPhoto.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
+    }
+
+    // 갤러리 연동하기 위한 메소드 2-2
+    private void sendPicture2(Uri imgUri) {
+        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        int exifDegree = exifOrientationToDegrees(exifOrientation);
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
+        iv_rightPhoto2.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
+    }
+
+    // 갤러리 연동하기 위한 메소드 2-3
+    private void sendPicture3(Uri imgUri) {
+        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        int exifDegree = exifOrientationToDegrees(exifOrientation);
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
+        iv_wrongPhoto.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
+    }
+
+    // 갤러리 연동하기 위한 메소드 2-4
+    private void sendPicture4(Uri imgUri) {
+        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(imagePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        int exifDegree = exifOrientationToDegrees(exifOrientation);
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
+        iv_wrongPhoto2.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
+    }
+
+    // 갤러리 연동하기 위한 메소드 3
+    private int exifOrientationToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
+        }
+        return 0;
+    }
+
+    // 갤러리 연동하기 위한 메소드 4
+    private Bitmap rotate(Bitmap src, float degree) {
+        // Matrix 객체 생성
+        Matrix matrix = new Matrix();
+        // 회전 각도 셋팅
+        matrix.postRotate(degree);
+        // 이미지와 Matrix 를 셋팅해서 Bitmap 객체 생성
+        return Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);
+    }
+
+    // 갤러리 연동하기 위한 메소드 5
+    private String getRealPathFromURI(Uri contentUri) {
+        int column_index = 0;
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        if (cursor.moveToFirst()) {
+            column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        }
+        return cursor.getString(column_index);
+    }
+
     // edittext를 입력했는지 확인
     boolean checkEditText(EditText editText) {
         return editText.getText().toString().equals("") || editText.getText().toString()==null;
@@ -247,6 +396,43 @@ public class setup3 extends AppCompatActivity {
         Bitmap checkBitmap = checkDrawable.getBitmap();
 
         return imageBitmap.equals(checkBitmap);
+    }
+
+    // 이미지 설명 입력 가능하도록
+    void imageInfo() {
+        // 인증샷 선택하면 해당 인증샷 설명 입력할 수 있도록 하기.
+        if(!checkImage(iv_rightPhoto)) {
+            et_rightPhotoInfo.setFocusableInTouchMode(true);
+            et_rightPhotoInfo.setClickable(true);
+            et_rightPhotoInfo.setFocusable(true);
+        } else {
+            et_rightPhotoInfo.setClickable(false);
+            et_rightPhotoInfo.setFocusable(false);
+        }
+        if(!checkImage(iv_rightPhoto2)) {
+            et_rightPhotoInfo2.setFocusableInTouchMode(true);
+            et_rightPhotoInfo2.setClickable(true);
+            et_rightPhotoInfo2.setFocusable(true);
+        } else {
+            et_rightPhotoInfo2.setClickable(false);
+            et_rightPhotoInfo2.setFocusable(false);
+        }
+        if(!checkImage(iv_wrongPhoto)) {
+            et_wrongPhotoInfo.setFocusableInTouchMode(true);
+            et_wrongPhotoInfo.setClickable(true);
+            et_wrongPhotoInfo.setFocusable(true);
+        } else {
+            et_wrongPhotoInfo.setClickable(false);
+            et_wrongPhotoInfo.setFocusable(false);
+        }
+        if(!checkImage(iv_wrongPhoto2)) {
+            et_wrongPhotoInfo2.setFocusableInTouchMode(true);
+            et_wrongPhotoInfo2.setClickable(true);
+            et_wrongPhotoInfo2.setFocusable(true);
+        } else {
+            et_wrongPhotoInfo2.setClickable(false);
+            et_wrongPhotoInfo2.setFocusable(false);
+        }
     }
 
     // imageView에서 bitmap을 byte[]로 변환
