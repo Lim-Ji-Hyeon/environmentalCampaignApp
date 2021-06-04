@@ -59,6 +59,7 @@ public class setup3 extends AppCompatActivity {
 
     private FirebaseDatabase database;
     private DatabaseReference temporaryRef, databaseReference;
+    FirebaseStorage storage;
     String uid, datetime;
 
     String imagePath1;
@@ -81,7 +82,8 @@ public class setup3 extends AppCompatActivity {
         iv_wrongPhoto2 = (ImageView)findViewById(R.id.iv_wrongPhoto2);
         et_wrongPhotoInfo = (EditText)findViewById(R.id.et_wrongPhotoInfo);
         et_wrongPhotoInfo2 = (EditText)findViewById(R.id.et_wrongPhotoInfo2);
-//        checkImage2 = (ImageView)findViewById(R.id.checkImage2);
+
+        storage = FirebaseStorage.getInstance();
 
         iv_rightPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -300,6 +302,23 @@ public class setup3 extends AppCompatActivity {
                 default:
                     break;
             }
+            // Storage에 저장하기
+            StorageReference storageRef = storage.getReference();
+
+            Uri file = Uri.fromFile(new File(getRealPathFromURI(data.getData())));
+            StorageReference riversRef = storageRef.child("Campaign/").child("images/"+file.getLastPathSegment());
+            UploadTask uploadTask = riversRef.putFile(file);
+
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                }
+            }).addOnSuccessListener
+                    (new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        }
+                    });
         }
         imageInfo();
     }
