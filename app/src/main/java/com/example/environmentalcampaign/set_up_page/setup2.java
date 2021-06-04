@@ -1,5 +1,6 @@
 package com.example.environmentalcampaign.set_up_page;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -26,10 +27,16 @@ import android.widget.Toast;
 
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.cp_info.CampaignItem;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 
 public class setup2 extends AppCompatActivity {
@@ -48,6 +55,14 @@ public class setup2 extends AppCompatActivity {
 
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+    FirebaseStorage storage;
+
+    String imagePath1;
+    String imagePath2;
+    String imagePath3;
+    String imagePath4;
+    String imagePath5;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,19 +148,19 @@ public class setup2 extends AppCompatActivity {
                         if(!checkImage(infoImages[i])) {
                             switch (i) {
                                 case 0 :
-                                    infoImage1 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info1));
+                                    infoImage1 = imagePath1;
                                     break;
                                 case 1 :
-                                    infoImage2 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info2));
+                                    infoImage2 = imagePath2;
                                     break;
                                 case 2 :
-                                    infoImage3 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info3));
+                                    infoImage3 = imagePath3;
                                     break;
                                 case 3 :
-                                    infoImage4 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info4));
+                                    infoImage4 = imagePath4;
                                     break;
                                 case 4 :
-                                    infoImage5 = byteArrayToBinaryString(bitmapToByteArray(iv_cp_info5));
+                                    infoImage5 = imagePath5;
                                     break;
                             }
                         }
@@ -248,81 +263,99 @@ public class setup2 extends AppCompatActivity {
                 default:
                     break;
             }
+
+            // Storage에 저장하기
+            StorageReference storageRef = storage.getReference();
+
+            Uri file = Uri.fromFile(new File(getRealPathFromURI(data.getData())));
+            StorageReference riversRef = storageRef.child("Campaign/").child("images/"+file.getLastPathSegment());
+            UploadTask uploadTask = riversRef.putFile(file);
+
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                }
+            }).addOnSuccessListener
+                    (new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        }
+                    });
         }
     }
 
     // 갤러리 연동하기 위한 메소드 2-1
     private void sendPicture1(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        imagePath1 = getRealPathFromURI(imgUri); // path 경로
         ExifInterface exif = null;
         try {
-            exif = new ExifInterface(imagePath);
+            exif = new ExifInterface(imagePath1);
         } catch (IOException e) {
             e.printStackTrace();
         }
         int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
         int exifDegree = exifOrientationToDegrees(exifOrientation);
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath1);//경로를 통해 비트맵으로 전환
         iv_cp_info1.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
     }
 
     // 갤러리 연동하기 위한 메소드 2-2
     private void sendPicture2(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        imagePath2 = getRealPathFromURI(imgUri); // path 경로
         ExifInterface exif = null;
         try {
-            exif = new ExifInterface(imagePath);
+            exif = new ExifInterface(imagePath2);
         } catch (IOException e) {
             e.printStackTrace();
         }
         int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
         int exifDegree = exifOrientationToDegrees(exifOrientation);
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath2);//경로를 통해 비트맵으로 전환
         iv_cp_info2.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
     }
 
     // 갤러리 연동하기 위한 메소드 2-3
     private void sendPicture3(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        imagePath3 = getRealPathFromURI(imgUri); // path 경로
         ExifInterface exif = null;
         try {
-            exif = new ExifInterface(imagePath);
+            exif = new ExifInterface(imagePath3);
         } catch (IOException e) {
             e.printStackTrace();
         }
         int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
         int exifDegree = exifOrientationToDegrees(exifOrientation);
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath3);//경로를 통해 비트맵으로 전환
         iv_cp_info3.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
     }
 
     // 갤러리 연동하기 위한 메소드 2-4
     private void sendPicture4(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        imagePath4 = getRealPathFromURI(imgUri); // path 경로
         ExifInterface exif = null;
         try {
-            exif = new ExifInterface(imagePath);
+            exif = new ExifInterface(imagePath4);
         } catch (IOException e) {
             e.printStackTrace();
         }
         int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
         int exifDegree = exifOrientationToDegrees(exifOrientation);
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath4);//경로를 통해 비트맵으로 전환
         iv_cp_info4.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
     }
 
     // 갤러리 연동하기 위한 메소드 2-5
     private void sendPicture5(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        imagePath5 = getRealPathFromURI(imgUri); // path 경로
         ExifInterface exif = null;
         try {
-            exif = new ExifInterface(imagePath);
+            exif = new ExifInterface(imagePath5);
         } catch (IOException e) {
             e.printStackTrace();
         }
         int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
         int exifDegree = exifOrientationToDegrees(exifOrientation);
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath5);//경로를 통해 비트맵으로 전환
         iv_cp_info5.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
     }
 
