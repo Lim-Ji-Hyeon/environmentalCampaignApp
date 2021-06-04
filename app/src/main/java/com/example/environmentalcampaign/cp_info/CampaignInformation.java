@@ -73,6 +73,15 @@ public class CampaignInformation extends FragmentActivity {
         firebaseUser = firebaseAuth.getCurrentUser();
         uid = firebaseUser.getUid();
 
+        // 뒤로가기 버튼 이벤트
+        bt_back = (ImageButton)findViewById(R.id.bt_back);
+        bt_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
         // datetime 받아오는 부분 만들어야 함.
         gIntent = getIntent();
         if(isRecyclerView()) {
@@ -94,8 +103,8 @@ public class CampaignInformation extends FragmentActivity {
             });
         }
 
-        getSupportFragmentManager().beginTransaction().add(R.id.tabcontent, fragmentInfo).commit();
         getSetupInfo(datetime);
+        getSupportFragmentManager().beginTransaction().add(R.id.tabcontent, fragmentInfo).commit();
 
         tabLayout = findViewById(R.id.layout_tab);
 //        tabLayout.addTab(tabLayout.newTab().setText("설명"));
@@ -115,7 +124,7 @@ public class CampaignInformation extends FragmentActivity {
                 else if(position == 2)
                     selected = fragmentReview;
                 getSupportFragmentManager().beginTransaction().replace(R.id.tabcontent, selected).commit();
-                fragmentSetup();
+//                fragmentSetup();
 //                if(isSetup()) { fragmentSetup(); }
             }
 
@@ -127,15 +136,6 @@ public class CampaignInformation extends FragmentActivity {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
-            }
-        });
-
-        // 뒤로가기 버튼 이벤트
-        bt_back = (ImageButton)findViewById(R.id.bt_back);
-        bt_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
             }
         });
 
@@ -154,6 +154,9 @@ public class CampaignInformation extends FragmentActivity {
         tv_participantsN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(campaignItem.getParticipantsN() == 0) {
+                    Toast.makeText(CampaignInformation.this, "현재 캠페인에 참가 중인 사람이 없습니다.", Toast.LENGTH_SHORT).show();
+                }
                 Intent intent = new Intent(getApplicationContext(), ParticipantList.class);
                 intent.putExtra("datetime", datetime);
                 startActivity(intent);
@@ -215,7 +218,7 @@ public class CampaignInformation extends FragmentActivity {
     // fragment에 setup 정보 입력하기
     void fragmentSetup() {
 //        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.tabcontent);
-        if(tabLayout.getSelectedTabPosition() == 0) {
+//        if(tabLayout.getSelectedTabPosition() == 0) {
             String info = campaignItem.getCpInfo();
 
             String infoImage1 = campaignItem.getInfoImage1();
@@ -233,8 +236,8 @@ public class CampaignInformation extends FragmentActivity {
             bundle1.putString("infoImage5", infoImage5);
 
             fragmentInfo.setArguments(bundle1);
-        }
-        else if(tabLayout.getSelectedTabPosition() == 1) {
+//        }
+//        else if(tabLayout.getSelectedTabPosition() == 1) {
             String way = campaignItem.getWayInfo();
             String rPhoto1 = campaignItem.getRightPhoto1();
             String rPhoto2 = campaignItem.getRightPhoto2();
@@ -261,12 +264,12 @@ public class CampaignInformation extends FragmentActivity {
             bundle2.putString("period", period);
 
             fragmentWay.setArguments(bundle2);
-        }
-        else if(tabLayout.getSelectedTabPosition() == 2) {
+//        }
+//        else if(tabLayout.getSelectedTabPosition() == 2) {
             Bundle bundle3 = new Bundle();
             bundle3.putString("datetime", datetime);
             fragmentReview.setArguments(bundle3);
-        }
+//        }
     }
 
     // String을 byte[]로 변환
@@ -330,6 +333,7 @@ public class CampaignInformation extends FragmentActivity {
                                             double r = reCampaignAvg();
                                             tv_reCampaignN.setText(r + "회");
                                             databaseReference.child("campaign").child("reCampaignN").setValue(r);
+                                            database.getReference("environmentalCampaign").child("HomeCampaign").child(datetime).child("reCampaignN").setValue(r);
                                         }
                                     });
                                 }
@@ -342,20 +346,15 @@ public class CampaignInformation extends FragmentActivity {
                                     myCampaignItem.setStartDate(sDate);
                                     myCampaignItem.setEndDate(getEndDate(sDate));
                                     myCampaignItem.setReCount(1);
-                                    myCampaignRef.child(datetime).child("myCampaign").setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            // 버튼 '참가완료'로 바꾸기
-                                            tv_participation.setText("참가완료");
-                                            // 평균 참여 횟수 수정하기
-                                            double r = reCampaignAvg();
-                                            tv_reCampaignN.setText(r + "회");
-                                            databaseReference.child("campaign").child("reCampaignN").setValue(r);
-                                        }
-                                    });
+                                    myCampaignRef.child(datetime).child("myCampaign").setValue(myCampaignItem);
+//                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                        @Override
+//                                        public void onSuccess(Void aVoid) {
+//                                        }
+//                                    });
 
                                     // 참가자 리스트에 추가하기
-                                    databaseReference.child("participants").child(uid).setValue(uid).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    databaseReference.child("participants").child(uid).child("uid").setValue(uid).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             // 참가 인원 수정하기
@@ -365,6 +364,13 @@ public class CampaignInformation extends FragmentActivity {
                                             databaseReference.child("campaign").child("participantsN").setValue(n);
                                         }
                                     });
+                                    // 버튼 '참가완료'로 바꾸기
+                                    tv_participation.setText("참가완료");
+                                    // 평균 참여 횟수 수정하기
+                                    double r = reCampaignAvg();
+                                    tv_reCampaignN.setText(r + "회");
+                                    databaseReference.child("campaign").child("reCampaignN").setValue(r);
+                                    database.getReference("environmentalCampaign").child("HomeCampaign").child(datetime).child("reCampaignN").setValue(r);
                                 }
                             }
                             @Override
@@ -422,10 +428,11 @@ public class CampaignInformation extends FragmentActivity {
         int month = Integer.parseInt(sDate.substring(4, 6));
         int day = Integer.parseInt(sDate.substring(6, 8));
 
-        int certiCount = getCertiCount();
+        String sPeriod = tv_period.getText().toString();
+        int period = Integer.parseInt(sPeriod.substring(0, sPeriod.length()-1));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Calendar cal = new GregorianCalendar(year, month-1, day);
-        cal.add(Calendar.DAY_OF_MONTH, certiCount);
+        cal.add(Calendar.DAY_OF_MONTH, period*7);
 
         return sdf.format(cal.getTime());
     }
@@ -444,12 +451,23 @@ public class CampaignInformation extends FragmentActivity {
     // 평균 참여 횟수 구하기
     double reCampaignAvg() {
         ArrayList<ParticipantItem> participants = new ArrayList<>();
-        databaseReference.child("participants").addValueEventListener(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ParticipantItem participantItem = snapshot.getValue(ParticipantItem.class);
-                participants.add(participantItem);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                participants.clear();
+                if(dataSnapshot.hasChild("participants")) {
+                    for(DataSnapshot snapshot : dataSnapshot.child("participants").getChildren()) {
+                        ParticipantItem participantItem = snapshot.getValue(ParticipantItem.class);
+                        participants.add(participantItem);
+                    }
+                } else {
+                    databaseReference.child("participants").child(uid).child("uid").setValue(uid);
+                    ParticipantItem participantItem = new ParticipantItem();
+                    participantItem.setUid(uid);
+                    participants.add(participantItem);
+                }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // DB를 가져오던 중 에러 발생 시
@@ -458,9 +476,10 @@ public class CampaignInformation extends FragmentActivity {
         });
 
         ArrayList<MyCampaignItem> myCampaigns = new ArrayList<>();
+        myCampaigns.clear();
         for(int i = 0; i < participants.size(); i++) {
-            String uid = participants.get(i).getUid();
-            database.getReference("environmentalCampaign").child("MyCampaign").child(uid).child(datetime).child("myCampaign").addValueEventListener(new ValueEventListener() {
+            String participantUid = participants.get(i).getUid();
+            database.getReference("environmentalCampaign").child("MyCampaign").child(participantUid).child(datetime).child("myCampaign").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     MyCampaignItem myCampaignItem = snapshot.getValue(MyCampaignItem.class);
@@ -476,7 +495,7 @@ public class CampaignInformation extends FragmentActivity {
 
         double sum = 0;
         for(int i = 0; i < myCampaigns.size(); i++) {
-            sum += myCampaigns.get(i).getReCount();
+            sum += (double)myCampaigns.get(i).getReCount();
         }
         return Double.parseDouble(String.format("%.2f", sum / myCampaigns.size()));
     }

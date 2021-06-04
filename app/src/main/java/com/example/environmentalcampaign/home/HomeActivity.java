@@ -34,6 +34,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
@@ -48,12 +49,12 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView.Adapter fAdapter, nAdapter;
     private  RecyclerView.LayoutManager fLayoutManager, nLayoutManager;
     private RecyclerView fRecyclerView, nRecyclerView;
-    public ArrayList<RecyclerViewItem> fArrayList, nArrayList;
+    public ArrayList<RecyclerViewItem> arrayList, fArrayList, nArrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
-    ArrayList<String> campaignCodes;
-    ArrayList<CampaignItem> campaignItems;
+//    ArrayList<String> campaignCodes;
+//    ArrayList<CampaignItem> campaignItems;
 
    // TextView txt;
 
@@ -81,13 +82,90 @@ public class HomeActivity extends AppCompatActivity {
         setupIndicators(list.size());
 
 
+//        // RecyclerView 연결
+//
+//        database = FirebaseDatabase.getInstance();
+//        databaseReference = database.getReference("environmentalCampaign").child("Campaign");
+//
+//        campaignCodes = new ArrayList<>(); // 캠페인코드들을 담을 ArrayList
+//        campaignItems = new ArrayList<>(); // CampaignItem 객체를 담을 ArrayList
+//
+//        fRecyclerView = findViewById(R.id.famousCampaign);
+//        fRecyclerView.setHasFixedSize(true); // 성능 향상시키기위함
+//        fLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+//        fRecyclerView.setLayoutManager(fLayoutManager);
+//        fArrayList = new ArrayList<>(); // 인기캠페인 RecyclerViewItem 객체를 담을 ArrayList
+//
+//        nRecyclerView = findViewById(R.id.newCampaign);
+//        nRecyclerView.setHasFixedSize(true); // 성능 향상시키기위함
+//        nLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
+//        nRecyclerView.setLayoutManager(nLayoutManager);
+//        nArrayList = new ArrayList<>(); // 신규캠페인 RecyclerViewItem 객체를 담을 ArrayList
+//
+//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                campaignCodes.clear();
+//                campaignItems.clear();
+//                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                    String campaignCode = snapshot.getKey();
+//                    campaignCodes.add(campaignCode);
+//                    CampaignItem campaignItem = snapshot.child("campaign").getValue(CampaignItem.class);
+//                    campaignItems.add(campaignItem);
+//                }
+//
+//                // 내림차순 정렬
+//                Collections.sort(campaignItems);
+//                fArrayList.clear();
+//                // 인기캠페인 가져오기
+//                for(int i=0; i < 2; i++) {
+//                    CampaignItem campaignItem = campaignItems.get(i);
+//                    RecyclerViewItem recyclerViewItem = new RecyclerViewItem();
+//                    recyclerViewItem.setCampaignCode(campaignItem.getDatetime());
+//                    recyclerViewItem.setImage(campaignItem.getLogo());
+//                    recyclerViewItem.setTitle(campaignItem.getTitle());
+//                    fArrayList.add(recyclerViewItem);
+//                }
+//                fAdapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
+//
+//                // 내림차순 정렬
+//                Collections.sort(campaignCodes, Collections.reverseOrder());
+////                Collections.reverse(campaignCodes);
+//                nArrayList.clear();
+//                // 신규캠페인 가져오기
+//                for(int i=0; i < 2; i++) {
+//                    CampaignItem campaignItem = dataSnapshot.child(campaignCodes.get(i)).child("campaign").getValue(CampaignItem.class);
+//                    RecyclerViewItem recyclerViewItem = new RecyclerViewItem();
+//                    recyclerViewItem.setCampaignCode(campaignItem.getDatetime());
+//                    recyclerViewItem.setImage(campaignItem.getLogo());
+//                    recyclerViewItem.setTitle(campaignItem.getTitle());
+//                    nArrayList.add(recyclerViewItem);
+//                }
+//                nAdapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                // DB를 가져오던 중 에러 발생 시
+//                Log.e("HomeActivity3", String.valueOf(error.toException())); //에러문 출력
+//            }
+//        });
+//
+//        fAdapter = new RecyclerViewAdapter(fArrayList, this);
+//        fRecyclerView.setAdapter(fAdapter);
+//
+//        nAdapter = new RecyclerViewAdapter(nArrayList, this);
+//        nRecyclerView.setAdapter(nAdapter);
+
+
+
+
         // RecyclerView 연결
 
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("environmentalCampaign").child("Campaign");
+        databaseReference = database.getReference("environmentalCampaign").child("HomeCampaign");
 
-        campaignCodes = new ArrayList<>(); // 캠페인코드들을 담을 ArrayList
-        campaignItems = new ArrayList<>(); // CampaignItem 객체를 담을 ArrayList
+        arrayList = new ArrayList<>(); // RecyclerViewItem 객체를 담을 ArrayList
 
         fRecyclerView = findViewById(R.id.famousCampaign);
         fRecyclerView.setHasFixedSize(true); // 성능 향상시키기위함
@@ -104,40 +182,46 @@ public class HomeActivity extends AppCompatActivity {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                campaignCodes.clear();
-                campaignItems.clear();
+                arrayList.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String campaignCode = snapshot.getKey();
-                    campaignCodes.add(campaignCode);
-                    CampaignItem campaignItem = snapshot.child("campaign").getValue(CampaignItem.class);
-                    campaignItems.add(campaignItem);
+                    RecyclerViewItem recyclerViewItem = snapshot.getValue(RecyclerViewItem.class);
+                    arrayList.add(recyclerViewItem);
                 }
 
                 // 내림차순 정렬
-                Collections.sort(campaignItems);
+                Collections.sort(arrayList, new Comparator<RecyclerViewItem>() {
+                    @Override
+                    public int compare(RecyclerViewItem recyclerViewItem, RecyclerViewItem t1) {
+                        // reCampaignN을 기준으로 내림차순 정렬
+                        if(recyclerViewItem.getReCampaignN() < t1.getReCampaignN()) {
+                            return -1; // 1로 하면 오름차순
+                        } else if(recyclerViewItem.getReCampaignN() == t1.getReCampaignN()) {
+                            return 0;
+                        } else {
+                            return 1; // -1로 하면 오름차순
+                        }
+                    }
+                });
                 fArrayList.clear();
                 // 인기캠페인 가져오기
                 for(int i=0; i < 2; i++) {
-                    CampaignItem campaignItem = campaignItems.get(i);
-                    RecyclerViewItem recyclerViewItem = new RecyclerViewItem();
-                    recyclerViewItem.setCampaignCode(campaignItem.getDatetime());
-                    recyclerViewItem.setImage(campaignItem.getLogo());
-                    recyclerViewItem.setTitle(campaignItem.getTitle());
+                    RecyclerViewItem recyclerViewItem = arrayList.get(i);
                     fArrayList.add(recyclerViewItem);
                 }
                 fAdapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
 
                 // 내림차순 정렬
-                Collections.sort(campaignCodes, Collections.reverseOrder());
-//                Collections.reverse(campaignCodes);
+                Collections.sort(arrayList, new Comparator<RecyclerViewItem>() {
+                    @Override
+                    public int compare(RecyclerViewItem recyclerViewItem, RecyclerViewItem t1) {
+                        // campaignCode를 기준으로 내림차순 정렬
+                        return t1.getCampaignCode().compareTo(recyclerViewItem.getCampaignCode());
+                    }
+                });
                 nArrayList.clear();
                 // 신규캠페인 가져오기
                 for(int i=0; i < 2; i++) {
-                    CampaignItem campaignItem = dataSnapshot.child(campaignCodes.get(i)).child("campaign").getValue(CampaignItem.class);
-                    RecyclerViewItem recyclerViewItem = new RecyclerViewItem();
-                    recyclerViewItem.setCampaignCode(campaignItem.getDatetime());
-                    recyclerViewItem.setImage(campaignItem.getLogo());
-                    recyclerViewItem.setTitle(campaignItem.getTitle());
+                    RecyclerViewItem recyclerViewItem = arrayList.get(i);
                     nArrayList.add(recyclerViewItem);
                 }
                 nAdapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
@@ -146,7 +230,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // DB를 가져오던 중 에러 발생 시
-                Log.e("HomeActivity3", String.valueOf(error.toException())); //에러문 출력
+                Log.e("HomeActivity", String.valueOf(error.toException())); //에러문 출력
             }
         });
 
@@ -160,38 +244,6 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-
-
-//        // 인기 캠페인, 신규 캠페인 recyclerview
-//        RecyclerView famousCampaign = findViewById(R.id.famousCampaign);
-//        List<String> ftitle = new ArrayList<>();
-//        List<Integer> fimage = new ArrayList<>();
-//        RecyclerViewAdapter fRecyclerViewAdapter = new RecyclerViewAdapter(this, ftitle, fimage);
-//
-//        RecyclerView newCampaign = findViewById(R.id.newCampaign);
-//        List<String> ntitle = new ArrayList<>();
-//        List<Integer> nimage = new ArrayList<>();
-//        RecyclerViewAdapter nRecyclerViewAdapter = new RecyclerViewAdapter(this, ntitle, nimage);
-//
-//        ftitle.add("버리스타 캠페인");
-//        ftitle.add("용기내 캠페인");
-//        fimage.add(R.drawable.burista_1);
-//        fimage.add(R.drawable.campaign_image);
-//
-//        ntitle.add("페트라떼 캠페인");
-//        ntitle.add("플라스틱 프리 챌린지");
-//
-//        nimage.add(R.drawable.new_campaign_1);
-//        nimage.add(R.drawable.new_campaign_2);
-//
-//        GridLayoutManager fGridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
-//        GridLayoutManager nGridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
-//
-//        famousCampaign.setLayoutManager(fGridLayoutManager);
-//        newCampaign.setLayoutManager(nGridLayoutManager);
-//
-//        famousCampaign.setAdapter(fRecyclerViewAdapter);
-//        newCampaign.setAdapter(nRecyclerViewAdapter);
 
 
         Intent intent = getIntent();
