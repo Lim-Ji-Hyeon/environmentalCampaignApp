@@ -52,8 +52,6 @@ public class setup3 extends AppCompatActivity {
     EditText et_cp_way, et_rightPhotoInfo, et_rightPhotoInfo2, et_wrongPhotoInfo, et_wrongPhotoInfo2;
     ImageView iv_rightPhoto, iv_rightPhoto2, iv_wrongPhoto, iv_wrongPhoto2;
 
-    FirebaseStorage storage;
-
     private final int GALLERY_CODE1 = 111;
     private final int GALLERY_CODE2 = 222;
     private final int GALLERY_CODE3 = 333;
@@ -62,6 +60,12 @@ public class setup3 extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference temporaryRef, databaseReference;
     String uid, datetime;
+
+    String imagePath1;
+    String imagePath2;
+    String imagePath3;
+    String imagePath4;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,16 +187,16 @@ public class setup3 extends AppCompatActivity {
             if(!checkImage(photos[i])) {
                 switch (i) {
                     case 0 :
-                        rPhoto1 = byteArrayToBinaryString(bitmapToByteArray(iv_rightPhoto));
+                        rPhoto1 = imagePath1;
                         break;
                     case 1 :
-                        rPhoto2 = byteArrayToBinaryString(bitmapToByteArray(iv_rightPhoto2));
+                        rPhoto2 = imagePath2;
                         break;
                     case 2 :
-                        wPhoto1 = byteArrayToBinaryString(bitmapToByteArray(iv_wrongPhoto));
+                        wPhoto1 = imagePath3;
                         break;
                     case 3 :
-                        wPhoto2 = byteArrayToBinaryString(bitmapToByteArray(iv_wrongPhoto2));
+                        wPhoto2 = imagePath4;
                         break;
                 }
             }
@@ -283,87 +287,15 @@ public class setup3 extends AppCompatActivity {
             switch (requestCode) {
                 case GALLERY_CODE1:
                     sendPicture1(data.getData()); //갤러리에서 가져오기
-
-//                    // Storage에 저장하기
-//                    StorageReference storageRef1 = storage.getReference();
-//
-//                    Uri file1 = Uri.fromFile(new File(getRealPathFromURI(data.getData())));
-//                    StorageReference riversRef1 = storageRef1.child("Campaign/").child("images/"+file1.getLastPathSegment());
-//                    UploadTask uploadTask1 = riversRef1.putFile(file1);
-//
-//                    uploadTask1.addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception exception) {
-//                        }
-//                    }).addOnSuccessListener
-//                            (new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                                @Override
-//                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                                }
-//                            });
                     break;
                 case GALLERY_CODE2:
                     sendPicture2(data.getData()); //갤러리에서 가져오기
-
-                    // Storage에 저장하기
-                    StorageReference storageRef2 = storage.getReference();
-
-                    Uri file2 = Uri.fromFile(new File(getRealPathFromURI(data.getData())));
-                    StorageReference riversRef2 = storageRef2.child("Campaign/").child("images/"+file2.getLastPathSegment());
-                    UploadTask uploadTask2 = riversRef2.putFile(file2);
-
-                    uploadTask2.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                        }
-                    }).addOnSuccessListener
-                            (new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                }
-                            });
                     break;
                 case GALLERY_CODE3:
                     sendPicture3(data.getData()); //갤러리에서 가져오기
-
-//                    // Storage에 저장하기
-//                    StorageReference storageRef3 = storage.getReference();
-//
-//                    Uri file3 = Uri.fromFile(new File(getRealPathFromURI(data.getData())));
-//                    StorageReference riversRef3 = storageRef3.child("Campaign/").child("images/"+file3.getLastPathSegment());
-//                    UploadTask uploadTask3 = riversRef3.putFile(file3);
-//
-//                    uploadTask3.addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception exception) {
-//                        }
-//                    }).addOnSuccessListener
-//                            (new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                                @Override
-//                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                                }
-//                            });
                     break;
                 case GALLERY_CODE4:
                     sendPicture4(data.getData()); //갤러리에서 가져오기
-
-                    // Storage에 저장하기
-                    StorageReference storageRef4 = storage.getReference();
-
-                    Uri file4 = Uri.fromFile(new File(getRealPathFromURI(data.getData())));
-                    StorageReference riversRef4 = storageRef4.child("Campaign/").child("images/"+file4.getLastPathSegment());
-                    UploadTask uploadTask4 = riversRef4.putFile(file4);
-
-                    uploadTask4.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                        }
-                    }).addOnSuccessListener
-                            (new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                @Override
-                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                }
-                            });
                     break;
                 default:
                     break;
@@ -374,61 +306,61 @@ public class setup3 extends AppCompatActivity {
 
     // 갤러리 연동하기 위한 메소드 2-1
     private void sendPicture1(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        imagePath1 = getRealPathFromURI(imgUri); // path 경로
         ExifInterface exif = null;
         try {
-            exif = new ExifInterface(imagePath);
+            exif = new ExifInterface(imagePath1);
         } catch (IOException e) {
             e.printStackTrace();
         }
         int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
         int exifDegree = exifOrientationToDegrees(exifOrientation);
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath1);//경로를 통해 비트맵으로 전환
         iv_rightPhoto.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
     }
 
     // 갤러리 연동하기 위한 메소드 2-2
     private void sendPicture2(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        imagePath2 = getRealPathFromURI(imgUri); // path 경로
         ExifInterface exif = null;
         try {
-            exif = new ExifInterface(imagePath);
+            exif = new ExifInterface(imagePath2);
         } catch (IOException e) {
             e.printStackTrace();
         }
         int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
         int exifDegree = exifOrientationToDegrees(exifOrientation);
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath2);//경로를 통해 비트맵으로 전환
         iv_rightPhoto2.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
     }
 
     // 갤러리 연동하기 위한 메소드 2-3
     private void sendPicture3(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        imagePath3 = getRealPathFromURI(imgUri); // path 경로
         ExifInterface exif = null;
         try {
-            exif = new ExifInterface(imagePath);
+            exif = new ExifInterface(imagePath3);
         } catch (IOException e) {
             e.printStackTrace();
         }
         int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
         int exifDegree = exifOrientationToDegrees(exifOrientation);
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath3);//경로를 통해 비트맵으로 전환
         iv_wrongPhoto.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
     }
 
     // 갤러리 연동하기 위한 메소드 2-4
     private void sendPicture4(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        imagePath4 = getRealPathFromURI(imgUri); // path 경로
         ExifInterface exif = null;
         try {
-            exif = new ExifInterface(imagePath);
+            exif = new ExifInterface(imagePath4);
         } catch (IOException e) {
             e.printStackTrace();
         }
         int exifOrientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
         int exifDegree = exifOrientationToDegrees(exifOrientation);
-        Bitmap bitmap = BitmapFactory.decodeFile(imagePath);//경로를 통해 비트맵으로 전환
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath4);//경로를 통해 비트맵으로 전환
         iv_wrongPhoto2.setImageBitmap(rotate(bitmap, exifDegree));//이미지 뷰에 비트맵 넣기
     }
 
