@@ -41,8 +41,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewHolder holder, int position) {
         // 각 아이템을 연결해준다.
+        Glide.with(holder.itemView)
+                .load(recyclerViewItems.get(position).getImage())
+                .into(holder.image);
         holder.campaignCode.setText(recyclerViewItems.get(position).getCampaignCode());
-        holder.image.setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(recyclerViewItems.get(position).getImage())));
+        //holder.image.setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(recyclerViewItems.get(position).getImage())));
         holder.title.setText(recyclerViewItems.get(position).getTitle());
     }
 

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.environmentalcampaign.R;
 
 import java.io.ByteArrayInputStream;
@@ -69,7 +70,8 @@ public class FragmentWay extends Fragment {
             ImageView[] imageViews = {iv_rightPhoto, iv_rightPhoto2, iv_wrongPhoto, iv_wrongPhoto2};
             for(int i = 0; i < photos.length; i++) {
                 if(!photos[i].equals("")) {
-                    imageViews[i].setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(photos[i])));
+                    Glide.with(FragmentWay.this).load(photos[i]).into(imageViews[i]);
+                    //imageViews[i].setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(photos[i])));
                     imageViews[i].setVisibility(View.VISIBLE);
                 } else { imageViews[i].setVisibility(View.INVISIBLE); }
             }

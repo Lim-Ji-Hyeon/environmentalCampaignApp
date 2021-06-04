@@ -28,14 +28,19 @@ import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.cp_info.CampaignInformation;
 import com.example.environmentalcampaign.cp_info.CampaignItem;
 import com.example.environmentalcampaign.home.RecyclerViewItem;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 
@@ -46,6 +51,8 @@ public class setup3 extends AppCompatActivity {
 
     EditText et_cp_way, et_rightPhotoInfo, et_rightPhotoInfo2, et_wrongPhotoInfo, et_wrongPhotoInfo2;
     ImageView iv_rightPhoto, iv_rightPhoto2, iv_wrongPhoto, iv_wrongPhoto2;
+
+    FirebaseStorage storage;
 
     private final int GALLERY_CODE1 = 111;
     private final int GALLERY_CODE2 = 222;
@@ -255,6 +262,10 @@ public class setup3 extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+
+                databaseReference.child("HomeCampaign").child(datetime).setValue(recyclerViewItem);
+
+
             }
 
             @Override
@@ -272,15 +283,87 @@ public class setup3 extends AppCompatActivity {
             switch (requestCode) {
                 case GALLERY_CODE1:
                     sendPicture1(data.getData()); //갤러리에서 가져오기
+
+//                    // Storage에 저장하기
+//                    StorageReference storageRef1 = storage.getReference();
+//
+//                    Uri file1 = Uri.fromFile(new File(getRealPathFromURI(data.getData())));
+//                    StorageReference riversRef1 = storageRef1.child("Campaign/").child("images/"+file1.getLastPathSegment());
+//                    UploadTask uploadTask1 = riversRef1.putFile(file1);
+//
+//                    uploadTask1.addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception exception) {
+//                        }
+//                    }).addOnSuccessListener
+//                            (new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                                @Override
+//                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                                }
+//                            });
                     break;
                 case GALLERY_CODE2:
                     sendPicture2(data.getData()); //갤러리에서 가져오기
+
+                    // Storage에 저장하기
+                    StorageReference storageRef2 = storage.getReference();
+
+                    Uri file2 = Uri.fromFile(new File(getRealPathFromURI(data.getData())));
+                    StorageReference riversRef2 = storageRef2.child("Campaign/").child("images/"+file2.getLastPathSegment());
+                    UploadTask uploadTask2 = riversRef2.putFile(file2);
+
+                    uploadTask2.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                        }
+                    }).addOnSuccessListener
+                            (new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                }
+                            });
                     break;
                 case GALLERY_CODE3:
                     sendPicture3(data.getData()); //갤러리에서 가져오기
+
+//                    // Storage에 저장하기
+//                    StorageReference storageRef3 = storage.getReference();
+//
+//                    Uri file3 = Uri.fromFile(new File(getRealPathFromURI(data.getData())));
+//                    StorageReference riversRef3 = storageRef3.child("Campaign/").child("images/"+file3.getLastPathSegment());
+//                    UploadTask uploadTask3 = riversRef3.putFile(file3);
+//
+//                    uploadTask3.addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception exception) {
+//                        }
+//                    }).addOnSuccessListener
+//                            (new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                                @Override
+//                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                                }
+//                            });
                     break;
                 case GALLERY_CODE4:
                     sendPicture4(data.getData()); //갤러리에서 가져오기
+
+                    // Storage에 저장하기
+                    StorageReference storageRef4 = storage.getReference();
+
+                    Uri file4 = Uri.fromFile(new File(getRealPathFromURI(data.getData())));
+                    StorageReference riversRef4 = storageRef4.child("Campaign/").child("images/"+file4.getLastPathSegment());
+                    UploadTask uploadTask4 = riversRef4.putFile(file4);
+
+                    uploadTask4.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                        }
+                    }).addOnSuccessListener
+                            (new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                }
+                            });
                     break;
                 default:
                     break;

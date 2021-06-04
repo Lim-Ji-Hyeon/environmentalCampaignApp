@@ -1,5 +1,6 @@
 package com.example.environmentalcampaign.set_up_page;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,12 +26,18 @@ import android.widget.Toast;
 
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.cp_info.CampaignItem;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -54,6 +61,9 @@ public class setup1 extends AppCompatActivity {
 
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+    FirebaseStorage storage;
+
+    String imagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +74,8 @@ public class setup1 extends AppCompatActivity {
         et_cp_name = (EditText)findViewById(R.id.et_cp_name);
         tv_frequency = (TextView)findViewById(R.id.tv_frequency);
         tv_period = (TextView)findViewById(R.id.tv_period);
+
+        storage = FirebaseStorage.getInstance();
 
         // 대표사진 클릭시 갤러리앱에서 이미지 선택
         iv_cp_logo.setOnClickListener(new View.OnClickListener() {
@@ -130,10 +142,11 @@ public class setup1 extends AppCompatActivity {
                      // TemporarySave - uid에 저장
                      database = FirebaseDatabase.getInstance();
                      databaseReference = database.getReference("environmentalCampaign").child("TemporarySave").child(uid);
-                     databaseReference.child("logo").setValue(byteArrayToBinaryString(bitmapToByteArray(iv_cp_logo)));
+                     databaseReference.child("logo").setValue(imagePath);
                      databaseReference.child("title").setValue(et_cp_name.getText().toString());
                      databaseReference.child("frequency").setValue(tv_frequency.getText().toString());
                      databaseReference.child("period").setValue(tv_period.getText().toString());
+
 
                     Intent intent = new Intent(getApplicationContext(), setup2.class);
                     intent.putExtra("uid", uid);
@@ -249,6 +262,23 @@ public class setup1 extends AppCompatActivity {
             switch (requestCode) {
                 case GALLERY_CODE:
                     sendPicture(data.getData()); //갤러리에서 가져오기
+                    // Storage에 저장하기
+                    StorageReference storageRef = storage.getReference();
+
+                    Uri file = Uri.fromFile(new File(getRealPathFromURI(data.getData())));
+                    StorageReference riversRef = storageRef.child("Campaign/").child("images/"+file.getLastPathSegment());
+                    UploadTask uploadTask = riversRef.putFile(file);
+
+                    uploadTask.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                        }
+                    }).addOnSuccessListener
+                            (new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                }
+                            });
                     break;
                 default:
                     break;
@@ -258,7 +288,7 @@ public class setup1 extends AppCompatActivity {
 
     // 갤러리 연동하기 위한 메소드 2
     private void sendPicture(Uri imgUri) {
-        String imagePath = getRealPathFromURI(imgUri); // path 경로
+        imagePath = getRealPathFromURI(imgUri); // path 경로
         ExifInterface exif = null;
         try {
             exif = new ExifInterface(imagePath);

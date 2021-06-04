@@ -65,7 +65,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             feedImageView.setClipToOutline(true);
 
 
-
             // Feed에 있는 image를 클릭했을 때 피드 이미지 상세 페이지로 넘어간다.
             feedImageView.setOnClickListener(new View.OnClickListener() {
                 @Override

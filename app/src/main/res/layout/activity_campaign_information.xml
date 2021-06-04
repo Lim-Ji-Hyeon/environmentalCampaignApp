@@ -43,7 +43,8 @@
                 android:layout_height="250dp"
                 android:background="@drawable/edge"
                 android:scaleType="fitCenter"
-                android:src="@drawable/burista" />
+                android:src="@drawable/burista"
+                android:visibility="invisible"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

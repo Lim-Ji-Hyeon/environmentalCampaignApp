@@ -82,84 +82,6 @@ public class HomeActivity extends AppCompatActivity {
         setupIndicators(list.size());
 
 
-//        // RecyclerView 연결
-//
-//        database = FirebaseDatabase.getInstance();
-//        databaseReference = database.getReference("environmentalCampaign").child("Campaign");
-//
-//        campaignCodes = new ArrayList<>(); // 캠페인코드들을 담을 ArrayList
-//        campaignItems = new ArrayList<>(); // CampaignItem 객체를 담을 ArrayList
-//
-//        fRecyclerView = findViewById(R.id.famousCampaign);
-//        fRecyclerView.setHasFixedSize(true); // 성능 향상시키기위함
-//        fLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
-//        fRecyclerView.setLayoutManager(fLayoutManager);
-//        fArrayList = new ArrayList<>(); // 인기캠페인 RecyclerViewItem 객체를 담을 ArrayList
-//
-//        nRecyclerView = findViewById(R.id.newCampaign);
-//        nRecyclerView.setHasFixedSize(true); // 성능 향상시키기위함
-//        nLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
-//        nRecyclerView.setLayoutManager(nLayoutManager);
-//        nArrayList = new ArrayList<>(); // 신규캠페인 RecyclerViewItem 객체를 담을 ArrayList
-//
-//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                campaignCodes.clear();
-//                campaignItems.clear();
-//                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    String campaignCode = snapshot.getKey();
-//                    campaignCodes.add(campaignCode);
-//                    CampaignItem campaignItem = snapshot.child("campaign").getValue(CampaignItem.class);
-//                    campaignItems.add(campaignItem);
-//                }
-//
-//                // 내림차순 정렬
-//                Collections.sort(campaignItems);
-//                fArrayList.clear();
-//                // 인기캠페인 가져오기
-//                for(int i=0; i < 2; i++) {
-//                    CampaignItem campaignItem = campaignItems.get(i);
-//                    RecyclerViewItem recyclerViewItem = new RecyclerViewItem();
-//                    recyclerViewItem.setCampaignCode(campaignItem.getDatetime());
-//                    recyclerViewItem.setImage(campaignItem.getLogo());
-//                    recyclerViewItem.setTitle(campaignItem.getTitle());
-//                    fArrayList.add(recyclerViewItem);
-//                }
-//                fAdapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
-//
-//                // 내림차순 정렬
-//                Collections.sort(campaignCodes, Collections.reverseOrder());
-////                Collections.reverse(campaignCodes);
-//                nArrayList.clear();
-//                // 신규캠페인 가져오기
-//                for(int i=0; i < 2; i++) {
-//                    CampaignItem campaignItem = dataSnapshot.child(campaignCodes.get(i)).child("campaign").getValue(CampaignItem.class);
-//                    RecyclerViewItem recyclerViewItem = new RecyclerViewItem();
-//                    recyclerViewItem.setCampaignCode(campaignItem.getDatetime());
-//                    recyclerViewItem.setImage(campaignItem.getLogo());
-//                    recyclerViewItem.setTitle(campaignItem.getTitle());
-//                    nArrayList.add(recyclerViewItem);
-//                }
-//                nAdapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                // DB를 가져오던 중 에러 발생 시
-//                Log.e("HomeActivity3", String.valueOf(error.toException())); //에러문 출력
-//            }
-//        });
-//
-//        fAdapter = new RecyclerViewAdapter(fArrayList, this);
-//        fRecyclerView.setAdapter(fAdapter);
-//
-//        nAdapter = new RecyclerViewAdapter(nArrayList, this);
-//        nRecyclerView.setAdapter(nAdapter);
-
-
-
-
         // RecyclerView 연결
 
         database = FirebaseDatabase.getInstance();
@@ -230,7 +152,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // DB를 가져오던 중 에러 발생 시
-                Log.e("HomeActivity", String.valueOf(error.toException())); //에러문 출력
+                Log.e("HomeActivity3", String.valueOf(error.toException())); //에러문 출력
             }
         });
 
@@ -239,10 +161,6 @@ public class HomeActivity extends AppCompatActivity {
 
         nAdapter = new RecyclerViewAdapter(nArrayList, this);
         nRecyclerView.setAdapter(nAdapter);
-
-
-
-
 
 
 

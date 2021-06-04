@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -198,7 +199,10 @@ public class CampaignInformation extends FragmentActivity {
                 campaignItem = snapshot.getValue(CampaignItem.class);
 
                 // 내용 붙이기
-                iv_logo.setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(campaignItem.getLogo())));
+
+                Glide.with(CampaignInformation.this).load(campaignItem.getLogo()).into(iv_logo);
+                iv_logo.setVisibility(View.VISIBLE);
+               // iv_logo.setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(campaignItem.getLogo())));
                 tv_cp_name.setText(campaignItem.getTitle());
                 tv_frequency.setText(campaignItem.getFrequency());
                 tv_period.setText(campaignItem.getPeriod());
