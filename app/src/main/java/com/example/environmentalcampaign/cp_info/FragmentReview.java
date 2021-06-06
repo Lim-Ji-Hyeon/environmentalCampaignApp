@@ -61,17 +61,19 @@ public class FragmentReview extends Fragment {
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
 
-        databaseReference = database.getReference("environmentalCampaign").child("Campaign").child(campaignCode).child("reviews"); // DB 테이블 연결
+        databaseReference = database.getReference("environmentalCampaign").child("Campaign").child(campaignCode); // DB 테이블 연결
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // 파이어베이스 데이터베이스의 데이터를 받아오는 곳
                 arrayList.clear(); // 기존 배열 리스트가 존재하지 않게 초기화
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){ // 반복문으로 데이터 리스트를 추출해냄.
-                    ReviewItem reviewItem = snapshot.getValue(ReviewItem.class); //만들어둔 ReviewItem 객체를 담는다.
-                    arrayList.add(reviewItem); // 담은 데이터들을 배열 리스트에 넣고 recyclerview에 보낼 준비를 한다.
+                if(dataSnapshot.hasChild("reviews")) {
+                    for(DataSnapshot snapshot : dataSnapshot.child("reviews").getChildren()){ // 반복문으로 데이터 리스트를 추출해냄.
+                        ReviewItem reviewItem = snapshot.getValue(ReviewItem.class); //만들어둔 ReviewItem 객체를 담는다.
+                        arrayList.add(reviewItem); // 담은 데이터들을 배열 리스트에 넣고 recyclerview에 보낼 준비를 한다.
+                    }
+                    adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
                 }
-                adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }
 
             @Override

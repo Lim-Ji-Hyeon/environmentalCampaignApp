@@ -86,7 +86,7 @@ public class ParticipantList extends AppCompatActivity {
 //        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.profile), "으쌰으쌰");
 
         tv_participantsN = (TextView)findViewById(R.id.tv_participantsN);
-        tv_participantsN.setText(String.valueOf(adapter.getCount()));
+        tv_participantsN.setText(String.valueOf(adapter.getCount()+1));
 
         // 뒤로가기 버튼 이벤트
         bt_back = (ImageButton)findViewById(R.id.bt_back);

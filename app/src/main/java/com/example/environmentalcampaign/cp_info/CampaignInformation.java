@@ -7,8 +7,6 @@ import androidx.fragment.app.FragmentActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +19,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.environmentalcampaign.R;
+import com.example.environmentalcampaign.home.RecyclerViewItem;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
@@ -83,7 +82,7 @@ public class CampaignInformation extends FragmentActivity {
             }
         });
 
-        // datetime 받아오는 부분 만들어야 함.
+        // datetime 받아오기
         gIntent = getIntent();
         if(isRecyclerView()) {
             datetime = gIntent.getStringExtra("campaignCode");
@@ -147,9 +146,34 @@ public class CampaignInformation extends FragmentActivity {
         tv_participantsN = (TextView)findViewById(R.id.tv_participantsN);
         tv_reCampaignN = (TextView)findViewById(R.id.tv_reCampaignN);
 
-//        if(이미 참가중인 캠페인이라면) {
-//            tv_participation.setText("참가완료");
-//        }
+        // 참가중인 캠페인인지 확인
+        database.getReference("environmentalCampaign").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // 참가중이라면 "참가완료"로 바꾸기
+                if((snapshot.hasChild("MyCampaign"))&&(snapshot.child("MyCampaign").hasChild(uid))&&(snapshot.child("MyCampaign").child(uid).hasChild(datetime))) {
+                    int today = Integer.parseInt(getTimeMilli().substring(0, 8));
+                    database.getReference("environmentalCampaign").child("MyCampaign").child(uid).child(datetime).child("myCampaign").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            MyCampaignItem myCampaignItem = snapshot.getValue(MyCampaignItem.class);
+                            int edate = Integer.parseInt(myCampaignItem.getEndDate());
+                            if(today <= edate) {
+                                tv_participation.setText("참가완료");
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         // 참가인원의 몇명인지 누르면 참가자 리스트 보여주기
         tv_participantsN.setOnClickListener(new View.OnClickListener() {
@@ -314,35 +338,53 @@ public class CampaignInformation extends FragmentActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // 내가 참가한 캠페인에 넣을 방법 구현해야함.
                         String sDate = getTimeMilli();
-                        DatabaseReference myCampaignRef = database.getReference("environmentalCampaign").child("MyCampaign").child(uid);
+                        DatabaseReference myCampaignRef = database.getReference("environmentalCampaign");
                         myCampaignRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 // 참여한 적이 있다면
-                                if(snapshot.hasChild(datetime)) {
+                                if((snapshot.hasChild("MyCampaign"))&&(snapshot.child("MyCampaign").hasChild(uid))&&(snapshot.child("MyCampaign").child(uid).hasChild(datetime))) {
                                     // 이전 내용 가져오기
-                                    MyCampaignItem myCampaignItem = snapshot.child(datetime).child("myCampaign").getValue(MyCampaignItem.class);
+                                    MyCampaignItem myCampaignItem = snapshot.child("MyCampaign").child(uid).child(datetime).child("myCampaign").getValue(MyCampaignItem.class);
                                     myCampaignItem.setStartDate(sDate);
                                     myCampaignItem.setEndDate(getEndDate(sDate));
                                     int reCount = myCampaignItem.getReCount();
                                     myCampaignItem.setReCount(reCount + 1);
 
                                     // 다시 올리기
-                                    myCampaignRef.child(datetime).child("myCampaign").setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    myCampaignRef.child("MyCampaign").child(uid).child(datetime).child("myCampaign").setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             // 버튼 '참가완료'로 바꾸기
                                             tv_participation.setText("참가완료");
                                             // 평균 참여 횟수 수정하기
-                                            double r = reCampaignAvg();
-                                            tv_reCampaignN.setText(r + "회");
-                                            databaseReference.child("campaign").child("reCampaignN").setValue(r);
-                                            database.getReference("environmentalCampaign").child("HomeCampaign").child(datetime).child("reCampaignN").setValue(r);
+                                            reCampaignAvg();
+
+                                            // DB 갱신
+                                            databaseReference.child("participants").child(uid).addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    ParticipantItem participantItem = snapshot.getValue(ParticipantItem.class);
+                                                    participantItem.setReCount(reCount + 1);
+                                                    databaseReference.child("participants").child(uid).setValue(participantItem);
+                                                }
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+                                                    // DB를 가져오던 중 에러 발생 시
+                                                    Log.e("ParticipantsRefresh", String.valueOf(error.toException())); //에러문 출력
+                                                }
+                                            });
                                         }
                                     });
                                 }
                                 // 참여한 적이 없다면
                                 else {
+                                    // 참가자 리스트에 추가하기
+                                    ParticipantItem participantItem = new ParticipantItem();
+                                    participantItem.setUid(uid);
+                                    participantItem.setReCount(1);
+                                    databaseReference.child("participants").child(uid).setValue(participantItem);
+
                                     // MyCampaignItem 객체 생성해서 데이터베이스에 삽입
                                     MyCampaignItem myCampaignItem = new MyCampaignItem();
                                     myCampaignItem.setCampaignCode(datetime);
@@ -350,31 +392,38 @@ public class CampaignInformation extends FragmentActivity {
                                     myCampaignItem.setStartDate(sDate);
                                     myCampaignItem.setEndDate(getEndDate(sDate));
                                     myCampaignItem.setReCount(1);
-                                    myCampaignRef.child(datetime).child("myCampaign").setValue(myCampaignItem);
-//                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                        @Override
-//                                        public void onSuccess(Void aVoid) {
-//                                        }
-//                                    });
-
-                                    // 참가자 리스트에 추가하기
-                                    databaseReference.child("participants").child(uid).child("uid").setValue(uid).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    myCampaignRef.child("MyCampaign").child(uid).child(datetime).child("myCampaign").setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
+                                            // 버튼 '참가완료'로 바꾸기
+                                            tv_participation.setText("참가완료");
                                             // 참가 인원 수정하기
-                                            String tv = tv_participantsN.getText().toString();
-                                            int n = Integer.parseInt(tv.substring(0, tv.length()-1)) + 1;
+                                            String s = tv_participantsN.getText().toString();
+                                            int n = Integer.parseInt(s.substring(0, s.length()-1)) + 1;
                                             tv_participantsN.setText( n + "명");
-                                            databaseReference.child("campaign").child("participantsN").setValue(n);
+
+                                            // DB 갱신
+                                            databaseReference.child("campaign").addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    campaignItem = snapshot.getValue(CampaignItem.class);
+                                                    campaignItem.setParticipantsN(n);
+                                                    databaseReference.child("campaign").setValue(campaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            // 평균 참여 횟수 수정하기
+                                                            reCampaignAvg();
+                                                        }
+                                                    });
+                                                }
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+                                                    // DB를 가져오던 중 에러 발생 시
+                                                    Log.e("CampaignItemRefresh", String.valueOf(error.toException())); //에러문 출력
+                                                }
+                                            });
                                         }
                                     });
-                                    // 버튼 '참가완료'로 바꾸기
-                                    tv_participation.setText("참가완료");
-                                    // 평균 참여 횟수 수정하기
-                                    double r = reCampaignAvg();
-                                    tv_reCampaignN.setText(r + "회");
-                                    databaseReference.child("campaign").child("reCampaignN").setValue(r);
-                                    database.getReference("environmentalCampaign").child("HomeCampaign").child(datetime).child("reCampaignN").setValue(r);
                                 }
                             }
                             @Override
@@ -453,7 +502,7 @@ public class CampaignInformation extends FragmentActivity {
     }
 
     // 평균 참여 횟수 구하기
-    double reCampaignAvg() {
+    void reCampaignAvg() {
         ArrayList<ParticipantItem> participants = new ArrayList<>();
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -464,11 +513,44 @@ public class CampaignInformation extends FragmentActivity {
                         ParticipantItem participantItem = snapshot.getValue(ParticipantItem.class);
                         participants.add(participantItem);
                     }
+
+                    double sum = 0;
+                    for(int i = 0; i < participants.size(); i++) {
+                        sum += (double)participants.get(i).getReCount();
+                    }
+                    double r = Double.parseDouble(String.format("%.2f", sum / participants.size()));
+                    tv_reCampaignN.setText(r + "회");
+
+                    // DB 갱신
+                    databaseReference.child("campaign").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            campaignItem = snapshot.getValue(CampaignItem.class);
+                            campaignItem.setReCampaignN(r);
+                            databaseReference.child("campaign").setValue(campaignItem);
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // DB를 가져오던 중 에러 발생 시
+                            Log.e("CampaignItemRefresh", String.valueOf(error.toException())); //에러문 출력
+                        }
+                    });
+                    database.getReference("environmentalCampaign").child("HomeCampaign").child(datetime).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            RecyclerViewItem recyclerViewItem = snapshot.getValue(RecyclerViewItem.class);
+                            recyclerViewItem.setReCampaignN(r);
+                            database.getReference("environmentalCampaign").child("HomeCampaign").child(datetime).setValue(recyclerViewItem);
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // DB를 가져오던 중 에러 발생 시
+                            Log.e("RecyclerViewItemRefresh", String.valueOf(error.toException())); //에러문 출력
+                        }
+                    });
+
                 } else {
-                    databaseReference.child("participants").child(uid).child("uid").setValue(uid);
-                    ParticipantItem participantItem = new ParticipantItem();
-                    participantItem.setUid(uid);
-                    participants.add(participantItem);
+                    Toast.makeText(CampaignInformation.this, "NoData", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -478,29 +560,5 @@ public class CampaignInformation extends FragmentActivity {
                 Log.e("participantsAdd", String.valueOf(error.toException())); //에러문 출력
             }
         });
-
-        ArrayList<MyCampaignItem> myCampaigns = new ArrayList<>();
-        myCampaigns.clear();
-        for(int i = 0; i < participants.size(); i++) {
-            String participantUid = participants.get(i).getUid();
-            database.getReference("environmentalCampaign").child("MyCampaign").child(participantUid).child(datetime).child("myCampaign").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    MyCampaignItem myCampaignItem = snapshot.getValue(MyCampaignItem.class);
-                    myCampaigns.add(myCampaignItem);
-                }
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    // DB를 가져오던 중 에러 발생 시
-                    Log.e("myCampaignsAdd", String.valueOf(error.toException())); //에러문 출력
-                }
-            });
-        }
-
-        double sum = 0;
-        for(int i = 0; i < myCampaigns.size(); i++) {
-            sum += (double)myCampaigns.get(i).getReCount();
-        }
-        return Double.parseDouble(String.format("%.2f", sum / myCampaigns.size()));
     }
 }

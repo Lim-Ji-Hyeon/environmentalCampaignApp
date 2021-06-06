@@ -116,11 +116,11 @@ public class HomeActivity extends AppCompatActivity {
                     public int compare(RecyclerViewItem recyclerViewItem, RecyclerViewItem t1) {
                         // reCampaignN을 기준으로 내림차순 정렬
                         if(recyclerViewItem.getReCampaignN() < t1.getReCampaignN()) {
-                            return -1; // 1로 하면 오름차순
+                            return 1; // -1로 하면 오름차순
                         } else if(recyclerViewItem.getReCampaignN() == t1.getReCampaignN()) {
                             return 0;
                         } else {
-                            return 1; // -1로 하면 오름차순
+                            return -1; // 1로 하면 오름차순
                         }
                     }
                 });

@@ -37,7 +37,7 @@ public class ParticipantAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() { return sample.size(); }
+    public int getCount() { return (sample != null ? sample.size() : 0); }
 
     @Override
     public Object getItem(int position) { return sample.get(position); }
