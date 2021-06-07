@@ -156,7 +156,7 @@ public class Second_Certification_Page extends AppCompatActivity {
 
                 // 카메라로 찍으면 photoUri를 가져오고, 갤러리로 가져왔다면 imagePath를 이용한다.
                 if(photoUri != null){
-                    certiImg = photoUri.toString();
+                    certiImg = makeToken(photoUri.toString());
                 }else{
                     certiImg = makeToken(imagePath);
                 }
