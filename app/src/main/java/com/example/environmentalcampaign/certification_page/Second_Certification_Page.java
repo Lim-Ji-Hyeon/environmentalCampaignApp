@@ -84,6 +84,8 @@ public class Second_Certification_Page extends AppCompatActivity {
     Button camera_btn;
     Button gallery_btn;
 
+    private int heartN=0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,7 +158,7 @@ public class Second_Certification_Page extends AppCompatActivity {
                 if(photoUri != null){
                     certiImg = photoUri.toString();
                 }else{
-                    certiImg = imagePath;
+                    certiImg = makeToken(imagePath);
                 }
 
                 Certi_Info certi_info = new Certi_Info();
@@ -167,6 +169,10 @@ public class Second_Certification_Page extends AppCompatActivity {
 
                 FeedItem feedItem = new FeedItem();
                 feedItem.setImage(certiImg);
+                feedItem.setPublisher(publisher);
+                feedItem.setDate(getTime);
+                feedItem.setContents(contents);
+                feedItem.setHeartN(heartN);
 
                 mDatabaseRef.child("Certification").child(publisher).child(getTime).setValue(certi_info);
                 mDatabaseRef.child("Feed").child(getTime).setValue(feedItem);
@@ -320,6 +326,16 @@ public class Second_Certification_Page extends AppCompatActivity {
             column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         }
         return cursor.getString(column_index);
+    }
+
+    // 토큰 만들기
+    String makeToken(String imagePath) {
+        int index = imagePath.lastIndexOf("/");
+        String imageName = imagePath.substring(index+1);
+        String token = "https://firebasestorage.googleapis.com/v0/b/environmental-campaign.appspot.com/o/Campaign%2Fimages%2F"
+                + imageName + "?alt=media";
+
+        return token;
     }
 
 }

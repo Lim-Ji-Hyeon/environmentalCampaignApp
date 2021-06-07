@@ -91,17 +91,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="사랑 뿜뿜"
+                            android:text="작성자 이름"
                             android:textColor="#000000"
                             android:textSize="18dp"
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/date"
+                            android:id="@+id/tv_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="2021.5.16.10:20"
+                            android:text="0000.00.00.00:00"
                             android:textSize="15dp" />
                     </LinearLayout>
 
@@ -110,21 +110,22 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/iv_feed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:src="@drawable/cp3"
-                android:background="@drawable/background_rounding"/>
+                android:background="@drawable/background_rounding"
+                android:visibility="invisible"/>
 
             <TextView
-                android:id="@+id/textView9"
+                android:id="@+id/tv_contents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:ellipsize="end"
                 android:maxLines="5"
-                android:text="용기내 캠페인 인증하기"
+                android:text="캠페인 인증 내용"
                 android:textColor="#000000" />
 
             <LinearLayout

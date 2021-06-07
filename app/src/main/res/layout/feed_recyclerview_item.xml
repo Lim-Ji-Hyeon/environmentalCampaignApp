@@ -26,6 +26,13 @@
     android:paddingLeft="10dp"
     android:paddingTop="10dp">
 
+    <TextView
+        android:id="@+id/feedPublisher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:visibility="invisible"/>
+
     <ImageView
         android:scaleType="centerCrop"
         android:layout_width="wrap_content"
@@ -33,5 +40,13 @@
         android:id="@+id/imagePost"
         android:src="@drawable/cp7"
         android:background="@drawable/background_rounding" />
+
+    <TextView
+        android:id="@+id/feed_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:visibility="invisible"/>
+
 
 </LinearLayout>

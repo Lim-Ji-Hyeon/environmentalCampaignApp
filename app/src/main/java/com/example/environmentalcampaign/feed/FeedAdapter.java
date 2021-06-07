@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -47,7 +48,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         Glide.with(holder.itemView)
                 .load(feeditems.get(position).getImage())
                 .into(holder.feedImageView);
-        // holder.tv_id.setText(arraylist.get(position).getId()); - 텍스트 연결
+        holder.feed_date.setText(feeditems.get(position).getDate()); //텍스트 연결
+        holder.feedPublisher.setText(feeditems.get(position).getPublisher());
         //holder.setFeedImageView(feeditems.get(position));
     }
 
@@ -57,12 +59,15 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     class FeedViewHolder extends RecyclerView.ViewHolder{
 
         ImageView feedImageView;
+        TextView feed_date, feedPublisher;
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         public FeedViewHolder(@NonNull View itemView) {
             super(itemView);
             feedImageView = itemView.findViewById(R.id.imagePost);
             feedImageView.setClipToOutline(true);
+            feed_date = itemView.findViewById(R.id.feed_date);
+            feedPublisher = itemView.findViewById(R.id.feedPublisher);
 
 
             // Feed에 있는 image를 클릭했을 때 피드 이미지 상세 페이지로 넘어간다.
@@ -70,6 +75,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(view.getContext(), FeedImageDetailPage.class);
+                    intent.putExtra("FeedDate", feed_date.getText().toString());
+                    intent.putExtra("FeedPublisher", feedPublisher.getText().toString());
                     view.getContext().startActivity(intent);
                 }
             });

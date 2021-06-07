@@ -76,6 +76,8 @@ public class setup2 extends AppCompatActivity {
         iv_cp_info4 = (ImageView)findViewById(R.id.iv_cp_info4);
         iv_cp_info5 = (ImageView)findViewById(R.id.iv_cp_info5);
 
+        storage = FirebaseStorage.getInstance();
+
         iv_cp_info1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -148,19 +150,19 @@ public class setup2 extends AppCompatActivity {
                         if(!checkImage(infoImages[i])) {
                             switch (i) {
                                 case 0 :
-                                    infoImage1 = imagePath1;
+                                    infoImage1 = makeToken(imagePath1);
                                     break;
                                 case 1 :
-                                    infoImage2 = imagePath2;
+                                    infoImage2 = makeToken(imagePath2);
                                     break;
                                 case 2 :
-                                    infoImage3 = imagePath3;
+                                    infoImage3 = makeToken(imagePath3);
                                     break;
                                 case 3 :
-                                    infoImage4 = imagePath4;
+                                    infoImage4 = makeToken(imagePath4);
                                     break;
                                 case 4 :
-                                    infoImage5 = imagePath5;
+                                    infoImage5 = makeToken(imagePath5);
                                     break;
                             }
                         }
@@ -390,5 +392,15 @@ public class setup2 extends AppCompatActivity {
             column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
         }
         return cursor.getString(column_index);
+    }
+
+    // 토큰 만들기
+    String makeToken(String imagePath) {
+        int index = imagePath.lastIndexOf("/");
+        String imageName = imagePath.substring(index+1);
+        String token = "https://firebasestorage.googleapis.com/v0/b/environmental-campaign.appspot.com/o/Campaign%2Fimages%2F"
+                + imageName + "?alt=media";
+
+        return token;
     }
 }
