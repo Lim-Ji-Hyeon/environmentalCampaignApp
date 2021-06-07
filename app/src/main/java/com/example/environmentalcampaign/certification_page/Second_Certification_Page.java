@@ -332,7 +332,7 @@ public class Second_Certification_Page extends AppCompatActivity {
     String makeToken(String imagePath) {
         int index = imagePath.lastIndexOf("/");
         String imageName = imagePath.substring(index+1);
-        String token = "https://firebasestorage.googleapis.com/v0/b/environmental-campaign.appspot.com/o/Campaign%2Fimages%2F"
+        String token = "https://firebasestorage.googleapis.com/v0/b/environmental-campaign.appspot.com/o/Feed%2Fimages%2F"
                 + imageName + "?alt=media";
 
         return token;
