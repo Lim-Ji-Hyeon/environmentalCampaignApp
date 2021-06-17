@@ -36,7 +36,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="8dp"
                         android:paddingBottom="5dp"
-                        android:text="현재 달성률 100%"
+                        android:text="현재 달성률 0%"
                         android:textColor="#E91E63"
                         android:textSize="10dp" />
 
@@ -50,7 +50,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="8dp"
                         android:paddingBottom="5dp"
-                        android:text="D-28"
+                        android:text="D-"
                         android:textColor="#555555"
                         android:textSize="10dp" />
 
@@ -68,7 +68,7 @@
                             android:paddingLeft="8dp"
                             android:paddingTop="5dp"
                             android:paddingBottom="5dp"
-                            android:text="2번째 참여중"
+                            android:text="번째 참여중"
                             android:textColor="#E3CF1F"
                             android:textSize="10dp" />
 
@@ -94,7 +94,8 @@
                     android:text="버리스타"
                     android:textColor="#000000"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="invisible"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -113,7 +114,8 @@
                         android:layout_height="wrap_content"
                         android:text="2주, 주 5일"
                         android:layout_gravity="center_vertical"
-                        android:textSize="10dp"/>
+                        android:textSize="10dp"
+                        android:visibility="invisible"/>
 
                     <ImageView
                         android:layout_width="18dp"
@@ -128,7 +130,8 @@
                         android:layout_height="wrap_content"
                         android:text="03.01(월) 종료"
                         android:layout_gravity="center_vertical"
-                        android:textSize="10dp"/>
+                        android:textSize="10dp"
+                        android:visibility="invisible"/>
 
                 </LinearLayout>
 
@@ -139,7 +142,8 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:background="@drawable/edge"
-                android:src="@drawable/burista" />
+                android:src="@drawable/burista"
+                android:visibility="invisible"/>
 
         </LinearLayout>
 

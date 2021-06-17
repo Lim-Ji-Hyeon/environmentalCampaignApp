@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.environmentalcampaign.R;
 
 public class PopupActivity extends AppCompatActivity {
@@ -34,12 +35,14 @@ public class PopupActivity extends AppCompatActivity {
 
         // 내용 불러오기
         Intent gIntent = getIntent();
-        byte[] arr = gIntent.getByteArrayExtra("image");
-        Bitmap image = BitmapFactory.decodeByteArray(arr, 0, arr.length);
+//        byte[] arr = gIntent.getByteArrayExtra("image");
+//        Bitmap image = BitmapFactory.decodeByteArray(arr, 0, arr.length);
+        String image = gIntent.getStringExtra("image");
         String info = gIntent.getStringExtra("info");
 
         // 붙이기
-        iv_popup.setImageBitmap(image);
+//        iv_popup.setImageBitmap(image);
+        Glide.with(PopupActivity.this).load(image).into(iv_popup);
         tv_popupInfo.setText(info);
 
         btn_ok = (Button)findViewById(R.id.btn_ok);

@@ -114,7 +114,7 @@ public class CampaignInformation extends FragmentActivity {
         }
 
         getSetupInfo(datetime);
-        getSupportFragmentManager().beginTransaction().add(R.id.tabcontent, fragmentInfo).commit();
+//        getSupportFragmentManager().beginTransaction().add(R.id.tabcontent, fragmentInfo).commit();
 
         tabLayout = findViewById(R.id.layout_tab);
 //        tabLayout.addTab(tabLayout.newTab().setText("설명"));
@@ -191,10 +191,14 @@ public class CampaignInformation extends FragmentActivity {
             public void onClick(View view) {
                 if(campaignItem.getParticipantsN() == 0) {
                     Toast.makeText(CampaignInformation.this, "현재 캠페인에 참가 중인 사람이 없습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    String s = tv_participantsN.getText().toString();
+                    int n = Integer.parseInt(s.substring(0, s.length()-1));
+                    Intent intent = new Intent(getApplicationContext(), ParticipantList.class);
+                    intent.putExtra("participantsN", n);
+                    intent.putExtra("datetime", datetime);
+                    startActivity(intent);
                 }
-                Intent intent = new Intent(getApplicationContext(), ParticipantList.class);
-                intent.putExtra("datetime", datetime);
-                startActivity(intent);
             }
         });
 
@@ -399,14 +403,14 @@ public class CampaignInformation extends FragmentActivity {
                                 // 참여한 적이 있다면
                                 if((snapshot.hasChild("MyCampaign"))&&(snapshot.child("MyCampaign").hasChild(uid))&&(snapshot.child("MyCampaign").child(uid).hasChild(datetime))) {
                                     // 이전 내용 가져오기
-                                    MyCampaignItem myCampaignItem = snapshot.child("MyCampaign").child(uid).child(datetime).child("myCampaign").getValue(MyCampaignItem.class);
+                                    MyCampaignItem myCampaignItem = snapshot.child("MyCampaign").child(uid).child(datetime).getValue(MyCampaignItem.class);
                                     myCampaignItem.setStartDate(sDate);
                                     myCampaignItem.setEndDate(getEndDate(sDate));
                                     int reCount = myCampaignItem.getReCount();
                                     myCampaignItem.setReCount(reCount + 1);
 
                                     // 다시 올리기
-                                    myCampaignRef.child("MyCampaign").child(uid).child(datetime).child("myCampaign").setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    myCampaignRef.child("MyCampaign").child(uid).child(datetime).setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             // 버튼 '참가완료'로 바꾸기
@@ -446,7 +450,8 @@ public class CampaignInformation extends FragmentActivity {
                                     myCampaignItem.setStartDate(sDate);
                                     myCampaignItem.setEndDate(getEndDate(sDate));
                                     myCampaignItem.setReCount(1);
-                                    myCampaignRef.child("MyCampaign").child(uid).child(datetime).child("myCampaign").setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    myCampaignItem.setComplete(false);
+                                    myCampaignRef.child("MyCampaign").child(uid).child(datetime).setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             // 버튼 '참가완료'로 바꾸기

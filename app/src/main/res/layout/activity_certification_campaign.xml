@@ -149,6 +149,18 @@
                                 android:background="@drawable/edge"
                                 android:src="@drawable/cp1"/>
 
+                            <TextView
+                                android:id="@+id/tv_rightPhotoInfo1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"/>
+
+                            <TextView
+                                android:id="@+id/tv_rightPhotoPath1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"/>
+
                         </LinearLayout>
 
                         <LinearLayout
@@ -185,6 +197,18 @@
                                 android:layout_height="100dp"
                                 android:background="@drawable/edge"
                                 android:src="@drawable/cp2"/>
+
+                            <TextView
+                                android:id="@+id/tv_rightPhotoInfo2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"/>
+
+                            <TextView
+                                android:id="@+id/tv_rightPhotoPath2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"/>
 
                         </LinearLayout>
 
@@ -223,6 +247,18 @@
                                 android:background="@drawable/edge"
                                 android:src="@drawable/cp3"/>
 
+                            <TextView
+                                android:id="@+id/tv_wrongPhotoInfo1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"/>
+
+                            <TextView
+                                android:id="@+id/tv_wrongPhotoPath1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"/>
+
                         </LinearLayout>
 
                         <LinearLayout
@@ -258,6 +294,18 @@
                                 android:layout_height="100dp"
                                 android:background="@drawable/edge"
                                 android:src="@drawable/cp4"/>
+
+                            <TextView
+                                android:id="@+id/tv_wrongPhotoInfo2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"/>
+
+                            <TextView
+                                android:id="@+id/tv_wrongPhotoPath2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone"/>
 
                         </LinearLayout>
 

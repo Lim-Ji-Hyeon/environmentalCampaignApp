@@ -3,6 +3,7 @@ package com.example.environmentalcampaign.cp_info;
 public class MyCampaignItem {
     String campaignCode, startDate, endDate;
     int reCount, certiCount;
+    boolean complete;
 
     public MyCampaignItem(){}
 
@@ -25,4 +26,8 @@ public class MyCampaignItem {
     public int getCertiCount() { return certiCount; }
 
     public void setCertiCount(int certiCount) { this.certiCount = certiCount; }
+
+    public boolean isComplete() { return complete; }
+
+    public void setComplete(boolean complete) { this.complete = complete; }
 }

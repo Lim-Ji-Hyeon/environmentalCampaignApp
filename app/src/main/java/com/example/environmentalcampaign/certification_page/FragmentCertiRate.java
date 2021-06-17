@@ -2,6 +2,7 @@ package com.example.environmentalcampaign.certification_page;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,13 @@ import android.widget.TextView;
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.feed.FeedAdapter;
 import com.example.environmentalcampaign.feed.FeedItem;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +38,13 @@ public class FragmentCertiRate extends Fragment {
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     int maxRate, rate;
+    int success, fail, rest;
     int count; // 총 인증해야 하는 개수
+    String campaignCode, uid;
+
+    FirebaseDatabase database;
+    DatabaseReference databaseReference;
+    ArrayList<FeedItem> photoUrl;
 
     public FragmentCertiRate() {
         // Required empty public constructor
@@ -55,11 +69,16 @@ public class FragmentCertiRate extends Fragment {
         if(bundle != null) {
             rate = bundle.getInt("rate");
             count = bundle.getInt("count");
+            campaignCode = bundle.getString("campaignCode");
         }
 
         maxRate = 80; // 나중에 구현해야 함.
         tv_rateInfo.setText(String.valueOf(maxRate));
         tv_currentRate.setText(rate + "%");
+
+        // uid 가져오기
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        uid = firebaseUser.getUid();
 
         // progressbar 수정
         progressBar.setProgress(rate);
@@ -70,10 +89,10 @@ public class FragmentCertiRate extends Fragment {
         LinearLayout.LayoutParams params2 = (LinearLayout.LayoutParams)lo_noRate.getLayoutParams();
         params2.weight = 100 - rate;
         lo_noRate.setLayoutParams(params2);
-
-        tv_certiSuccess.setText("4"); // 나중에 구현해야 함.
-        tv_certiFailure.setText("0"); // 나중에 구현햐야 함.
-        tv_certiLeft.setText(String.valueOf(count - Integer.parseInt(tv_certiSuccess.getText().toString())));
+        if(lo_currentRate.getWidth() < 60) {
+            params.width = 60;
+            lo_currentRate.setLayoutParams(params);
+        }
 
         // recyclerView 삽입
         certiRecyclerView = (RecyclerView)rootView.findViewById(R.id.certiRecyclerView);
@@ -89,24 +108,69 @@ public class FragmentCertiRate extends Fragment {
         };
         certiRecyclerView.setLayoutManager(layoutManager);
 
-//        // 리스트 초기화
-//        List<FeedItem> photos = new ArrayList<>();
-//        for(int i = 0; i < count; i++) {
-//            photos.add(new FeedItem(R.drawable.no_image));
-//        }
-//
-//        certiRecyclerView.setAdapter(new FeedAdapter(photos));
-
-        ArrayList<FeedItem> photos = new ArrayList<>();
-        // no_image 붙이기
-        FeedItem photo = new FeedItem();
-        photo.setImage("https://firebasestorage.googleapis.com/v0/b/environmental-campaign.appspot.com/o/no_image.jpg?alt=media&token=f0929e4a-f161-4732-9473-fc008f436b0a");
-        for(int i = 0; i < count; i++) {
-            photos.add(photo);
-        }
-        adapter = new FeedAdapter(photos, getContext());
-        certiRecyclerView.setAdapter(adapter);
+        success = certiSuccess();
+        tv_certiFailure.setText("0"); // 나중에 구현햐야 함.
 
         return rootView;
+    }
+
+    int certiSuccess() {
+        ArrayList<Certi_Info> arrayList = new ArrayList<>();
+        photoUrl = new ArrayList<>();
+        database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference("environmentalCampaign").child("Certification").child(uid);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                photoUrl.clear();
+                if(dataSnapshot.hasChild(campaignCode)) {
+                    for(DataSnapshot snapshot : dataSnapshot.child(campaignCode).getChildren()) {
+                        Certi_Info certi_info = snapshot.getValue(Certi_Info.class);
+                        arrayList.add(certi_info);
+//                        database.getReference("environmentalCampaign").child("Feed").child(certi_info.getCerti_date()).addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                FeedItem feedItem = snapshot.getValue(FeedItem.class);
+//                                photoUrl.add(feedItem);
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError error) {
+//
+//                            }
+//                        });
+                        FeedItem feedItem = new FeedItem();
+                        feedItem.setDate(certi_info.getCerti_date());
+                        feedItem.setContents(certi_info.getContents());
+                        feedItem.setPublisher(certi_info.getPublisher());
+                        feedItem.setImage(certi_info.getPhotoUrl());
+                        photoUrl.add(feedItem);
+                    }
+                    tv_certiSuccess.setText(String.valueOf(arrayList.size()));
+                    rest = count - Integer.parseInt(tv_certiSuccess.getText().toString());
+                    tv_certiLeft.setText(String.valueOf(rest));
+
+//                    // no_image 붙이기
+//                    FeedItem photo = new FeedItem();
+//                    photo.setImage("https://firebasestorage.googleapis.com/v0/b/environmental-campaign.appspot.com/o/no_image.jpg?alt=media&token=f0929e4a-f161-4732-9473-fc008f436b0a");
+//                    for(int i = 0; i < count-arrayList.size(); i++) {
+//                        photoUrl.add(photo);
+//                    }
+
+                } else {
+                    tv_certiSuccess.setText("0");
+                    rest = count - Integer.parseInt(tv_certiSuccess.getText().toString());
+                    tv_certiLeft.setText(String.valueOf(rest));
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        adapter = new FeedAdapter(photoUrl, getContext());
+        certiRecyclerView.setAdapter(adapter);
+
+        return Integer.parseInt(tv_certiSuccess.getText().toString());
     }
 }

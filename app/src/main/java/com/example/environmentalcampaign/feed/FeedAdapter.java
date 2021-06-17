@@ -16,17 +16,68 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.environmentalcampaign.certification_page.Certi_Info;
 import com.example.environmentalcampaign.cp_info.CampaignInformation;
 import com.example.environmentalcampaign.R;
+import com.example.environmentalcampaign.cp_info.ParticipantItem;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder>{
 
     private ArrayList<FeedItem> feeditems;
     private Context context;
+
+//    // FragmentCertiPhotos에서 사용할 adapter
+//    public FeedAdapter(String campaignCode, ArrayList<ParticipantItem> participantItems, Context context) {
+//        this.feeditems = new ArrayList<>();
+//        this.context = context;
+//
+//        ArrayList<String> certiDates = new ArrayList<>();
+//
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference databaseReference = database.getReference("envirnoemtalCampaign").child("Certification");
+//        certiDates.clear();
+//        for(int i = 0; i < participantItems.size(); i++) {
+//            databaseReference.child(participantItems.get(i).getUid()).child(campaignCode).addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                    for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                        Certi_Info certi_info = snapshot.getValue(Certi_Info.class);
+//                        certiDates.add(certi_info.getCerti_date());
+//                    }
+//                }
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//
+//                }
+//            });
+//        }
+//
+//        Collections.sort(certiDates, Collections.reverseOrder());
+//        feeditems.clear();
+//        for(int i = 0; i < certiDates.size(); i++) {
+//            database.getReference("envirnoemtalCampaign").child("Feed").child(certiDates.get(i)).addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    FeedItem feedItem = snapshot.getValue(FeedItem.class);
+//                    feeditems.add(feedItem);
+//                }
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//
+//                }
+//            });
+//        }
+//    }
 
     public FeedAdapter(ArrayList<FeedItem> feeditems, Context context) {
         this.feeditems = feeditems;
@@ -51,6 +102,21 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         holder.feed_date.setText(feeditems.get(position).getDate()); //텍스트 연결
         holder.feedPublisher.setText(feeditems.get(position).getPublisher());
         //holder.setFeedImageView(feeditems.get(position));
+
+        FirebaseDatabase.getInstance().getReference("environmentalCampaign").child("Feed").child(feeditems.get(position).getDate()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                FeedItem feedItem = snapshot.getValue(FeedItem.class);
+                if(feeditems.get(position).getHeartN() != feedItem.getHeartN()) {
+                    feeditems.set(position, feedItem);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override

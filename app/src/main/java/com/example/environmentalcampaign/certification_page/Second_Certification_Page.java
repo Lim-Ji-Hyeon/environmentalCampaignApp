@@ -77,6 +77,8 @@ public class Second_Certification_Page extends AppCompatActivity {
     String contents, certiImg, publisher, certi_date;
     FirebaseStorage storage;
 
+    String campaignCode;
+
     ImageView img1;
     Button btn1;
     EditText editText;
@@ -90,6 +92,9 @@ public class Second_Certification_Page extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second__certification__page);
+
+        Intent gIntent = getIntent();
+        campaignCode = gIntent.getStringExtra("campaignCode");
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("environmentalCampaign");
@@ -174,8 +179,9 @@ public class Second_Certification_Page extends AppCompatActivity {
                 feedItem.setContents(contents);
                 feedItem.setHeartN(heartN);
 
-                mDatabaseRef.child("Certification").child(publisher).child(getTime).setValue(certi_info);
+                mDatabaseRef.child("Certification").child(publisher).child(campaignCode).child(getTime).setValue(certi_info);
                 mDatabaseRef.child("Feed").child(getTime).setValue(feedItem);
+                mDatabaseRef.child("Campaign").child(campaignCode).child("certifications").child(getTime).setValue(feedItem);
 
                 Toast.makeText(Second_Certification_Page.this, "인증이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), CertificationPage.class);
