@@ -15,6 +15,7 @@ import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.cp_info.ParticipantItem;
 import com.example.environmentalcampaign.feed.FeedAdapter;
 import com.example.environmentalcampaign.feed.FeedItem;
+import com.example.environmentalcampaign.home.RecyclerViewItem;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -51,12 +52,22 @@ public class FragmentCertiPhotos extends Fragment {
         }
 
         RecyclerView certiRecyclerView2 = (RecyclerView)rootView.findViewById(R.id.certiRecyclerView2);
-        certiRecyclerView2.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        certiRecyclerView2.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL){
+            @Override
+            public boolean checkLayoutParams(RecyclerView.LayoutParams lp) {
+                // 이미지 크기 변경
+                lp.width = (getWidth() / getSpanCount())-20;
+                lp.height = lp.width;
+                return true;
+            }
+        };
+        certiRecyclerView2.setLayoutManager(layoutManager);
 
         feedItems = new ArrayList<>();
 
         database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference("envirnoemtalCampaign").child("Campaign").child(campaignCode).child("certifications");
+        databaseReference = database.getReference("environmentalCampaign").child("Campaign").child(campaignCode).child("certifications");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
