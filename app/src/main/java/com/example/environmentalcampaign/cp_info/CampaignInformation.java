@@ -1,6 +1,7 @@
 package com.example.environmentalcampaign.cp_info;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -19,16 +20,20 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.environmentalcampaign.R;
+import com.example.environmentalcampaign.feed.FeedItem;
 import com.example.environmentalcampaign.home.RecyclerViewItem;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayInputStream;
@@ -47,9 +52,8 @@ public class CampaignInformation extends FragmentActivity {
     ImageButton bt_back;
 
     Intent gIntent;
-    ImageView iv_logo;
+    ImageView iv_logo, bookmark;
     TextView tv_cp_name, tv_frequency, tv_period, tv_participantsN, tv_reCampaignN;
-
     TextView tv_participation;
 
     private FirebaseDatabase database;
@@ -59,6 +63,12 @@ public class CampaignInformation extends FragmentActivity {
 
     public CampaignItem campaignItem;
     String datetime, uid;
+
+    // 북마크를 위한 변수
+    public Boolean bookmarkButtonPush;
+    int bookmarkN;
+    String logo, title;
+    double reCampaignN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +210,33 @@ public class CampaignInformation extends FragmentActivity {
                 }
             }
         });
+
+        // 북마크 표시하기
+        bookmark = findViewById(R.id.iv_bookmark);
+
+        bookmark.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                if (bookmarkButtonPush == true){
+                    bookmark.setImageResource(R.drawable.bookmark);
+                    onBookmarkClicked(databaseReference.child("campaign"));
+
+                    FirebaseDatabase.getInstance().getReference("environmentalCampaign").child("BookMark").child(uid).child(datetime).removeValue();
+
+                }else{
+                    bookmark.setImageResource(R.drawable.bookmark_check);
+                    onBookmarkClicked(databaseReference.child("campaign"));
+
+                    RecyclerViewItem brecyclerviewItem = new RecyclerViewItem();
+                    brecyclerviewItem.setTitle(title);
+                    brecyclerviewItem.setImage(logo);
+                    brecyclerviewItem.setReCampaignN(reCampaignN);
+                    brecyclerviewItem.setCampaignCode(datetime);
+
+                    FirebaseDatabase.getInstance().getReference("environmentalCampaign").child("BookMark").child(uid).child(datetime).setValue(brecyclerviewItem);
+                }
+            }
+        });
     }
 
     // signal이 recyclerView인지 확인
@@ -234,6 +271,22 @@ public class CampaignInformation extends FragmentActivity {
                 tv_reCampaignN.setText(campaignItem.getReCampaignN() + "회");
 
                 fragmentSetup();
+
+                //북마크에 필요한 변수
+                bookmarkN = campaignItem.getBookmarkN();
+                logo = campaignItem.getLogo();
+                title = campaignItem.getTitle();
+                reCampaignN = campaignItem.getReCampaignN();
+
+
+                // 북마크를 불러온다
+                bookmarkButtonPush = campaignItem.bookmarkTotalN.containsKey(uid);
+                if(bookmarkButtonPush == true){
+                    bookmark.setImageResource(R.drawable.bookmark_check);
+                }else {
+                    bookmark.setImageResource(R.drawable.bookmark);
+                }
+
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -241,6 +294,7 @@ public class CampaignInformation extends FragmentActivity {
                 Log.e("CampaignInformation", String.valueOf(error.toException())); //에러문 출력
             }
         });
+
     }
 
     // fragment에 setup 정보 입력하기
@@ -558,6 +612,42 @@ public class CampaignInformation extends FragmentActivity {
             public void onCancelled(@NonNull DatabaseError error) {
                 // DB를 가져오던 중 에러 발생 시
                 Log.e("participantsAdd", String.valueOf(error.toException())); //에러문 출력
+            }
+        });
+    }
+
+    // 북마크를 눌렀을 때의 메소드
+    private void onBookmarkClicked(DatabaseReference postRef) {
+        postRef.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                CampaignItem campaignItem = mutableData.getValue(CampaignItem.class);
+                if (campaignItem == null) {
+                    return Transaction.success(mutableData);
+                }
+
+                if (bookmarkButtonPush) {
+                    // Unstar the post and remove self from stars
+                    bookmarkN = campaignItem.getBookmarkN();
+                    campaignItem.setBookmarkN(bookmarkN - 1);
+                    campaignItem.bookmarkTotalN.remove(uid);
+
+                } else {
+                    // Star the post and add self to stars
+                    bookmarkN = campaignItem.getBookmarkN();
+                    campaignItem.setBookmarkN(bookmarkN + 1);
+                    campaignItem.bookmarkTotalN.put(uid, true);
+                }
+
+                // Set value and report transaction success
+                mutableData.setValue(campaignItem);
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean committed,
+                                   DataSnapshot currentData) {
+                // Transaction completed
             }
         });
     }

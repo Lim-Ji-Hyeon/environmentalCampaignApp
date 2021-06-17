@@ -177,7 +177,6 @@ public class Second_Certification_Page extends AppCompatActivity {
                 mDatabaseRef.child("Certification").child(publisher).child(getTime).setValue(certi_info);
                 mDatabaseRef.child("Feed").child(getTime).setValue(feedItem);
 
-
                 Toast.makeText(Second_Certification_Page.this, "인증이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), CertificationPage.class);
                 startActivity(intent);

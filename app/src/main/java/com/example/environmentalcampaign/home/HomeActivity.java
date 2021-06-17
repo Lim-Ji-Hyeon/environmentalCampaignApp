@@ -3,6 +3,9 @@ package com.example.environmentalcampaign.home;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,20 +15,29 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
+import com.example.environmentalcampaign.certification_page.Certi_Info;
 import com.example.environmentalcampaign.certification_page.CertificationPage;
 import com.example.environmentalcampaign.cp_info.CampaignItem;
+import com.example.environmentalcampaign.feed.FeedAdapter;
+import com.example.environmentalcampaign.feed.FeedImageDetailPage;
+import com.example.environmentalcampaign.feed.FeedItem;
 import com.example.environmentalcampaign.mypage.MyPage;
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.search_page.SearchPage;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
 import com.example.environmentalcampaign.bookmark.BookMark;
 import com.example.environmentalcampaign.feed.FeedPage;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,8 +52,8 @@ import java.util.List;
 public class HomeActivity extends AppCompatActivity {
 
     TextView tv_search;
-    ImageView bookmark;
-    TextView tv_make, tv_certi, tv_feed, tv_mypage;
+    ImageView bookmark, realtime_image;
+    TextView tv_make, tv_certi, tv_feed, tv_mypage, realtime_text, realtime_publisher, realtime_date;
 
     ViewPager2 viewPager2;
     LinearLayout layoutIndicator;
@@ -50,8 +62,9 @@ public class HomeActivity extends AppCompatActivity {
     private  RecyclerView.LayoutManager fLayoutManager, nLayoutManager;
     private RecyclerView fRecyclerView, nRecyclerView;
     public ArrayList<RecyclerViewItem> arrayList, fArrayList, nArrayList;
+    public ArrayList<FeedItem> realtimeArrayList;
     private FirebaseDatabase database;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference, realtimeReference;
 
 //    ArrayList<String> campaignCodes;
 //    ArrayList<CampaignItem> campaignItems;
@@ -162,24 +175,60 @@ public class HomeActivity extends AppCompatActivity {
         nAdapter = new RecyclerViewAdapter(nArrayList, this);
         nRecyclerView.setAdapter(nAdapter);
 
+        // 실시간 인증글 가져오기
+        realtime_image = findViewById(R.id.realtime_image);
+        realtime_text = findViewById(R.id.realtime_text);
+        realtime_date = findViewById(R.id.realtime_date);
+        realtime_publisher = findViewById(R.id.realtime_publisher);
+        realtimeArrayList = new ArrayList<>();
 
+        realtimeReference = database.getReference("environmentalCampaign").child("Feed");
 
-        Intent intent = getIntent();
+        realtimeReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                realtimeArrayList.clear();
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    FeedItem feedItem = snapshot.getValue(FeedItem.class);
+                    realtimeArrayList.add(feedItem);
+                }
 
-        // Second_Certification_Page에서 보내온 신호를 가지고 있으면 수행한다.
-        if (intent.hasExtra("sendData") && intent.hasExtra("image_path")){
-            // 호출할 인텐트가 보내온 이미지와 메시지 얻어오기
+                // 내림차순 정렬
+                Collections.sort(realtimeArrayList, new Comparator<FeedItem>() {
+                    @Override
+                    public int compare(FeedItem feedItem, FeedItem t1) {
+                        return t1.getDate().compareTo(feedItem.getDate());
+                    }
+                });
 
-            //byte[] arr = intent.getByteArrayExtra("image");
-            Bitmap bitmap = BitmapFactory.decodeFile(intent.getStringExtra("image_path"));
-            String msg = (String)intent.getExtras().get("sendData");
+                // 신규 피드 가져오기
+                for(int i=0; i < 1; i++) {
+                    FeedItem feedItem = realtimeArrayList.get(i);
+                    realtime_publisher.setText(feedItem.getPublisher().toString());
+                    realtime_date.setText(feedItem.getDate().toString());
+                    realtime_text.setText(feedItem.getContents().toString());
+                    Glide.with(HomeActivity.this).load(feedItem.getImage()).into(realtime_image);
+                }
+            }
 
-            // 전달 되어온 정보를 뷰에 넣기
-            ImageView BigImage = (ImageView)findViewById(R.id.realtime_image);
-            BigImage.setImageBitmap(bitmap);
-            TextView txt = (TextView)findViewById(R.id.realtime_text);
-            txt.setText(msg);
-        }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("Failed to read value.", error.toException());
+            }
+        });
+
+        // 이미지를 누르면 디테일 페이지로 넘어간다.
+        realtime_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(HomeActivity.this, FeedImageDetailPage.class);
+                intent.putExtra("FeedDate", realtime_date.getText().toString());
+                intent.putExtra("FeedPublisher", realtime_publisher.getText().toString());
+                startActivity(intent);
+            }
+        });
+
 
         // 검색 페이지 연동
         tv_search = (TextView) findViewById(R.id.tv_search);

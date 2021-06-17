@@ -114,6 +114,7 @@ public class FeedImageDetailPage extends AppCompatActivity {
                 iv_feed.setVisibility(View.VISIBLE);
                 // 인증 내용 불러오기
                 tv_contents.setText(feedItem.getContents());
+
                 // 좋아요 개수 불러오기
                 feed_heart_text.setText("좋아요 "+feedItem.getHeartN()+"개");
                 heartN = feedItem.getHeartN();

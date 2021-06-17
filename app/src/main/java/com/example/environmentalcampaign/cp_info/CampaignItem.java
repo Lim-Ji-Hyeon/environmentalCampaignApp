@@ -1,6 +1,10 @@
 package com.example.environmentalcampaign.cp_info;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CampaignItem implements Comparable<CampaignItem>{
     // CampaignInformation
@@ -21,6 +25,11 @@ public class CampaignItem implements Comparable<CampaignItem>{
 
     // 생성날짜로 캠페인 구분 + 신규 캠페인 확인에 사용
     String datetime; // YYYYmmDDHHMMSSsss 식으로 생성
+
+    private int bookmarkN; // 북마크로 지정된 개수
+    public Map<String, Boolean> bookmarkTotalN = new HashMap<>(); //북마크를 위해서 만듦
+    private String uid; //사용자 아이디
+
 
     public CampaignItem(){}
 
@@ -120,6 +129,12 @@ public class CampaignItem implements Comparable<CampaignItem>{
 
     public void setDatetime(String datetime) { this.datetime = datetime; }
 
+    public int getBookmarkN() { return bookmarkN; }
+
+    public void setBookmarkN(int bookmarkN) { this.bookmarkN = bookmarkN; }
+
+
+
     @Override
     public int compareTo(CampaignItem campaignItem) {
         // reCampaignN을 기준으로 내림차순 정렬
@@ -134,5 +149,15 @@ public class CampaignItem implements Comparable<CampaignItem>{
         // 문자열 정렬
         // return this.name.compareTo(people.name); 내림차순
         // return people.name.compareTo(this.name); 오름차순
+    }
+
+    // 북마크에 필요한 메소드
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("uid", uid);
+        result.put("bookmarkN", bookmarkN);
+        result.put("bookmarkTotalN", bookmarkTotalN);
+        return result;
     }
 }

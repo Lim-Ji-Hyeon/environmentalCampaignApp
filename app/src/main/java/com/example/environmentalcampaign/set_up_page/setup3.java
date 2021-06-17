@@ -67,6 +67,8 @@ public class setup3 extends AppCompatActivity {
     String imagePath3;
     String imagePath4;
 
+    private int bookmarkN=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -240,6 +242,7 @@ public class setup3 extends AppCompatActivity {
         temporaryRef.child("rightPhotoInfo2").setValue(rInfo2);
         temporaryRef.child("wrongPhotoInfo1").setValue(wInfo1);
         temporaryRef.child("wrongPhotoInfo2").setValue(wInfo2);
+        temporaryRef.child("bookmarkN").setValue(bookmarkN);
 
         temporaryRef.addValueEventListener(new ValueEventListener() {
             @Override

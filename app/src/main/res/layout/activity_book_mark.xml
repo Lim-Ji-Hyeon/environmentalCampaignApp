@@ -59,7 +59,7 @@
         android:background="@drawable/edge">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/datalist"
+            android:id="@+id/stored_campaign"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </ScrollView>
