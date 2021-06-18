@@ -2,6 +2,7 @@ package com.example.environmentalcampaign.certification_page;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
@@ -16,6 +17,8 @@ import android.graphics.ImageDecoder;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.OvalShape;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
@@ -31,8 +34,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.bookmark.BookMark;
+import com.example.environmentalcampaign.feed.FeedCommentActivity;
+import com.example.environmentalcampaign.feed.FeedCommentItem;
 import com.example.environmentalcampaign.feed.FeedItem;
 import com.example.environmentalcampaign.feed.FeedPage;
 import com.example.environmentalcampaign.home.HomeActivity;
@@ -43,8 +49,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -77,8 +86,9 @@ public class Second_Certification_Page extends AppCompatActivity {
     private DatabaseReference mDatabaseRef;//실시간 데이터베이스
     String contents, certiImg, publisher, certi_date;
     FirebaseStorage storage;
+    private FirebaseUser firebaseUser;
 
-    String campaignCode, title;
+    String campaignCode, title, uid, userImg, nickname;
     TextView tv_title;
 
     ImageView img1;
@@ -104,8 +114,9 @@ public class Second_Certification_Page extends AppCompatActivity {
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("environmentalCampaign");
-        FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
+        firebaseUser = mFirebaseAuth.getCurrentUser();
         storage = FirebaseStorage.getInstance();
+        uid = firebaseUser.getUid();
 
         img1 = (ImageView)findViewById(R.id.certi_image);
         btn1 = (Button)findViewById(R.id.certi_button);
@@ -149,6 +160,24 @@ public class Second_Certification_Page extends AppCompatActivity {
             }
         });
 
+        // 현재 사용자의 사진과 닉네임을 가져온다.
+        mDatabaseRef.child("UserAccount").child(uid).addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // 파이어베이스 데이터베이스의 데이터를 받아오는 곳
+                UserAccount userAccount = snapshot.getValue(UserAccount.class);
+                userImg = userAccount.getProfileImg();
+                nickname = userAccount.getNickName();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // DB를 가져오던 중 에러 발생 시
+                Log.e("SecondCertificationPage", String.valueOf(error.toException())); //에러문 출력
+            }
+        });
+
 
 
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -185,9 +214,19 @@ public class Second_Certification_Page extends AppCompatActivity {
                 feedItem.setContents(contents);
                 feedItem.setHeartN(heartN);
 
+                FeedCommentItem feedCommentItem = new FeedCommentItem();
+                feedCommentItem.setUid(publisher);
+                feedCommentItem.setUserImage(userImg);
+                feedCommentItem.setNickname(nickname);
+                feedCommentItem.setPublisher(publisher);
+                feedCommentItem.setFeedDate(getTime);
+                feedCommentItem.setComment(contents);
+                feedCommentItem.setDate(getTime);
+
                 mDatabaseRef.child("Certification").child(publisher).child(campaignCode).child(getTime).setValue(certi_info);
                 mDatabaseRef.child("Feed").child(getTime).setValue(feedItem);
                 mDatabaseRef.child("Campaign").child(campaignCode).child("certifications").child(getTime).setValue(feedItem);
+                mDatabaseRef.child("FeedComment").child(getTime).child(getTime).setValue(feedCommentItem);
 
                 Toast.makeText(Second_Certification_Page.this, "인증이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), CertificationPage.class);

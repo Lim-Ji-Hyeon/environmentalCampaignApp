@@ -105,10 +105,5 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             });
         }
 
-//        void setFeedImageView(FeedItem feedItem) {
-//
-//            //
-//            feedImageView.setImageResource(feedItem.getImage());
-//        }
     }
 }
