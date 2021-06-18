@@ -2,7 +2,7 @@ package com.example.environmentalcampaign.cp_info;
 
 public class ReviewItem {
     private String uid, content;
-    private int datetime;
+    private String datetime;
     private double rating;
 
     public ReviewItem(){}
@@ -21,11 +21,11 @@ public class ReviewItem {
         this.content = content;
     }
 
-    public int getDatetime() {
+    public String getDatetime() {
         return datetime;
     }
 
-    public void setDatetime(int datetime) {
+    public void setDatetime(String datetime) {
         this.datetime = datetime;
     }
 

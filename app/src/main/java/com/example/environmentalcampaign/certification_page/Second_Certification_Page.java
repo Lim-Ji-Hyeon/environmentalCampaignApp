@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.environmentalcampaign.R;
@@ -77,7 +78,8 @@ public class Second_Certification_Page extends AppCompatActivity {
     String contents, certiImg, publisher, certi_date;
     FirebaseStorage storage;
 
-    String campaignCode;
+    String campaignCode, title;
+    TextView tv_title;
 
     ImageView img1;
     Button btn1;
@@ -95,6 +97,10 @@ public class Second_Certification_Page extends AppCompatActivity {
 
         Intent gIntent = getIntent();
         campaignCode = gIntent.getStringExtra("campaignCode");
+        title = gIntent.getStringExtra("title");
+
+        tv_title = (TextView)findViewById(R.id.tv_title);
+        tv_title.setText(title);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("environmentalCampaign");

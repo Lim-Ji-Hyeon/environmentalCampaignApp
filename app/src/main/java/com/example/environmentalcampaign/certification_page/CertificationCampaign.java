@@ -49,10 +49,7 @@ public class CertificationCampaign extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
 
-//    String name, time, Dday, period, frequency;
-//    byte[] arr;
-//    int rate;
-    String campaignCode, Dday;
+    String campaignCode, Dday, title;
     int certiRate, certiCount;
 
     @Override
@@ -62,6 +59,7 @@ public class CertificationCampaign extends AppCompatActivity {
 
         Intent gIntent = getIntent();
         campaignCode = gIntent.getStringExtra("campaignCode");
+        title = gIntent.getStringExtra("title");
         Dday = gIntent.getStringExtra("Dday");
         certiRate = gIntent.getIntExtra("certiRate", 0);
         certiCount = gIntent.getIntExtra("certiCount", 0);
@@ -141,32 +139,24 @@ public class CertificationCampaign extends AppCompatActivity {
                 switch (view.getId()) {
                     case R.id.iv_rightPhoto1:
                         Intent intent1 = new Intent(CertificationCampaign.this, PopupActivity.class);
-//                        byte[] byteArray1 = bitmapToByteArray(iv_rightPhoto1);
-//                        intent1.putExtra("image", byteArray1);
                         intent1.putExtra("image", tv_rightPhotoPath1.getText());
                         intent1.putExtra("info", tv_rightPhotoInfo1.getText());
                         startActivityForResult(intent1, 1);
                         break;
                     case R.id.iv_rightPhoto2:
                         Intent intent2 = new Intent(CertificationCampaign.this, PopupActivity.class);
-//                        byte[] byteArray2 = bitmapToByteArray(iv_rightPhoto2);
-//                        intent2.putExtra("image", byteArray2);
                         intent2.putExtra("image", tv_rightPhotoPath2.getText());
                         intent2.putExtra("info", tv_rightPhotoInfo2.getText());
                         startActivityForResult(intent2, 1);
                         break;
                     case R.id.iv_wrongPhoto1:
                         Intent intent3 = new Intent(CertificationCampaign.this, PopupActivity.class);
-//                        byte[] byteArray3 = bitmapToByteArray(iv_wrongPhoto1);
-//                        intent3.putExtra("image", byteArray3);
                         intent3.putExtra("image", tv_wrongPhotoPath1.getText());
                         intent3.putExtra("info", tv_wrongPhotoInfo1.getText());
                         startActivityForResult(intent3, 1);
                         break;
                     case R.id.iv_wrongPhoto2:
                         Intent intent4 = new Intent(CertificationCampaign.this, PopupActivity.class);
-//                        byte[] byteArray4 = bitmapToByteArray(iv_wrongPhoto2);
-//                        intent4.putExtra("image", byteArray4);
                         intent4.putExtra("image", tv_wrongPhotoPath2.getText());
                         intent4.putExtra("info", tv_wrongPhotoInfo2.getText());
                         startActivityForResult(intent4, 1);
@@ -213,22 +203,6 @@ public class CertificationCampaign extends AppCompatActivity {
             }
         });
 
-//        // 리스트뷰의 캠페인 내용 불러오기
-//        Intent gIntent = getIntent();
-//        name = gIntent.getStringExtra("name");
-//        Dday = gIntent.getStringExtra("Dday");
-//        period = gIntent.getStringExtra("period");
-//        frequency = gIntent.getStringExtra("frequency");
-//        arr = gIntent.getByteArrayExtra("logo");
-//        Bitmap logo = BitmapFactory.decodeByteArray(arr, 0, arr.length);
-//        rate = gIntent.getIntExtra("rate", 0);
-//
-//        // 붙이기
-//        tv_cp_name.setText(name);
-//        tv_certiLeftDate.setText(Dday);
-//        tv_certiFrequency.setText(period + ", " + frequency);
-//        iv_logo.setImageBitmap(logo);
-
         fragmentInitialization();
 
         // 뒤로가기 버튼 이벤트
@@ -248,23 +222,15 @@ public class CertificationCampaign extends AppCompatActivity {
                 // second certification page로 넘어간다
                 Intent intent = new Intent(getApplicationContext(), Second_Certification_Page.class);
                 intent.putExtra("campaignCode", campaignCode);
+                intent.putExtra("title", title);
                 startActivity(intent);
             }
         });
     }
 
-//    // 총 인증해야 하는 갯수 구하는 메소드
-//    public int photoN(String period, String frequency) {
-//        int periodN = Integer.parseInt(period.substring(0, period.length()-1));
-//        int frequencyN = Integer.parseInt(frequency.substring(2, frequency.length()-1));
-//        return periodN * frequencyN;
-//    }
-
     // fragment에 정보 입력
     void fragmentInitialization() {
         if(tabLayout.getSelectedTabPosition() == 0) {
-//            int count = photoN(period, frequency);
-
             Bundle bundle1 = new Bundle();
             bundle1.putInt("rate", certiRate);
             bundle1.putInt("count", certiCount);

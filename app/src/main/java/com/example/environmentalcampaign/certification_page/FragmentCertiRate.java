@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,8 +90,9 @@ public class FragmentCertiRate extends Fragment {
         LinearLayout.LayoutParams params2 = (LinearLayout.LayoutParams)lo_noRate.getLayoutParams();
         params2.weight = 100 - rate;
         lo_noRate.setLayoutParams(params2);
-        if(lo_currentRate.getWidth() < 60) {
-            params.width = 60;
+        if(lo_currentRate.getWidth() < 100) {
+            lo_currentRate.setGravity(Gravity.LEFT);
+            params.width = 100;
             lo_currentRate.setLayoutParams(params);
         }
 

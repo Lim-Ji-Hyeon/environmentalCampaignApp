@@ -163,7 +163,7 @@ public class CampaignInformation extends FragmentActivity {
                 // 참가중이라면 "참가완료"로 바꾸기
                 if((snapshot.hasChild("MyCampaign"))&&(snapshot.child("MyCampaign").hasChild(uid))&&(snapshot.child("MyCampaign").child(uid).hasChild(datetime))) {
                     int today = Integer.parseInt(getTimeMilli().substring(0, 8));
-                    database.getReference("environmentalCampaign").child("MyCampaign").child(uid).child(datetime).child("myCampaign").addValueEventListener(new ValueEventListener() {
+                    database.getReference("environmentalCampaign").child("MyCampaign").child(uid).child(datetime).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             MyCampaignItem myCampaignItem = snapshot.getValue(MyCampaignItem.class);
@@ -408,6 +408,8 @@ public class CampaignInformation extends FragmentActivity {
                                     myCampaignItem.setEndDate(getEndDate(sDate));
                                     int reCount = myCampaignItem.getReCount();
                                     myCampaignItem.setReCount(reCount + 1);
+                                    myCampaignItem.setComplete(false);
+                                    myCampaignItem.setReviewComplete(false);
 
                                     // 다시 올리기
                                     myCampaignRef.child("MyCampaign").child(uid).child(datetime).setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -445,12 +447,14 @@ public class CampaignInformation extends FragmentActivity {
 
                                     // MyCampaignItem 객체 생성해서 데이터베이스에 삽입
                                     MyCampaignItem myCampaignItem = new MyCampaignItem();
+                                    myCampaignItem.setTitle(title);
                                     myCampaignItem.setCampaignCode(datetime);
                                     myCampaignItem.setCertiCount(getCertiCount());
                                     myCampaignItem.setStartDate(sDate);
                                     myCampaignItem.setEndDate(getEndDate(sDate));
                                     myCampaignItem.setReCount(1);
                                     myCampaignItem.setComplete(false);
+                                    myCampaignItem.setReviewComplete(false);
                                     myCampaignRef.child("MyCampaign").child(uid).child(datetime).setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {

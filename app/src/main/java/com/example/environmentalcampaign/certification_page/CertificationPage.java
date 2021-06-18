@@ -1,9 +1,11 @@
 package com.example.environmentalcampaign.certification_page;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import com.example.environmentalcampaign.CpData;
 import com.example.environmentalcampaign.MyAdapter;
 import com.example.environmentalcampaign.R;
+import com.example.environmentalcampaign.ReviewPage;
 import com.example.environmentalcampaign.cp_info.MyCampaignItem;
 import com.example.environmentalcampaign.feed.FeedPage;
 import com.example.environmentalcampaign.home.HomeActivity;
@@ -105,6 +108,9 @@ public class CertificationPage extends AppCompatActivity {
                         // 오늘 인증 했으면 arrayList2에 저장
                         if(myCampaignItem.isComplete()) { arrayList2.add(myCampaignItem); }
                         else { arrayList1.add(myCampaignItem); }
+                    } else {
+                        // 캠페인이 종료되고 리뷰를 작성하지 않았으면
+                        if(!myCampaignItem.isReviewComplete()) { reviewDialog(myCampaignItem.getCampaignCode(), myCampaignItem.getTitle()); }
                     }
                 }
                 adapter1.notifyDataSetChanged();
@@ -133,6 +139,8 @@ public class CertificationPage extends AppCompatActivity {
                 TextView tv_rate = view.findViewById(R.id.tv_achievement_rate);
                 String s = tv_rate.getText().toString();
                 int rate = Integer.parseInt(s.substring(7, s.length()-1));
+                TextView tv_cp_name = view.findViewById(R.id.tv_cp_name);
+                String title = tv_cp_name.getText().toString();
 
 //                BitmapDrawable drawable = (BitmapDrawable)item.getLogo();
 //                Bitmap bitmap = drawable.getBitmap();
@@ -141,6 +149,7 @@ public class CertificationPage extends AppCompatActivity {
 //                byte[] byteArray = stream.toByteArray();
 
                 intent.putExtra("campaignCode", item.getCampaignCode());
+                intent.putExtra("title", title);
                 intent.putExtra("Dday", countdday(Integer.parseInt(item.getEndDate())) + "일 뒤 종료");
                 intent.putExtra("certiCount", item.getCertiCount());
                 intent.putExtra("certiRate", rate);
@@ -232,4 +241,26 @@ public class CertificationPage extends AppCompatActivity {
         }
     }
 
+    void reviewDialog(String campaignCode, String title) {
+
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(CertificationPage.this)
+                .setTitle("리뷰 작성하기")
+                .setMessage(title + "의 기간이 종료되었습니다.\n캠페인 참여는 어떠셨나요?\n참여한 캠페인에 대한 리뷰를 남겨주세요!")
+                .setPositiveButton("작성", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(getApplicationContext(), ReviewPage.class);
+                        intent.putExtra("campaignCode", campaignCode);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        database.getReference("environmentalCampaign").child("MyCampaign").child(uid).child(campaignCode).child("reviewComplete").setValue(true);
+                    }
+                });
+        AlertDialog alertDialog = alertBuilder.create();
+        alertDialog.show();
+    }
 }

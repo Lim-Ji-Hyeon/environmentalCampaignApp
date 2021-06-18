@@ -36,49 +36,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
     private ArrayList<FeedItem> feeditems;
     private Context context;
 
-//    // FragmentCertiPhotos에서 사용할 adapter
-//    public FeedAdapter(String campaignCode, ArrayList<ParticipantItem> participantItems, Context context) {
-//        this.feeditems = new ArrayList<>();
-//        this.context = context;
-//
-//        ArrayList<String> certiDates = new ArrayList<>();
-//
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference databaseReference = database.getReference("envirnoemtalCampaign").child("Certification");
-//        certiDates.clear();
-//        for(int i = 0; i < participantItems.size(); i++) {
-//            databaseReference.child(participantItems.get(i).getUid()).child(campaignCode).addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                    for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                        Certi_Info certi_info = snapshot.getValue(Certi_Info.class);
-//                        certiDates.add(certi_info.getCerti_date());
-//                    }
-//                }
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//
-//                }
-//            });
-//        }
-//
-//        Collections.sort(certiDates, Collections.reverseOrder());
-//        feeditems.clear();
-//        for(int i = 0; i < certiDates.size(); i++) {
-//            database.getReference("envirnoemtalCampaign").child("Feed").child(certiDates.get(i)).addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    FeedItem feedItem = snapshot.getValue(FeedItem.class);
-//                    feeditems.add(feedItem);
-//                }
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//
-//                }
-//            });
-//        }
-//    }
-
     public FeedAdapter(ArrayList<FeedItem> feeditems, Context context) {
         this.feeditems = feeditems;
         this.context = context;

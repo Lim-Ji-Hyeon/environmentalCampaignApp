@@ -1,11 +1,15 @@
 package com.example.environmentalcampaign.cp_info;
 
 public class MyCampaignItem {
-    String campaignCode, startDate, endDate;
+    String title, campaignCode, startDate, endDate;
     int reCount, certiCount;
-    boolean complete;
+    boolean complete, reviewComplete;
 
     public MyCampaignItem(){}
+
+    public String getTitle() { return title; }
+
+    public void setTitle(String title) { this.title = title; }
 
     public String getCampaignCode() { return campaignCode; }
 
@@ -30,4 +34,8 @@ public class MyCampaignItem {
     public boolean isComplete() { return complete; }
 
     public void setComplete(boolean complete) { this.complete = complete; }
+
+    public boolean isReviewComplete() { return reviewComplete; }
+
+    public void setReviewComplete(boolean reviewComplete) { this.reviewComplete = reviewComplete; }
 }

@@ -106,13 +106,15 @@ public class FragmentReview extends Fragment {
 //        rAdpter.addItem(ContextCompat.getDrawable(context, R.drawable.profile), "으쌰으쌰", 20210328, 5,
 //                "느끼는 것이 많은 캠페인입니다. 계속 re캠페인 중입니다.");
 
+        TextView tv_noReview = (TextView)rootView.findViewById(R.id.tv_noReview);
+        LinearLayout lo_review = (LinearLayout)rootView.findViewById(R.id.lo_review);
         // 리뷰가 없다면 없다는 화면을 출력하고, 있다면 리스트뷰 출력
         if(adapter.isEmpty()) {
-            TextView tv_noReview = (TextView)rootView.findViewById(R.id.tv_noReview);
-            LinearLayout lo_review = (LinearLayout)rootView.findViewById(R.id.lo_review);
             tv_noReview.setVisibility(View.VISIBLE);
             lo_review.setVisibility(View.GONE);
         } else {
+            tv_noReview.setVisibility(View.GONE);
+            lo_review.setVisibility(View.VISIBLE);
             TextView tv_reviewN = (TextView)rootView.findViewById(R.id.tv_reviewN);
             int n = adapter.getCount();
             if(n > 100) {
