@@ -233,6 +233,8 @@ public class Second_Certification_Page extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         MyCampaignItem myCampaignItem = snapshot.getValue(MyCampaignItem.class);
                         int certiCompleteCount = myCampaignItem.getCertiCompleteCount();
+                        certiCompleteCount++;
+                        myCampaignItem.setCertiCompleteCount(certiCompleteCount);
                         mDatabaseRef.child("MyCampaign").child(publisher).child(campaignCode).setValue(myCampaignItem);
                     }
 
