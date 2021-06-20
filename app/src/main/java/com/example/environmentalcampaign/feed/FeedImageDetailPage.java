@@ -38,7 +38,7 @@ public class FeedImageDetailPage extends AppCompatActivity {
 
     ImageButton bt_back;
 
-    ImageView iv_profile, iv_feed, feed_heart;
+    ImageView iv_profile, iv_feed, feed_heart, feed_comment;
 
     TextView tv_nickname, tv_date, tv_contents, feed_heart_text;
 
@@ -67,6 +67,7 @@ public class FeedImageDetailPage extends AppCompatActivity {
         tv_contents = (TextView)findViewById(R.id.tv_contents);
         feed_heart = (ImageView)findViewById(R.id.feed_heart);
         feed_heart_text = (TextView)findViewById(R.id.feed_heart_text);
+        feed_comment = (ImageView)findViewById(R.id.feed_comment);
 
         Intent intent = getIntent();
         feedDate = intent.getStringExtra("FeedDate");
@@ -145,6 +146,17 @@ public class FeedImageDetailPage extends AppCompatActivity {
                     feed_heart_text.setText("좋아요 "+heartN+"개");
                     onHeartClicked(databaseReference1);
                 }
+            }
+        });
+
+        // 댓글달기 화면으로 이동
+        feed_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent commentIntent = new Intent(FeedImageDetailPage.this, FeedCommentActivity.class);
+                commentIntent.putExtra("commentFeedDate", feedDate);
+                commentIntent.putExtra("commentFeedPublisher", feedPublisher);
+                startActivity(commentIntent);
             }
         });
 

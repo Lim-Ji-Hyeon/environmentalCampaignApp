@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -22,6 +22,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".certification_page.ReviewPage"></activity>
         <activity android:name=".home.SubLoginActivity" />
+        <activity android:name=".feed.FeedCommentActivity"></activity>
         <activity android:name=".home.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

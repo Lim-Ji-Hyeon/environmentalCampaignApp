@@ -61,7 +61,7 @@ public class CampaignInformation extends FragmentActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
 
-    public CampaignItem campaignItem;
+    public CampaignItem campaignItem, campaignItem1;
     String datetime, uid;
 
     // 북마크를 위한 변수
@@ -638,26 +638,26 @@ public class CampaignInformation extends FragmentActivity {
         postRef.runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
-                CampaignItem campaignItem = mutableData.getValue(CampaignItem.class);
-                if (campaignItem == null) {
+                campaignItem1 = mutableData.getValue(CampaignItem.class);
+                if (campaignItem1 == null) {
                     return Transaction.success(mutableData);
                 }
 
                 if (bookmarkButtonPush) {
                     // Unstar the post and remove self from stars
-                    bookmarkN = campaignItem.getBookmarkN();
-                    campaignItem.setBookmarkN(bookmarkN - 1);
-                    campaignItem.bookmarkTotalN.remove(uid);
+                    bookmarkN = campaignItem1.getBookmarkN();
+                    campaignItem1.setBookmarkN(bookmarkN - 1);
+                    campaignItem1.bookmarkTotalN.remove(uid);
 
                 } else {
                     // Star the post and add self to stars
-                    bookmarkN = campaignItem.getBookmarkN();
-                    campaignItem.setBookmarkN(bookmarkN + 1);
-                    campaignItem.bookmarkTotalN.put(uid, true);
+                    bookmarkN = campaignItem1.getBookmarkN();
+                    campaignItem1.setBookmarkN(bookmarkN + 1);
+                    campaignItem1.bookmarkTotalN.put(uid, true);
                 }
 
                 // Set value and report transaction success
-                mutableData.setValue(campaignItem);
+                mutableData.setValue(campaignItem1);
                 return Transaction.success(mutableData);
             }
 
