@@ -2,7 +2,7 @@ package com.example.environmentalcampaign.cp_info;
 
 public class MyCampaignItem {
     String title, campaignCode, startDate, endDate;
-    int reCount, certiCount;
+    int reCount, certiCount, certiCompleteCount;
     boolean complete, reviewComplete;
 
     public MyCampaignItem(){}
@@ -38,4 +38,8 @@ public class MyCampaignItem {
     public boolean isReviewComplete() { return reviewComplete; }
 
     public void setReviewComplete(boolean reviewComplete) { this.reviewComplete = reviewComplete; }
+
+    public int getCertiCompleteCount() { return certiCompleteCount; }
+
+    public void setCertiCompleteCount(int certiCompleteCount) { this.certiCompleteCount = certiCompleteCount; }
 }

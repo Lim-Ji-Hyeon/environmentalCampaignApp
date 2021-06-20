@@ -3,9 +3,8 @@ package com.example.environmentalcampaign;
 import android.graphics.drawable.Drawable;
 
 public class CpCompleteData {
-    private String name, frequency;
+    private String name, frequency, logo;
     private int rate, reCp;
-    private Drawable logo;
 
     public CpCompleteData(){}
 
@@ -25,7 +24,7 @@ public class CpCompleteData {
 
     public void setReCp(int reCp) { this.reCp = reCp; }
 
-    public Drawable getLogo() { return logo; }
+    public String getLogo() { return logo; }
 
-    public void setLogo(Drawable logo) { this.logo = logo; }
+    public void setLogo(String logo) { this.logo = logo; }
 }

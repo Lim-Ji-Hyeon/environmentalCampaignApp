@@ -99,6 +99,10 @@ public class CampaignInformation extends FragmentActivity {
 //            getSetupInfo(datetime);
         }
 
+        if(isMypage()) {
+            datetime = gIntent.getStringExtra("campaignCode");
+        }
+
         // setup의 intent면 내용 불러오기
         if(isSetup()) {
             datetime = gIntent.getStringExtra("datetime");
@@ -114,7 +118,6 @@ public class CampaignInformation extends FragmentActivity {
         }
 
         getSetupInfo(datetime);
-//        getSupportFragmentManager().beginTransaction().add(R.id.tabcontent, fragmentInfo).commit();
 
         tabLayout = findViewById(R.id.layout_tab);
 //        tabLayout.addTab(tabLayout.newTab().setText("설명"));
@@ -192,10 +195,7 @@ public class CampaignInformation extends FragmentActivity {
                 if(campaignItem.getParticipantsN() == 0) {
                     Toast.makeText(CampaignInformation.this, "현재 캠페인에 참가 중인 사람이 없습니다.", Toast.LENGTH_SHORT).show();
                 } else {
-                    String s = tv_participantsN.getText().toString();
-                    int n = Integer.parseInt(s.substring(0, s.length()-1));
                     Intent intent = new Intent(getApplicationContext(), ParticipantList.class);
-                    intent.putExtra("participantsN", n);
                     intent.putExtra("datetime", datetime);
                     startActivity(intent);
                 }
@@ -246,6 +246,11 @@ public class CampaignInformation extends FragmentActivity {
     // signal이 recyclerView인지 확인
     boolean isRecyclerView() {
         return gIntent.hasExtra("signal") && gIntent.getStringExtra("signal").equals("recyclerView");
+    }
+
+    // signal이 mypage인지 확인
+    boolean isMypage() {
+        return gIntent.hasExtra("signal") && gIntent.getStringExtra("signal").equals("mypage");
     }
 
     // signal이 setup인지 확인
@@ -356,6 +361,7 @@ public class CampaignInformation extends FragmentActivity {
             bundle3.putString("datetime", datetime);
             fragmentReview.setArguments(bundle3);
 //        }
+        getSupportFragmentManager().beginTransaction().add(R.id.tabcontent, fragmentInfo).commit();
     }
 
     // String을 byte[]로 변환
@@ -410,6 +416,7 @@ public class CampaignInformation extends FragmentActivity {
                                     myCampaignItem.setReCount(reCount + 1);
                                     myCampaignItem.setComplete(false);
                                     myCampaignItem.setReviewComplete(false);
+                                    myCampaignItem.setCertiCompleteCount(0);
 
                                     // 다시 올리기
                                     myCampaignRef.child("MyCampaign").child(uid).child(datetime).setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -455,6 +462,7 @@ public class CampaignInformation extends FragmentActivity {
                                     myCampaignItem.setReCount(1);
                                     myCampaignItem.setComplete(false);
                                     myCampaignItem.setReviewComplete(false);
+                                    myCampaignItem.setCertiCompleteCount(0);
                                     myCampaignRef.child("MyCampaign").child(uid).child(datetime).setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {

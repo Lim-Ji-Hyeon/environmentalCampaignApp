@@ -37,6 +37,9 @@ public class FragmentReview extends Fragment {
 
     String campaignCode;
 
+    TextView tv_noReview;
+    LinearLayout lo_review;
+
     public FragmentReview() {
         // Required empty public constructor
     }
@@ -54,6 +57,9 @@ public class FragmentReview extends Fragment {
         if(bundle != null) {
             campaignCode = bundle.getString("datetime"); // 캠페인의 생성날짜로 불러올것임.
         }
+
+        tv_noReview = (TextView)rootView.findViewById(R.id.tv_noReview);
+        lo_review = (LinearLayout)rootView.findViewById(R.id.lo_review);
 
         rListView = (ListView)rootView.findViewById(R.id.lv_review);
 
@@ -73,7 +79,11 @@ public class FragmentReview extends Fragment {
                         arrayList.add(reviewItem); // 담은 데이터들을 배열 리스트에 넣고 recyclerview에 보낼 준비를 한다.
                     }
                     adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
+                } else {
+                    tv_noReview.setVisibility(View.VISIBLE);
+                    lo_review.setVisibility(View.GONE);
                 }
+                setView(rootView, arrayList);
             }
 
             @Override
@@ -82,10 +92,8 @@ public class FragmentReview extends Fragment {
                 Log.e("FragmentReviewActivity", String.valueOf(error.toException())); //에러문 출력
             }
         });
-
         adapter = new ReviewAdapter(arrayList, getActivity().getApplicationContext());
         rListView.setAdapter(adapter); // 리스트뷰에 어댑터 연결
-
 
 //        scrollView = (ScrollView)rootView.findViewById(R.id.sv);
 //        rListView.setOnTouchListener(new View.OnTouchListener() {
@@ -106,31 +114,27 @@ public class FragmentReview extends Fragment {
 //        rAdpter.addItem(ContextCompat.getDrawable(context, R.drawable.profile), "으쌰으쌰", 20210328, 5,
 //                "느끼는 것이 많은 캠페인입니다. 계속 re캠페인 중입니다.");
 
-        TextView tv_noReview = (TextView)rootView.findViewById(R.id.tv_noReview);
-        LinearLayout lo_review = (LinearLayout)rootView.findViewById(R.id.lo_review);
         // 리뷰가 없다면 없다는 화면을 출력하고, 있다면 리스트뷰 출력
-        if(adapter.isEmpty()) {
-            tv_noReview.setVisibility(View.VISIBLE);
-            lo_review.setVisibility(View.GONE);
-        } else {
-            tv_noReview.setVisibility(View.GONE);
-            lo_review.setVisibility(View.VISIBLE);
-            TextView tv_reviewN = (TextView)rootView.findViewById(R.id.tv_reviewN);
-            int n = adapter.getCount();
-            if(n > 100) {
-                tv_reviewN.setText("(100+)");
-            } else {
-                tv_reviewN.setText("(" + n + ")");
-            }
-
-            RatingBar ratingBar = (RatingBar)rootView.findViewById(R.id.ratingBar);
-            ratingBar.setRating(reviewAverage(rListView));
-
-            TextView tv_reviewAvr = (TextView)rootView.findViewById(R.id.tv_reviewAvr);
-            tv_reviewAvr.setText(Float.toString(reviewAverage(rListView)));
-
-            setListViewHeightBasedOnChildren(rListView);
-        }
+//        if(adapter.isEmpty()) {
+//            tv_noReview.setVisibility(View.VISIBLE);
+//            lo_review.setVisibility(View.GONE);
+//        } else {
+//            TextView tv_reviewN = (TextView)rootView.findViewById(R.id.tv_reviewN);
+//            int n = adapter.getCount();
+//            if(n > 100) {
+//                tv_reviewN.setText("(100+)");
+//            } else {
+//                tv_reviewN.setText("(" + n + ")");
+//            }
+//
+//            RatingBar ratingBar = (RatingBar)rootView.findViewById(R.id.ratingBar);
+//            ratingBar.setRating(reviewAverage(rListView));
+//
+//            TextView tv_reviewAvr = (TextView)rootView.findViewById(R.id.tv_reviewAvr);
+//            tv_reviewAvr.setText(Float.toString(reviewAverage(rListView)));
+//
+//            setListViewHeightBasedOnChildren(rListView);
+//        }
 
         return rootView;
     }
@@ -165,15 +169,34 @@ public class FragmentReview extends Fragment {
         }
     }
 
+    // ratingbar, 리뷰 갯수 등등
+    void setView(ViewGroup rootView, ArrayList<ReviewItem> arrayList) {
+        TextView tv_reviewN = (TextView)rootView.findViewById(R.id.tv_reviewN);
+        int size = arrayList.size();
+        if(size > 100) {
+            tv_reviewN.setText("(100+)");
+        } else {
+            tv_reviewN.setText("(" + size + ")");
+        }
+
+        float avg = reviewAverage(arrayList);
+        RatingBar ratingBar = (RatingBar)rootView.findViewById(R.id.ratingBar);
+        ratingBar.setRating(avg);
+
+        TextView tv_reviewAvr = (TextView)rootView.findViewById(R.id.tv_reviewAvr);
+        tv_reviewAvr.setText(Float.toString(avg));
+
+//        setListViewHeightBasedOnChildren(rListView);
+    }
+
     // 리뷰 평균 구하기
-    public float reviewAverage(ListView listview) {
-        ListAdapter listAdapter = listview.getAdapter();
+    public float reviewAverage(ArrayList<ReviewItem> arrayList) {
         double sum = 0;
-        for(int i=0; i < listAdapter.getCount(); i++) {
-            ReviewItem r = (ReviewItem)listAdapter.getItem(i);
+        for(int i=0; i < arrayList.size(); i++) {
+            ReviewItem r = arrayList.get(i);
             sum += r.getRating();
         }
-        return Float.parseFloat(String.format("%.2f", sum / listAdapter.getCount()));
+        return Float.parseFloat(String.format("%.2f", sum / arrayList.size()));
     }
 
 }

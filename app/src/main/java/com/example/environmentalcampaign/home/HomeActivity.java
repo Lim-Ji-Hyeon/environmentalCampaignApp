@@ -7,6 +7,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -65,6 +68,11 @@ public class HomeActivity extends AppCompatActivity {
     public ArrayList<FeedItem> realtimeArrayList;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference, realtimeReference;
+    
+    int currentPage = 0;
+    Timer timer;
+    final long DELAY_MS = 500; // 작업 실행 전 지연 시간(밀리초)
+    final long PERIOD_MS = 5000; // 연속 작업 실행 간격(밀리초)
 
 //    ArrayList<String> campaignCodes;
 //    ArrayList<CampaignItem> campaignItems;
@@ -94,6 +102,22 @@ public class HomeActivity extends AppCompatActivity {
         });
         setupIndicators(list.size());
 
+        final Handler handler = new Handler();
+        final Runnable Update = new Runnable() {
+            @Override
+            public void run() {
+                if(currentPage == list.size()+1) { currentPage = 0; }
+                viewPager2.setCurrentItem(currentPage++, true);
+            }
+        };
+
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(Update);
+            }
+        }, DELAY_MS, PERIOD_MS);
 
         // RecyclerView 연결
 

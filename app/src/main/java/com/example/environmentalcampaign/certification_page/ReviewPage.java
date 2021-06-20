@@ -1,4 +1,4 @@
-package com.example.environmentalcampaign;
+package com.example.environmentalcampaign.certification_page;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.cp_info.ReviewItem;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,7 +62,7 @@ public class ReviewPage extends AppCompatActivity {
                 // 현재시간 가져오기
                 long now = System.currentTimeMillis();
                 Date mDate = new Date(now);
-                SimpleDateFormat simpleDate = new SimpleDateFormat("yyMMdd");
+                SimpleDateFormat simpleDate = new SimpleDateFormat("yyMMddhhmmss");
                 String getTime = simpleDate.format(mDate);
 
                 ReviewItem reviewItem = new ReviewItem();

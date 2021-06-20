@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="20dp"
                 android:gravity="center|top"
-                android:text="1개"
+                android:text="개"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center|top"
                 android:paddingBottom="20dp"
-                android:text="100.0%"
+                android:text="%"
                 android:textColor="#EF5C8E"
                 android:textSize="20sp"
                 android:textStyle="bold" />

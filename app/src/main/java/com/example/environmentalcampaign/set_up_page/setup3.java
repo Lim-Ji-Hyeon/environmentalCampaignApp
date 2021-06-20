@@ -248,15 +248,19 @@ public class setup3 extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 CampaignItem campaignItem = snapshot.getValue(CampaignItem.class);
+
                 RecyclerViewItem recyclerViewItem = new RecyclerViewItem();
                 recyclerViewItem.setTitle(campaignItem.getTitle());
                 recyclerViewItem.setImage(campaignItem.getLogo());
                 recyclerViewItem.setCampaignCode(campaignItem.getDatetime());
                 recyclerViewItem.setReCampaignN(campaignItem.getReCampaignN());
 
+                SetUpCampaignItem setUpCampaignItem = new SetUpCampaignItem();
+                setUpCampaignItem.setCampaignCode(datetime);
+
                 // 데이터베이스에 삽입
                 databaseReference = database.getReference("environmentalCampaign");
-                databaseReference.child("SetUpCampaign").child(uid).child(datetime).child("campaignCode").setValue(datetime); // 내가 개설한 캠페인 확인하기 위함.
+                databaseReference.child("SetUpCampaign").child(uid).child(datetime).setValue(setUpCampaignItem); // 내가 개설한 캠페인 확인하기 위함.
                 databaseReference.child("HomeCampaign").child(datetime).setValue(recyclerViewItem); // 홈화면에 신규캠페인, 인기캠페인을 위함.
                 databaseReference.child("Campaign").child(datetime).child("campaign").setValue(campaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

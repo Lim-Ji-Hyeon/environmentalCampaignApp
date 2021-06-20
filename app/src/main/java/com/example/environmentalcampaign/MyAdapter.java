@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -37,16 +38,26 @@ public class MyAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<MyCampaignItem> sample;
+    private boolean completeLogo;
 
     FirebaseDatabase database;
     DatabaseReference databaseReference;
     String uid;
 
     TextView achievementRate, complete;
+    LinearLayout lo_complete_logo;
 
     public MyAdapter(ArrayList<MyCampaignItem> sample, Context context){
         this.sample = sample;
         this.context = context;
+        this.completeLogo = false;
+    }
+
+    // 인증 완료 표시 안보이게 하는 생성자(true를 입력하면 로고가 나타나지 않음)
+    public MyAdapter(ArrayList<MyCampaignItem> sample, Context context, boolean completeLogo) {
+        this.sample = sample;
+        this.context = context;
+        this.completeLogo = completeLogo;
     }
 
     @Override
@@ -84,6 +95,8 @@ public class MyAdapter extends BaseAdapter {
         TextView certiFrequency = (TextView)convertView.findViewById(R.id.tv_certiFrequency);
         ImageView logo = (ImageView)convertView.findViewById(R.id.iv_logo);
         complete = (TextView)convertView.findViewById(R.id.tv_complete_logo);
+        lo_complete_logo = (LinearLayout)convertView.findViewById(R.id.lo_complete_logo);
+        if(completeLogo) { lo_complete_logo.setVisibility(View.GONE); }
 
         // Data set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         MyCampaignItem listViewItem = sample.get(position);
@@ -100,7 +113,8 @@ public class MyAdapter extends BaseAdapter {
                 CampaignItem campaignItem = snapshot.getValue(CampaignItem.class);
                 CpData cpData = new CpData();
 
-                cpData.setRate(getAchievementRate(listViewItem.getCampaignCode(), listViewItem.getCertiCount()));
+//                cpData.setRate(getAchievementRate(listViewItem.getCampaignCode(), listViewItem.getCertiCount()));
+                cpData.setRate(listViewItem.getCertiCompleteCount()*100/listViewItem.getCertiCount());
                 cpData.setEdate(listViewItem.getEndDate());
                 cpData.setReCp(listViewItem.getReCount());
                 cpData.setName(campaignItem.getTitle());
@@ -111,7 +125,7 @@ public class MyAdapter extends BaseAdapter {
 
                 // 아이템 내 각 위젯에 데이터 반영
                 int edate = Integer.parseInt(cpData.getEdate());
-//                achievementRate.setText("현재 달성률 " + listViewItem.getRate() + "%");
+                achievementRate.setText("현재 달성률 " + cpData.getRate() + "%");
                 dDay.setText("D-" + countdday(edate));
                 reCp.setText(cpData.getReCp() + "번째 참여중");
                 cpName.setText(cpData.getName());
@@ -167,34 +181,34 @@ public class MyAdapter extends BaseAdapter {
 //        sample.add(item);
 //    }
 
-    // 현재 달성률 구하기
-    public int getAchievementRate(String campaignCode, int certiCount) {
-        ArrayList<Certi_Info> certi_infos = new ArrayList<>();
-        database.getReference("environmentalCampaign").child("Certification").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                certi_infos.clear();
-                if((dataSnapshot.hasChild(uid))&&(dataSnapshot.child(uid).hasChild(campaignCode))) {
-                    for(DataSnapshot snapshot : dataSnapshot.child(uid).child(campaignCode).getChildren()) {
-                        Certi_Info certi_info = snapshot.getValue(Certi_Info.class);
-                        certi_infos.add(certi_info);
-                    }
-                    int certiN = certi_infos.size();
-                    achievementRate.setText("현재 달성률 " + certiN*100/certiCount + "%");
-                } else {
-                    int certiN = 0;
-                    achievementRate.setText("현재 달성률 " + certiN*100/certiCount + "%");
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // DB를 가져오던 중 에러 발생 시
-                Log.e("getAchievementRate", String.valueOf(error.toException())); //에러문 출력
-            }
-        });
-        String s = achievementRate.getText().toString();
-        return Integer.parseInt(s.substring(7, s.length()-1));
-    }
+//    // 현재 달성률 구하기
+//    public int getAchievementRate(String campaignCode, int certiCount) {
+//        ArrayList<Certi_Info> certi_infos = new ArrayList<>();
+//        database.getReference("environmentalCampaign").child("Certification").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                certi_infos.clear();
+//                if((dataSnapshot.hasChild(uid))&&(dataSnapshot.child(uid).hasChild(campaignCode))) {
+//                    for(DataSnapshot snapshot : dataSnapshot.child(uid).child(campaignCode).getChildren()) {
+//                        Certi_Info certi_info = snapshot.getValue(Certi_Info.class);
+//                        certi_infos.add(certi_info);
+//                    }
+//                    int certiN = certi_infos.size();
+//                    achievementRate.setText("현재 달성률 " + certiN*100/certiCount + "%");
+//                } else {
+//                    int certiN = 0;
+//                    achievementRate.setText("현재 달성률 " + certiN*100/certiCount + "%");
+//                }
+//            }
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                // DB를 가져오던 중 에러 발생 시
+//                Log.e("getAchievementRate", String.valueOf(error.toException())); //에러문 출력
+//            }
+//        });
+//        String s = achievementRate.getText().toString();
+//        return Integer.parseInt(s.substring(7, s.length()-1));
+//    }
 
     public int eyear(int edate) { return Integer.parseInt(String.valueOf(edate).substring(0,4)); }
     public int emonth(int edate) { return Integer.parseInt(String.valueOf(edate).substring(4,6)); }

@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.bookmark.BookMark;
+import com.example.environmentalcampaign.cp_info.MyCampaignItem;
 import com.example.environmentalcampaign.feed.FeedItem;
 import com.example.environmentalcampaign.feed.FeedPage;
 import com.example.environmentalcampaign.home.HomeActivity;
@@ -43,8 +44,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -188,6 +192,20 @@ public class Second_Certification_Page extends AppCompatActivity {
                 mDatabaseRef.child("Certification").child(publisher).child(campaignCode).child(getTime).setValue(certi_info);
                 mDatabaseRef.child("Feed").child(getTime).setValue(feedItem);
                 mDatabaseRef.child("Campaign").child(campaignCode).child("certifications").child(getTime).setValue(feedItem);
+                // 인증횟수 +1
+                mDatabaseRef.child("MyCampaign").child(publisher).child(campaignCode).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        MyCampaignItem myCampaignItem = snapshot.getValue(MyCampaignItem.class);
+                        int certiCompleteCount = myCampaignItem.getCertiCompleteCount();
+                        mDatabaseRef.child("MyCampaign").child(publisher).child(campaignCode).setValue(myCampaignItem);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
                 Toast.makeText(Second_Certification_Page.this, "인증이 완료되었습니다.", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), CertificationPage.class);

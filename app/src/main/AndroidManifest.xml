@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EnvironmentalCampaign"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ReviewPage"></activity>
+        <activity android:name=".certification_page.ReviewPage"></activity>
         <activity android:name=".home.SubLoginActivity" />
         <activity android:name=".home.LoginActivity">
             <intent-filter>
@@ -40,7 +40,7 @@
         <activity android:name=".feed.FeedImageDetailPage" />
         <activity android:name=".set_up_page.setup1" />
         <activity android:name=".certification_page.Second_Certification_Page" />
-        <activity android:name=".CpMakelist" />
+        <activity android:name=".mypage.CpMakelist" />
         <activity android:name=".mypage.CampaignSituation" />
         <activity android:name=".cp_info.CampaignInformation" />
         <activity android:name=".pointmarket.PointMarket" />

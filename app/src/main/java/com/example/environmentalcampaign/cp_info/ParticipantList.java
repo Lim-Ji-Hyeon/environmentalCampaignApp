@@ -40,6 +40,7 @@ public class ParticipantList extends AppCompatActivity {
         setContentView(R.layout.activity_participant_list);
 
         participantListView = findViewById(R.id.lv_participantList);
+        tv_participantsN = (TextView)findViewById(R.id.tv_participantsN);
 
         arrayList = new ArrayList<>(); // ParticipantItem 객체를 담을 ArrayList
 
@@ -57,6 +58,7 @@ public class ParticipantList extends AppCompatActivity {
                     ParticipantItem participantItem = snapshot.getValue(ParticipantItem.class); //만들어둔 ParticipantItem 객체를 담는다.
                     arrayList.add(participantItem); // 담은 데이터들을 배열 리스트에 넣고 recyclerview에 보낼 준비를 한다.
                 }
+                tv_participantsN.setText(String.valueOf(arrayList.size()));
                 adapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
             }
 
@@ -84,11 +86,6 @@ public class ParticipantList extends AppCompatActivity {
 //        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.profile), "녹색아줌마");
 //        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.profile), "지구지킴이");
 //        adapter.addItem(ContextCompat.getDrawable(this, R.drawable.profile), "으쌰으쌰");
-
-        int n = gIntent.getIntExtra("participantsN", 0);
-        tv_participantsN = (TextView)findViewById(R.id.tv_participantsN);
-//        tv_participantsN.setText(String.valueOf(adapter.getCount()));
-        tv_participantsN.setText(String.valueOf(n));
 
         // 뒤로가기 버튼 이벤트
         bt_back = (ImageButton)findViewById(R.id.bt_back);

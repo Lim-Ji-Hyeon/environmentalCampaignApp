@@ -130,7 +130,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:gravity="bottom|center"
-                        android:text="1"
+                        android:text=""
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -155,7 +155,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:gravity="bottom|center"
-                        android:text="14"
+                        android:text=""
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -180,7 +180,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
                         android:gravity="bottom|center"
-                        android:text="4"
+                        android:text=""
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -217,7 +217,7 @@
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:paddingLeft="10dp"
-                    android:text="1,080p"
+                    android:text="0p"
                     android:textSize="15sp" />
 
                 <TextView

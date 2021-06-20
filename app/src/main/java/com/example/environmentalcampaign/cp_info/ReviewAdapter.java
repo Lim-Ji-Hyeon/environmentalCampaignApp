@@ -87,8 +87,7 @@ public class ReviewAdapter extends BaseAdapter {
                 profile.setBackground(new ShapeDrawable(new OvalShape()));
                 profile.setClipToOutline(true);
                 nickname.setText(userAccount.getNickName());
-                int rDatetime = Integer.parseInt(listViewItem.getDatetime());
-                date.setText(ryear(rDatetime) + "." + rmonth(rDatetime) + "." + rday(rDatetime));
+                date.setText(ryear(listViewItem.getDatetime()) + "." + rmonth(listViewItem.getDatetime()) + "." + rday(listViewItem.getDatetime()));
 //                date.setText(listViewItem.getDatetime());
                 reviewRating.setRating((float)listViewItem.getRating());
                 review.setText(listViewItem.getContent());
@@ -128,8 +127,8 @@ public class ReviewAdapter extends BaseAdapter {
 //    }
 
     // yyMMdd 변환
-    public int ryear(int rdate) { return Integer.parseInt(String.valueOf(rdate).substring(0,2)); }
-    public int rmonth(int rdate) { return Integer.parseInt(String.valueOf(rdate).substring(2,4)); }
-    public int rday(int rdate) { return Integer.parseInt(String.valueOf(rdate).substring(4,6)); }
+    public int ryear(String rdate) { return Integer.parseInt(rdate.substring(0,2)); }
+    public int rmonth(String rdate) { return Integer.parseInt(rdate.substring(2,4)); }
+    public int rday(String rdate) { return Integer.parseInt(rdate.substring(4,6)); }
 
 }

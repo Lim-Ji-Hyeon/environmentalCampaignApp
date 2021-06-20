@@ -18,14 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.environmentalcampaign.cp_info.MyCampaignItem;
 import com.example.environmentalcampaign.home.LoginActivity;
 import com.example.environmentalcampaign.certification_page.CertificationPage;
-import com.example.environmentalcampaign.CpMakelist;
 import com.example.environmentalcampaign.home.UserAccount;
 import com.example.environmentalcampaign.pointmarket.PointMarket;
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.feed.FeedPage;
 import com.example.environmentalcampaign.home.HomeActivity;
+import com.example.environmentalcampaign.set_up_page.SetUpCampaignItem;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,14 +38,20 @@ import com.google.firebase.database.ValueEventListener;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 public class MyPage extends AppCompatActivity {
 
     LinearLayout lo_point, lo_cp_ing, lo_cp_complete, lo_cp_make;
+    TextView tv_ing, tv_complete, tv_mycp;
     TextView tv_home, tv_make, tv_certi, tv_feed, tv_mypage;
     Button btn_logout;
 
     ImageView iv_profile;
     TextView tv_nickname;
+    String uid;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseDatabase database;
@@ -60,7 +67,7 @@ public class MyPage extends AppCompatActivity {
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
-        String uid = firebaseUser.getUid(); // 현재 로그인한 사용자의 uid 가져오기
+        uid = firebaseUser.getUid(); // 현재 로그인한 사용자의 uid 가져오기
 
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
         databaseReference = database.getReference("environmentalCampaign").child("UserAccount").child(uid); // DB 테이블 연결
@@ -80,6 +87,68 @@ public class MyPage extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
                 // DB를 가져오던 중 에러 발생 시
                 Log.e("MyPageActivity", String.valueOf(error.toException())); //에러문 출력
+            }
+        });
+
+        tv_ing = (TextView)findViewById(R.id.tv_ing);
+        tv_complete = (TextView)findViewById(R.id.tv_complete);
+        tv_mycp = (TextView)findViewById(R.id.tv_mycp);
+
+        ArrayList<MyCampaignItem> arrayList1 = new ArrayList<>();
+        ArrayList<CompleteCampaignItem> arrayList2 = new ArrayList<>();
+        ArrayList<SetUpCampaignItem> arrayList3 = new ArrayList<>();
+
+        database.getReference("environmentalCampaign").child("MyCampaign").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayList1.clear();
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    MyCampaignItem myCampaignItem = snapshot.getValue(MyCampaignItem.class);
+
+                    // 현재시간 가져오기
+                    long now = System.currentTimeMillis();
+                    Date mDate = new Date(now);
+                    SimpleDateFormat simpleDate = new SimpleDateFormat("yyyyMMdd");
+                    String today = simpleDate.format(mDate);
+
+                    // 종료날짜 전이라면
+                    if(today.compareTo(myCampaignItem.getEndDate()) <= 0) { arrayList1.add(myCampaignItem); }
+                }
+                tv_ing.setText(String.valueOf(arrayList1.size()));
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        database.getReference("environmentalCampaign").child("CompleteCampaign").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayList2.clear();
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    CompleteCampaignItem completeCampaignItem = snapshot.getValue(CompleteCampaignItem.class);
+                    arrayList2.add(completeCampaignItem);
+                }
+                tv_complete.setText(String.valueOf(arrayList2.size()));
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        database.getReference("environmentalCampaign").child("SetUpCampaign").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayList3.clear();
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    SetUpCampaignItem setUpCampaignItem = snapshot.getValue(SetUpCampaignItem.class);
+                    arrayList3.add(setUpCampaignItem);
+                }
+                tv_mycp.setText(String.valueOf(arrayList3.size()));
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 

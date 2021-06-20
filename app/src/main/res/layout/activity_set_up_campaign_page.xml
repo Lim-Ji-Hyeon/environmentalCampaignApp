@@ -62,7 +62,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/lo_my_cp_complet"
+            android:id="@+id/lo_my_cp_complete"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_margin="10dp"
@@ -75,7 +75,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="완료된 캠페인"
+                android:text="완료한 캠페인"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:textColor="#000000"/>

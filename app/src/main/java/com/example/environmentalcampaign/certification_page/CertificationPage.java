@@ -3,12 +3,9 @@ package com.example.environmentalcampaign.certification_page;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,13 +14,12 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.environmentalcampaign.CpData;
 import com.example.environmentalcampaign.MyAdapter;
 import com.example.environmentalcampaign.R;
-import com.example.environmentalcampaign.ReviewPage;
 import com.example.environmentalcampaign.cp_info.MyCampaignItem;
 import com.example.environmentalcampaign.feed.FeedPage;
 import com.example.environmentalcampaign.home.HomeActivity;
+import com.example.environmentalcampaign.mypage.CompleteCampaignItem;
 import com.example.environmentalcampaign.mypage.MyPage;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,7 +30,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -57,23 +52,6 @@ public class CertificationPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_certification_page);
-
-//        ListView listView, listView2;
-//        MyAdapter adapter, adapter2;
-//
-//        // Adapter 생성
-//        adapter = new MyAdapter();
-//        adapter2 = new MyAdapter();
-//
-//        // 리스트뷰 참조 및 Adapter 달기
-//        listView = (ListView)findViewById(R.id.lv_certi_cp);
-//        listView.setAdapter(adapter);
-//        listView2 = (ListView)findViewById(R.id.lv_complete_cp);
-//        listView2.setAdapter(adapter2);
-//
-//        // 첫 번째 아이템 추가
-//        adapter.addItem(70, 2, "버리스타", "2주", "주 2일",  20210701, ContextCompat.getDrawable(this, R.drawable.burista));
-//        adapter2.addItem(95, 1, "용기내", "3주", "주 5일",  20210830, ContextCompat.getDrawable(this, R.drawable.cp1), true);
 
         listView1 = findViewById(R.id.lv_certi_cp);
         listView2 = findViewById(R.id.lv_complete_cp);
@@ -111,6 +89,37 @@ public class CertificationPage extends AppCompatActivity {
                     } else {
                         // 캠페인이 종료되고 리뷰를 작성하지 않았으면
                         if(!myCampaignItem.isReviewComplete()) { reviewDialog(myCampaignItem.getCampaignCode(), myCampaignItem.getTitle()); }
+                        database.getReference("environmentalCampaign").child("CompleteCampaign").addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot1) {
+                                String campaignCode = myCampaignItem.getCampaignCode();
+                                double avg = Double.parseDouble(String.format("%.1f", (double)myCampaignItem.getCertiCompleteCount()*100/myCampaignItem.getCertiCount()));
+
+                                // 캠페인이 이미 완료캠페인에 존재할 경우
+                                if(snapshot1.hasChild(uid)&&snapshot1.child(uid).hasChild(campaignCode)) {
+                                    CompleteCampaignItem completeCampaignItem = snapshot1.child(uid).child(campaignCode).getValue(CompleteCampaignItem.class);
+                                    if(completeCampaignItem.getReCount() != myCampaignItem.getReCount()) {
+                                        double avgRate = completeCampaignItem.getAchievementAvg();
+                                        int c = completeCampaignItem.getReCount();
+                                        completeCampaignItem.setAchievementAvg(Double.parseDouble(String.format("%.1f", (avgRate*c+avg)/(c+1))));
+                                        completeCampaignItem.setReCount(myCampaignItem.getReCount());
+                                        database.getReference("environmentalCampaign").child("CompleteCampaign").child(uid).child(campaignCode).setValue(completeCampaignItem);
+                                    }
+                                }
+                                else {
+                                    CompleteCampaignItem completeCampaignItem = new CompleteCampaignItem();
+                                    completeCampaignItem.setCampaignCode(campaignCode);
+                                    completeCampaignItem.setAchievementAvg(avg);
+                                    completeCampaignItem.setReCount(myCampaignItem.getReCount());
+                                    database.getReference("environmentalCampaign").child("CompleteCampaign").child(uid).child(campaignCode).setValue(completeCampaignItem);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
                     }
                 }
                 adapter1.notifyDataSetChanged();
@@ -142,22 +151,11 @@ public class CertificationPage extends AppCompatActivity {
                 TextView tv_cp_name = view.findViewById(R.id.tv_cp_name);
                 String title = tv_cp_name.getText().toString();
 
-//                BitmapDrawable drawable = (BitmapDrawable)item.getLogo();
-//                Bitmap bitmap = drawable.getBitmap();
-//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-//                byte[] byteArray = stream.toByteArray();
-
                 intent.putExtra("campaignCode", item.getCampaignCode());
                 intent.putExtra("title", title);
                 intent.putExtra("Dday", countdday(Integer.parseInt(item.getEndDate())) + "일 뒤 종료");
                 intent.putExtra("certiCount", item.getCertiCount());
                 intent.putExtra("certiRate", rate);
-//                intent.putExtra("name", item.getName());
-//                intent.putExtra("period", item.getPeriod());
-//                intent.putExtra("frequency", item.getFrequency());
-//                intent.putExtra("logo", byteArray);
-//                intent.putExtra("rate", item.getRate());
 
                 startActivity(intent);
             }
