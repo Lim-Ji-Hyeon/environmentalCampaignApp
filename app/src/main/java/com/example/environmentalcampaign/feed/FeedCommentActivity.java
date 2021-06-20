@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.graphics.drawable.ShapeDrawable;
@@ -40,6 +41,7 @@ public class FeedCommentActivity extends AppCompatActivity {
     ImageView bt_back, comment_profile;
     TextView comment_check, userNickname;
     EditText comment;
+    SwipeRefreshLayout srl_main;
 
     private RecyclerView commentList;
     private RecyclerView.Adapter cAdapter;
@@ -50,8 +52,6 @@ public class FeedCommentActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference databaseReference, fcDatabaseReference, databaseReference1;
     private FirebaseUser firebaseUser;
-
-    NestedScrollView nestedScrollView;
 
     String feedDate, feedPublisher, uid, commentstr, userImg, userId;
 
@@ -66,8 +66,7 @@ public class FeedCommentActivity extends AppCompatActivity {
         comment_profile = (ImageView)findViewById(R.id.comment_profile);
         comment_check = (TextView)findViewById(R.id.comment_check);
         comment = (EditText)findViewById(R.id.comment);
-
-        nestedScrollView = (NestedScrollView)findViewById(R.id.nestedScrollView);
+        srl_main = (SwipeRefreshLayout)findViewById(R.id.srl_main);
 
         Intent intent = getIntent();
         feedDate = intent.getStringExtra("commentFeedDate"); //작성날짜
@@ -139,25 +138,60 @@ public class FeedCommentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                // 작성한 내용 String형으로 바꾸기
-                commentstr = comment.getText().toString();
+                if (comment.length() != 0){
+                    // 작성한 내용 String형으로 바꾸기
+                    commentstr = comment.getText().toString();
+                    comment.setText(null);
+                    // 현재시간 가져오기
+                    long now = System.currentTimeMillis();
+                    Date mDate = new Date(now);
+                    SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    String getTime = simpleDate.format(mDate);
 
-                // 현재시간 가져오기
-                long now = System.currentTimeMillis();
-                Date mDate = new Date(now);
-                SimpleDateFormat simpleDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                String getTime = simpleDate.format(mDate);
+                    FeedCommentItem feedCommentItem = new FeedCommentItem();
+                    feedCommentItem.setComment(commentstr);
+                    feedCommentItem.setDate(getTime);
+                    feedCommentItem.setFeedDate(feedDate);
+                    feedCommentItem.setPublisher(feedPublisher);
+                    feedCommentItem.setNickname(userId);
+                    feedCommentItem.setUserImage(userImg);
+                    feedCommentItem.setUid(uid);
 
-                FeedCommentItem feedCommentItem = new FeedCommentItem();
-                feedCommentItem.setComment(commentstr);
-                feedCommentItem.setDate(getTime);
-                feedCommentItem.setFeedDate(feedDate);
-                feedCommentItem.setPublisher(feedPublisher);
-                feedCommentItem.setNickname(userId);
-                feedCommentItem.setUserImage(userImg);
-                feedCommentItem.setUid(uid);
+                    databaseReference1.child("FeedComment").child(feedDate).child(getTime).setValue(feedCommentItem);
+                    Toast.makeText(FeedCommentActivity.this, "댓글 작성이 완료되었습니다.", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(FeedCommentActivity.this, "댓글을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }
 
-                databaseReference1.child("FeedComment").child(feedDate).child(getTime).setValue(feedCommentItem);
+            }
+        });
+
+
+
+        srl_main.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fcDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        // 파이어베이스 데이터베이스의 데이터를 받아오는 곳
+                        fcArrayList.clear(); // 기존 배열 리스트가 존재하지 않게 초기화
+                        for(DataSnapshot snapshot : dataSnapshot.getChildren()){ // 반복문으로 데이터 리스트를 추출해냄.
+                            FeedCommentItem feedCommentItem = snapshot.getValue(FeedCommentItem.class); //만들어둔 FeedItem 객체를 담는다.
+                            fcArrayList.add(feedCommentItem); // 담은 데이터들을 배열 리스트에 넣고 recyclerview에 보낼 준비를 한다.
+                        }
+                        cAdapter.notifyDataSetChanged(); //리스트 저장 및 새로고침
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        // DB를 가져오던 중 에러 발생 시
+                        Log.e("FeedCommentActivity", String.valueOf(error.toException())); //에러문 출력
+                    }
+                });
+
+                srl_main.setRefreshing(false);
             }
         });
 
