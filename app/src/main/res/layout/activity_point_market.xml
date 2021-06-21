@@ -242,7 +242,7 @@
                 android:id="@+id/tv_home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
+                android:textSize="12dp"
                 android:text="홈" />
 
 
@@ -266,7 +266,7 @@
                 android:id="@+id/tv_make"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
+                android:textSize="12dp"
                 android:text="개설" />
 
 
@@ -290,7 +290,7 @@
                 android:id="@+id/tv_certi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
+                android:textSize="12dp"
                 android:text="인증" />
 
 
@@ -314,7 +314,7 @@
                 android:id="@+id/tv_feed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
+                android:textSize="12dp"
                 android:text="피드" />
 
 
@@ -338,7 +338,7 @@
                 android:id="@+id/tv_mypage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
+                android:textSize="12dp"
                 android:text="마이페이지" />
 
         </LinearLayout>

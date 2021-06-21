@@ -80,6 +80,7 @@ public class HomeActivity extends AppCompatActivity {
 
    // TextView txt;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +103,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         setupIndicators(list.size());
+        viewPager2.setClipToOutline(true);
 
         final Handler handler = new Handler();
         final Runnable Update = new Runnable() {
@@ -203,6 +205,7 @@ public class HomeActivity extends AppCompatActivity {
         // 실시간 인증글 가져오기
         realtime_image = findViewById(R.id.realtime_image);
         realtime_text = findViewById(R.id.realtime_text);
+        realtime_text.setClipToOutline(true);
         realtime_date = findViewById(R.id.realtime_date);
         realtime_publisher = findViewById(R.id.realtime_publisher);
         realtimeArrayList = new ArrayList<>();
