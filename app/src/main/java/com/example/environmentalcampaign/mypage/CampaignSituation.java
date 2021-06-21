@@ -170,6 +170,19 @@ public class CampaignSituation extends AppCompatActivity {
                 });
                 adapter = new MyCompleteAdapter(arrayList2, this);
                 listView.setAdapter(adapter);
+
+                // 리스트뷰를 클릭하면 캠페인 정보 페이지로 넘어간다.
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        // campaign information으로 넘어간다.
+                        Intent intent = new Intent(getApplicationContext(), CampaignInformation.class);
+                        CompleteCampaignItem item = (CompleteCampaignItem)adapter.getItem(i);
+                        intent.putExtra("campaignCode", item.getCampaignCode());
+                        intent.putExtra("signal", "mypage");
+                        startActivity(intent);
+                    }
+                });
                 break;
             case 3:
                 tv_cp_situation.setText("내가 개설한 캠페인");
@@ -339,6 +352,19 @@ public class CampaignSituation extends AppCompatActivity {
 
                 adapter = new MyCompleteAdapter(arrayList2, getApplicationContext());
                 listView.setAdapter(adapter);
+
+                // 리스트뷰를 클릭하면 캠페인 정보 페이지로 넘어간다.
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        // campaign information으로 넘어간다.
+                        Intent intent = new Intent(getApplicationContext(), CampaignInformation.class);
+                        CompleteCampaignItem item = (CompleteCampaignItem)adapter.getItem(i);
+                        intent.putExtra("campaignCode", item.getCampaignCode());
+                        intent.putExtra("signal", "mypage");
+                        startActivity(intent);
+                    }
+                });
                 break;
         }
     }

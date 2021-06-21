@@ -244,10 +244,10 @@ public class setup3 extends AppCompatActivity {
         temporaryRef.child("wrongPhotoInfo2").setValue(wInfo2);
         temporaryRef.child("bookmarkN").setValue(bookmarkN);
 
-        temporaryRef.addValueEventListener(new ValueEventListener() {
+        temporaryRef.get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                CampaignItem campaignItem = snapshot.getValue(CampaignItem.class);
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                CampaignItem campaignItem = dataSnapshot.getValue(CampaignItem.class);
 
                 RecyclerViewItem recyclerViewItem = new RecyclerViewItem();
                 recyclerViewItem.setTitle(campaignItem.getTitle());
@@ -286,14 +286,6 @@ public class setup3 extends AppCompatActivity {
                 });
 
                 databaseReference.child("HomeCampaign").child(datetime).setValue(recyclerViewItem);
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // DB를 가져오던 중 에러 발생 시
-                Log.e("SetUpActivity", String.valueOf(error.toException())); //에러문 출력
             }
         });
     }
