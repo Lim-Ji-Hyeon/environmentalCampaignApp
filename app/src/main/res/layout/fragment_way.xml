@@ -223,7 +223,7 @@
                     android:paddingTop="10dp"
                     android:paddingBottom="20dp"
                     android:text="꼭 알아주세요!"
-                    android:textColor="#FF2B56"
+                    android:textColor="#67D4BF"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 

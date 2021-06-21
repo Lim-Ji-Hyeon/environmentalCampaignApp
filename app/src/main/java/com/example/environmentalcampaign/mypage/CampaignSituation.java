@@ -9,11 +9,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.environmentalcampaign.MyAdapter;
 import com.example.environmentalcampaign.MyCompleteAdapter;
+import com.example.environmentalcampaign.MySetUpCampaignAdapter;
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.cp_info.CampaignInformation;
 import com.example.environmentalcampaign.cp_info.MyCampaignItem;
@@ -32,18 +34,20 @@ import java.util.Date;
 
 public class CampaignSituation extends AppCompatActivity {
     TextView tv_cp_situation, tv_cp_number, tv_avr_rate;
+    LinearLayout lo_avgRate;
     ImageButton bt_back;
 
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
     private ArrayList<MyCampaignItem> arrayList;
     private ArrayList<CompleteCampaignItem> arrayList2;
+    private ArrayList<SetUpCampaignItem> arrayList3;
     private BaseAdapter adapter;
     private ListView listView;
 
     ArrayList<String> campaignCodes;
     String uid;
-    double sum = 0, avg;
+    double sum, avg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +66,11 @@ public class CampaignSituation extends AppCompatActivity {
         tv_cp_situation = (TextView)findViewById(R.id.tv_cp_situation);
         tv_cp_number = (TextView)findViewById(R.id.tv_cp_number);
         tv_avr_rate = (TextView)findViewById(R.id.tv_avr_rate);
+        lo_avgRate = (LinearLayout)findViewById(R.id.lo_avgRate);
         listView = (ListView)findViewById(R.id.lv_cp_situation);
         arrayList = new ArrayList<>();
         arrayList2 = new ArrayList<>();
+        arrayList3 = new ArrayList<>();
         campaignCodes = new ArrayList<>();
 
         Intent gIntent = getIntent();
@@ -100,6 +106,7 @@ public class CampaignSituation extends AppCompatActivity {
                             }
                         }
                         tv_cp_number.setText(arrayList.size() + "개");
+                        sum = 0;
                         for(int i = 0; i < arrayList.size(); i++) {
                             int rate = arrayList.get(i).getCertiCompleteCount()*100/arrayList.get(i).getCertiCount();
                             sum += (double)rate;
@@ -145,6 +152,7 @@ public class CampaignSituation extends AppCompatActivity {
                             }
                         }
                         tv_cp_number.setText(arrayList2.size() + "개");
+                        sum = 0;
                         for(int i = 0; i < arrayList2.size(); i++) {
                             double rate = arrayList2.get(i).getAchievementAvg();
                             sum += rate;
@@ -164,6 +172,44 @@ public class CampaignSituation extends AppCompatActivity {
                 listView.setAdapter(adapter);
                 break;
             case 3:
+                tv_cp_situation.setText("내가 개설한 캠페인");
+
+                database.getReference("environmentalCampaign").child("SetUpCampaign").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        arrayList3.clear();
+                        if(dataSnapshot.hasChild(uid)) {
+                            for(DataSnapshot snapshot : dataSnapshot.child(uid).getChildren()) {
+                                SetUpCampaignItem setUpCampaignItem = snapshot.getValue(SetUpCampaignItem.class);
+                                arrayList3.add(setUpCampaignItem);
+                            }
+                        }
+                        tv_cp_number.setText(arrayList3.size() + "개");
+                        lo_avgRate.setVisibility(View.GONE);
+                        adapter.notifyDataSetChanged();
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                adapter = new MySetUpCampaignAdapter(arrayList3, this);
+                listView.setAdapter(adapter);
+
+                // 리스트뷰를 클릭하면 캠페인 정보 페이지로 넘어간다.
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        // campaign information으로 넘어간다.
+                        Intent intent = new Intent(getApplicationContext(), CampaignInformation.class);
+                        SetUpCampaignItem item = (SetUpCampaignItem)adapter.getItem(i);
+                        intent.putExtra("campaignCode", item.getCampaignCode());
+                        intent.putExtra("signal", "mypage");
+                        startActivity(intent);
+                    }
+                });
+                break;
+            case 4:
                 tv_cp_situation.setText("진행중 캠페인");
 
                 database.getReference("environmentalCampaign").child("SetUpCampaign").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -198,6 +244,7 @@ public class CampaignSituation extends AppCompatActivity {
                                         }
                                     }
                                     tv_cp_number.setText(arrayList.size() + "개");
+                                    sum = 0;
                                     for(int i = 0; i < arrayList.size(); i++) {
                                         int rate = arrayList.get(i).getCertiCompleteCount()*100/arrayList.get(i).getCertiCount();
                                         sum += (double)rate;
@@ -237,7 +284,7 @@ public class CampaignSituation extends AppCompatActivity {
                     }
                 });
                 break;
-            case 4:
+            case 5:
                 tv_cp_situation.setText("완료한 캠페인");
 
                 database.getReference("environmentalCampaign").child("SetUpCampaign").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -266,6 +313,7 @@ public class CampaignSituation extends AppCompatActivity {
                                         }
                                     }
                                     tv_cp_number.setText(arrayList2.size() + "개");
+                                    sum = 0;
                                     for(int i = 0; i < arrayList2.size(); i++) {
                                         double rate = arrayList2.get(i).getAchievementAvg();
                                         sum += (double)rate;

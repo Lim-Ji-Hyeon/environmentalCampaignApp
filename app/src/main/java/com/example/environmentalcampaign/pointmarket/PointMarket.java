@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.environmentalcampaign.certification_page.CertificationPage;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 
 public class PointMarket extends AppCompatActivity {
 
-    TextView tv_home, tv_make, tv_certi, tv_feed, tv_mypage;
+    LinearLayout lo_home, lo_make, lo_certi, lo_feed, lo_mypage;
     ImageButton bt_back;
 
     private RecyclerView.Adapter adapter;
@@ -95,8 +96,8 @@ public class PointMarket extends AppCompatActivity {
 
         // 하단 메뉴바 페이지 연동
 
-        tv_home = (TextView)findViewById(R.id.tv_home);
-        tv_home.setOnClickListener(new View.OnClickListener() {
+        lo_home = (LinearLayout)findViewById(R.id.lo_home);
+        lo_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
@@ -104,8 +105,8 @@ public class PointMarket extends AppCompatActivity {
             }
         });
 
-        tv_make = (TextView)findViewById(R.id.tv_make);
-        tv_make.setOnClickListener(new View.OnClickListener() {
+        lo_make = (LinearLayout)findViewById(R.id.lo_make);
+        lo_make.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), SetUpCampaignPage.class);
@@ -113,8 +114,8 @@ public class PointMarket extends AppCompatActivity {
             }
         });
 
-        tv_certi = (TextView)findViewById(R.id.tv_certi);
-        tv_certi.setOnClickListener(new View.OnClickListener() {
+        lo_certi = (LinearLayout)findViewById(R.id.lo_certi);
+        lo_certi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CertificationPage.class);
@@ -122,8 +123,8 @@ public class PointMarket extends AppCompatActivity {
             }
         });
 
-        tv_feed = (TextView)findViewById(R.id.tv_feed);
-        tv_feed.setOnClickListener(new View.OnClickListener() {
+        lo_feed = (LinearLayout)findViewById(R.id.lo_feed);
+        lo_feed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), FeedPage.class);
@@ -131,8 +132,8 @@ public class PointMarket extends AppCompatActivity {
             }
         });
 
-        tv_mypage = (TextView)findViewById(R.id.tv_mypage);
-        tv_mypage.setOnClickListener(new View.OnClickListener() {
+        lo_mypage = (LinearLayout) findViewById(R.id.lo_mypage);
+        lo_mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MyPage.class);

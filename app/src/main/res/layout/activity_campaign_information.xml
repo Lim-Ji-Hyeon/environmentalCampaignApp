@@ -173,9 +173,9 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edge"
                 app:tabGravity="fill"
-                app:tabIndicatorColor="#FF2B56"
+                app:tabIndicatorColor="#67D4BF"
                 app:tabMode="fixed"
-                app:tabSelectedTextColor="#FF2B56"
+                app:tabSelectedTextColor="#67D4BF"
                 app:tabTextColor="#000000">
 
                 <com.google.android.material.tabs.TabItem
@@ -227,7 +227,7 @@
             android:layout_width="wrap_content"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:background="#FF2B56"
+            android:background="#67D4BF"
             android:gravity="center"
             android:text="참가하기 (오늘 바로 시작)"
             android:textColor="#FFFFFF"

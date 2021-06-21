@@ -335,9 +335,9 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/edge"
                 app:tabGravity="fill"
-                app:tabIndicatorColor="#FF2B56"
+                app:tabIndicatorColor="#67D4BF"
                 app:tabMode="fixed"
-                app:tabSelectedTextColor="#FF2B56"
+                app:tabSelectedTextColor="#67D4BF"
                 app:tabTextColor="#000000">
 
                 <com.google.android.material.tabs.TabItem
@@ -372,7 +372,7 @@
         android:text="인증하기"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:backgroundTint="#FF2B56"
+        android:backgroundTint="#67D4BF"
         android:textColor="#FFFFFF"
         android:layout_gravity="bottom"
         android:layout_margin="10dp"/>

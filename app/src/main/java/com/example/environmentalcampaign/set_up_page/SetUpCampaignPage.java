@@ -18,8 +18,8 @@ import com.example.environmentalcampaign.home.HomeActivity;
 
 public class SetUpCampaignPage extends AppCompatActivity {
 
-    TextView tv_home, tv_make, tv_certi, tv_feed, tv_mypage;
-    LinearLayout lo_my_cp_ing, lo_my_cp_complete;
+    LinearLayout lo_home, lo_make, lo_certi, lo_feed, lo_mypage;
+    LinearLayout lo_my_cp_total, lo_my_cp_ing, lo_my_cp_complete;
     ImageView iv_plus;
 
     @Override
@@ -27,13 +27,24 @@ public class SetUpCampaignPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_up_campaign_page);
 
+        // 전체 캠페인 페이지 연결
+        lo_my_cp_total = (LinearLayout)findViewById(R.id.lo_my_cp_total);
+        lo_my_cp_total.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CampaignSituation.class);
+                intent.putExtra("intent_number", 3);
+                startActivity(intent);
+            }
+        });
+
         // 진행중인 캠페인 페이지 연결
         lo_my_cp_ing = (LinearLayout)findViewById(R.id.lo_my_cp_ing);
         lo_my_cp_ing.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CampaignSituation.class);
-                intent.putExtra("intent_number", 3);
+                intent.putExtra("intent_number", 4);
                 startActivity(intent);
             }
         });
@@ -44,7 +55,7 @@ public class SetUpCampaignPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CampaignSituation.class);
-                intent.putExtra("intent_number", 4);
+                intent.putExtra("intent_number", 5);
                 startActivity(intent);
             }
         });
@@ -61,8 +72,8 @@ public class SetUpCampaignPage extends AppCompatActivity {
 
         // 하단 메뉴바 페이지 연동
 
-        tv_home = (TextView)findViewById(R.id.tv_home);
-        tv_home.setOnClickListener(new View.OnClickListener() {
+        lo_home = (LinearLayout)findViewById(R.id.lo_home);
+        lo_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
@@ -70,8 +81,8 @@ public class SetUpCampaignPage extends AppCompatActivity {
             }
         });
 
-        tv_make = (TextView)findViewById(R.id.tv_make);
-        tv_make.setOnClickListener(new View.OnClickListener() {
+        lo_make = (LinearLayout)findViewById(R.id.lo_make);
+        lo_make.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), SetUpCampaignPage.class);
@@ -79,8 +90,8 @@ public class SetUpCampaignPage extends AppCompatActivity {
             }
         });
 
-        tv_certi = (TextView)findViewById(R.id.tv_certi);
-        tv_certi.setOnClickListener(new View.OnClickListener() {
+        lo_certi = (LinearLayout)findViewById(R.id.lo_certi);
+        lo_certi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CertificationPage.class);
@@ -88,8 +99,8 @@ public class SetUpCampaignPage extends AppCompatActivity {
             }
         });
 
-        tv_feed = (TextView)findViewById(R.id.tv_feed);
-        tv_feed.setOnClickListener(new View.OnClickListener() {
+        lo_feed = (LinearLayout)findViewById(R.id.lo_feed);
+        lo_feed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), FeedPage.class);
@@ -97,8 +108,8 @@ public class SetUpCampaignPage extends AppCompatActivity {
             }
         });
 
-        tv_mypage = (TextView)findViewById(R.id.tv_mypage);
-        tv_mypage.setOnClickListener(new View.OnClickListener() {
+        lo_mypage = (LinearLayout) findViewById(R.id.lo_mypage);
+        lo_mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MyPage.class);

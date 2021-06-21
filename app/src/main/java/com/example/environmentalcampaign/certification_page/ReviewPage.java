@@ -1,5 +1,6 @@
 package com.example.environmentalcampaign.certification_page;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,14 +10,19 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.cp_info.ReviewItem;
+import com.example.environmentalcampaign.mypage.PointItem;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -73,13 +79,24 @@ public class ReviewPage extends AppCompatActivity {
 
                 database = FirebaseDatabase.getInstance();
                 databaseReference = database.getReference("environmentalCampaign").child("Campaign").child(campaignCode).child("reviews");
-                databaseReference.child(getTime).setValue(reviewItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                databaseReference.child(getTime).setValue(reviewItem);
+                database.getReference("environmentalCampaign").child("Point").child(uid).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        database.getReference("environmentalCampaign").child("MyCampaign").child(uid).child(campaignCode).child("reviewComplete").setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    public void onSuccess(DataSnapshot dataSnapshot) {
+                        PointItem pointItem = dataSnapshot.getValue(PointItem.class);
+                        int currentPoint = pointItem.getPoint();
+                        pointItem.setPoint(currentPoint+100); // 리뷰 작성 시 100p 적립
+                        database.getReference("environmentalCampaign").child("Point").child(uid).setValue(pointItem).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                finish();
+                                Toast.makeText(getApplicationContext(), "100p가 적립되었습니다.", Toast.LENGTH_SHORT).show();
+
+                                database.getReference("environmentalCampaign").child("MyCampaign").child(uid).child(campaignCode).child("reviewComplete").setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        finish();
+                                    }
+                                });
                             }
                         });
                     }

@@ -11,8 +11,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.environmentalcampaign.MyAdapter;
 import com.example.environmentalcampaign.R;
@@ -21,7 +23,9 @@ import com.example.environmentalcampaign.feed.FeedPage;
 import com.example.environmentalcampaign.home.HomeActivity;
 import com.example.environmentalcampaign.mypage.CompleteCampaignItem;
 import com.example.environmentalcampaign.mypage.MyPage;
+import com.example.environmentalcampaign.mypage.PointItem;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,7 +41,7 @@ import java.util.Date;
 
 public class CertificationPage extends AppCompatActivity {
 
-    TextView tv_home, tv_make, tv_certi, tv_feed, tv_mypage;
+    LinearLayout lo_home, lo_make, lo_certi, lo_feed, lo_mypage;
 
     private BaseAdapter adapter1, adapter2;
     private ArrayList<MyCampaignItem> arrayList1, arrayList2;
@@ -82,11 +86,11 @@ public class CertificationPage extends AppCompatActivity {
                     String today = simpleDate.format(mDate);
 
                     // 종료날짜 전이라면
-                    if(today.compareTo(myCampaignItem.getEndDate()) <= 0) {
+                    if((today.compareTo(myCampaignItem.getEndDate()) <= 0)&&(myCampaignItem.getCertiCompleteCount()<=myCampaignItem.getCertiCount())) {
                         // 오늘 인증 했으면 arrayList2에 저장
                         if(myCampaignItem.isComplete()) { arrayList2.add(myCampaignItem); }
                         else { arrayList1.add(myCampaignItem); }
-                    } else {
+                    } else if(today.compareTo(myCampaignItem.getEndDate()) > 0) {
                         // 캠페인이 종료되고 리뷰를 작성하지 않았으면
                         if(!myCampaignItem.isReviewComplete()) { reviewDialog(myCampaignItem.getCampaignCode(), myCampaignItem.getTitle()); }
                         database.getReference("environmentalCampaign").child("CompleteCampaign").addValueEventListener(new ValueEventListener() {
@@ -98,20 +102,67 @@ public class CertificationPage extends AppCompatActivity {
                                 // 캠페인이 이미 완료캠페인에 존재할 경우
                                 if(snapshot1.hasChild(uid)&&snapshot1.child(uid).hasChild(campaignCode)) {
                                     CompleteCampaignItem completeCampaignItem = snapshot1.child(uid).child(campaignCode).getValue(CompleteCampaignItem.class);
+                                    // 완료캠페인에 갱신되지 않았을 경우
                                     if(completeCampaignItem.getReCount() != myCampaignItem.getReCount()) {
                                         double avgRate = completeCampaignItem.getAchievementAvg();
                                         int c = completeCampaignItem.getReCount();
                                         completeCampaignItem.setAchievementAvg(Double.parseDouble(String.format("%.1f", (avgRate*c+avg)/(c+1))));
                                         completeCampaignItem.setReCount(myCampaignItem.getReCount());
                                         database.getReference("environmentalCampaign").child("CompleteCampaign").child(uid).child(campaignCode).setValue(completeCampaignItem);
+
+                                        database.getReference("environmentalCampaign").child("Point").child(uid).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DataSnapshot dataSnapshot) {
+                                                PointItem pointItem = dataSnapshot.getValue(PointItem.class);
+                                                int currentPoint = pointItem.getPoint();
+                                                currentPoint += totalPoint(myCampaignItem);
+                                                pointItem.setPoint(currentPoint);
+                                                database.getReference("environmentalCampaign").child("Point").child(uid).setValue(pointItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Toast.makeText(getApplicationContext(), totalPoint(myCampaignItem)+"p가 적립되었습니다.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        });
                                     }
                                 }
+                                // 해당 캠페인을 처음 완료했을 경우
                                 else {
                                     CompleteCampaignItem completeCampaignItem = new CompleteCampaignItem();
                                     completeCampaignItem.setCampaignCode(campaignCode);
                                     completeCampaignItem.setAchievementAvg(avg);
                                     completeCampaignItem.setReCount(myCampaignItem.getReCount());
                                     database.getReference("environmentalCampaign").child("CompleteCampaign").child(uid).child(campaignCode).setValue(completeCampaignItem);
+
+                                    // 캠페인 완료가 처음일 경우
+                                    if(!snapshot1.hasChild(uid)) {
+                                        PointItem pointItem = new PointItem();
+                                        pointItem.setUid(uid);
+                                        pointItem.setPoint(totalPoint(myCampaignItem));
+                                        database.getReference("environmentalCampaign").child("Point").child(uid).setValue(pointItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(getApplicationContext(), totalPoint(myCampaignItem)+"p가 적립되었습니다.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    } else {
+                                        database.getReference("environmentalCampaign").child("Point").child(uid).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DataSnapshot dataSnapshot) {
+                                                PointItem pointItem = dataSnapshot.getValue(PointItem.class);
+                                                int currentPoint = pointItem.getPoint();
+                                                currentPoint += totalPoint(myCampaignItem);
+                                                pointItem.setPoint(currentPoint);
+                                                database.getReference("environmentalCampaign").child("Point").child(uid).setValue(pointItem).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Toast.makeText(getApplicationContext(), totalPoint(myCampaignItem)+"p가 적립되었습니다.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
                                 }
                             }
 
@@ -145,17 +196,17 @@ public class CertificationPage extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), CertificationCampaign.class);
 
                 MyCampaignItem item = (MyCampaignItem) adapter1.getItem(i);
-                TextView tv_rate = view.findViewById(R.id.tv_achievement_rate);
-                String s = tv_rate.getText().toString();
-                int rate = Integer.parseInt(s.substring(7, s.length()-1));
-                TextView tv_cp_name = view.findViewById(R.id.tv_cp_name);
-                String title = tv_cp_name.getText().toString();
+//                TextView tv_rate = view.findViewById(R.id.tv_achievement_rate);
+//                String s = tv_rate.getText().toString();
+//                int rate = Integer.parseInt(s.substring(7, s.length()-1));
+//                TextView tv_cp_name = view.findViewById(R.id.tv_cp_name);
+//                String title = tv_cp_name.getText().toString();
 
                 intent.putExtra("campaignCode", item.getCampaignCode());
-                intent.putExtra("title", title);
+                intent.putExtra("title", item.getTitle());
                 intent.putExtra("Dday", countdday(Integer.parseInt(item.getEndDate())) + "일 뒤 종료");
                 intent.putExtra("certiCount", item.getCertiCount());
-                intent.putExtra("certiRate", rate);
+                intent.putExtra("certiRate", item.getCertiCompleteCount()*100/item.getCertiCount());
 
                 startActivity(intent);
             }
@@ -163,8 +214,8 @@ public class CertificationPage extends AppCompatActivity {
 
         // 하단 메뉴바 페이지 연동
 
-        tv_home = (TextView)findViewById(R.id.tv_home);
-        tv_home.setOnClickListener(new View.OnClickListener() {
+        lo_home = (LinearLayout)findViewById(R.id.lo_home);
+        lo_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
@@ -172,8 +223,8 @@ public class CertificationPage extends AppCompatActivity {
             }
         });
 
-        tv_make = (TextView)findViewById(R.id.tv_make);
-        tv_make.setOnClickListener(new View.OnClickListener() {
+        lo_make = (LinearLayout)findViewById(R.id.lo_make);
+        lo_make.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), SetUpCampaignPage.class);
@@ -181,8 +232,8 @@ public class CertificationPage extends AppCompatActivity {
             }
         });
 
-        tv_certi = (TextView)findViewById(R.id.tv_certi);
-        tv_certi.setOnClickListener(new View.OnClickListener() {
+        lo_certi = (LinearLayout)findViewById(R.id.lo_certi);
+        lo_certi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CertificationPage.class);
@@ -190,8 +241,8 @@ public class CertificationPage extends AppCompatActivity {
             }
         });
 
-        tv_feed = (TextView)findViewById(R.id.tv_feed);
-        tv_feed.setOnClickListener(new View.OnClickListener() {
+        lo_feed = (LinearLayout)findViewById(R.id.lo_feed);
+        lo_feed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), FeedPage.class);
@@ -199,8 +250,8 @@ public class CertificationPage extends AppCompatActivity {
             }
         });
 
-        tv_mypage = (TextView)findViewById(R.id.tv_mypage);
-        tv_mypage.setOnClickListener(new View.OnClickListener() {
+        lo_mypage = (LinearLayout) findViewById(R.id.lo_mypage);
+        lo_mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MyPage.class);
@@ -240,7 +291,6 @@ public class CertificationPage extends AppCompatActivity {
     }
 
     void reviewDialog(String campaignCode, String title) {
-
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(CertificationPage.this)
                 .setTitle("리뷰 작성하기")
                 .setMessage(title + "의 기간이 종료되었습니다.\n캠페인 참여는 어떠셨나요?\n참여한 캠페인에 대한 리뷰를 남겨주세요!")
@@ -260,5 +310,14 @@ public class CertificationPage extends AppCompatActivity {
                 });
         AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
+    }
+
+    int totalPoint(MyCampaignItem myCampaignItem) {
+        int point = 0;
+        // 총 인증률이 80%가 넘어야 포인트 적립
+        if(myCampaignItem.getCertiCompleteCount()*100/myCampaignItem.getCertiCount() >= 80) {
+            point = myCampaignItem.getCertiCompleteCount() * 50; // 인증횟수마다 50p씩 적립
+        }
+        return point;
     }
 }

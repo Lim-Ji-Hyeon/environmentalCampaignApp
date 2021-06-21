@@ -45,8 +45,8 @@ import java.util.Date;
 public class MyPage extends AppCompatActivity {
 
     LinearLayout lo_point, lo_cp_ing, lo_cp_complete, lo_cp_make;
-    TextView tv_ing, tv_complete, tv_mycp;
-    TextView tv_home, tv_make, tv_certi, tv_feed, tv_mypage;
+    TextView tv_ing, tv_complete, tv_mycp, tv_point;
+    LinearLayout lo_home, lo_make, lo_certi, lo_feed, lo_mypage;
     Button btn_logout;
 
     ImageView iv_profile;
@@ -182,6 +182,29 @@ public class MyPage extends AppCompatActivity {
             }
         });
 
+        // 포인트 불러오기
+        tv_point = (TextView)findViewById(R.id.tv_point);
+        database.getReference("environmentalCampaign").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.hasChild("Point")&&snapshot.child("Point").hasChild(uid)) {
+                    PointItem pointItem = snapshot.child("Point").child(uid).getValue(PointItem.class);
+                    tv_point.setText(pointItem.getPoint() + "p");
+                } else {
+                    PointItem pointItem = new PointItem();
+                    pointItem.setUid(uid);
+                    pointItem.setPoint(0);
+                    database.getReference("environmentalCampaign").child("Point").child(uid).setValue(pointItem);
+                    tv_point.setText(thousandsComma(pointItem.getPoint()) + "p");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         // 보유 포인트를 눌렀을 때 포인트 마켓으로 이동한다.
         lo_point = (LinearLayout)findViewById(R.id.lo_point);
         lo_point.setOnClickListener(new View.OnClickListener() {
@@ -212,8 +235,8 @@ public class MyPage extends AppCompatActivity {
 
         // 하단 메뉴바 페이지 연동
 
-        tv_home = (TextView)findViewById(R.id.tv_home);
-        tv_home.setOnClickListener(new View.OnClickListener() {
+        lo_home = (LinearLayout)findViewById(R.id.lo_home);
+        lo_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
@@ -221,8 +244,8 @@ public class MyPage extends AppCompatActivity {
             }
         });
 
-        tv_make = (TextView)findViewById(R.id.tv_make);
-        tv_make.setOnClickListener(new View.OnClickListener() {
+        lo_make = (LinearLayout)findViewById(R.id.lo_make);
+        lo_make.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), SetUpCampaignPage.class);
@@ -230,8 +253,8 @@ public class MyPage extends AppCompatActivity {
             }
         });
 
-        tv_certi = (TextView)findViewById(R.id.tv_certi);
-        tv_certi.setOnClickListener(new View.OnClickListener() {
+        lo_certi = (LinearLayout)findViewById(R.id.lo_certi);
+        lo_certi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CertificationPage.class);
@@ -239,8 +262,8 @@ public class MyPage extends AppCompatActivity {
             }
         });
 
-        tv_feed = (TextView)findViewById(R.id.tv_feed);
-        tv_feed.setOnClickListener(new View.OnClickListener() {
+        lo_feed = (LinearLayout)findViewById(R.id.lo_feed);
+        lo_feed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), FeedPage.class);
@@ -248,13 +271,27 @@ public class MyPage extends AppCompatActivity {
             }
         });
 
-        tv_mypage = (TextView)findViewById(R.id.tv_mypage);
-        tv_mypage.setOnClickListener(new View.OnClickListener() {
+        lo_mypage = (LinearLayout) findViewById(R.id.lo_mypage);
+        lo_mypage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MyPage.class);
                 startActivity(intent);
             }
         });
+    }
+
+    // 천 단위마다 , 붙여주는 메소드
+    public String thousandsComma(int n) {
+        String number = String.valueOf(n);
+        String cost = "";
+        int count = 0;
+        for(int i = number.length()-1; i >= 0; i--) {
+            if((count != 0) && ((count%3) == 0))
+                cost = "," + cost;
+            cost = number.charAt(i) + cost;
+            count++;
+        }
+        return cost;
     }
 }

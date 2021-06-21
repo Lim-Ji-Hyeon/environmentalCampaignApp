@@ -42,7 +42,7 @@ public class FragmentCpMakeList2 extends Fragment {
 
     ArrayList<String> campaignCodes;
     String uid;
-    double sum = 0, avg;
+    double sum, avg;
 
     public FragmentCpMakeList2() {
         // Required empty public constructor
@@ -95,6 +95,7 @@ public class FragmentCpMakeList2 extends Fragment {
                                 }
                             }
                             tv_cp_number.setText(arrayList.size() + "개");
+                            sum = 0;
                             for(int i = 0; i < arrayList.size(); i++) {
                                 double rate = arrayList.get(i).getAchievementAvg();
                                 sum += (double)rate;

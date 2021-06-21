@@ -32,16 +32,28 @@
             android:gravity="center"
             android:text="캠페인 인증" />
 
-        <TextView
-            android:id="@+id/tv_certi_status"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="인증 현황" />
+<!--        <TextView-->
+<!--            android:id="@+id/tv_certi_status"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:clickable="true"-->
+<!--            android:gravity="center"-->
+<!--            android:text="인증 현황" />-->
 
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="10dp"
+        android:text="인증"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/lv_certi_cp"
@@ -50,6 +62,11 @@
         android:layout_weight="1">
 
     </ListView>
+
+    <TextView
+        android:background="@drawable/edge"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -78,55 +95,124 @@
         android:background="@drawable/edge"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_home"
+        <LinearLayout
+            android:id="@+id/lo_home"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_weight="1"
-            android:height="50dp"
-            android:clickable="true"
             android:gravity="center"
-            android:text="홈" />
+            android:padding="5dp"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_make"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:height="50dp"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="개설" />
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/menu_line_home"/>
 
-        <TextView
-            android:id="@+id/tv_certi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:height="50dp"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="인증" />
+            <TextView
+                android:id="@+id/tv_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="홈" />
 
-        <TextView
-            android:id="@+id/tv_feed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:height="50dp"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="피드" />
 
-        <TextView
-            android:id="@+id/tv_mypage"
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lo_make"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_weight="1"
-            android:height="50dp"
-            android:clickable="true"
             android:gravity="center"
-            android:text="마이페이지" />
+            android:padding="5dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/menu_line_write"/>
+
+            <TextView
+                android:id="@+id/tv_make"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="개설" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lo_certi"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="5dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/menu_certi"/>
+
+            <TextView
+                android:id="@+id/tv_certi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="인증" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lo_feed"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="5dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/menu_line_feed"/>
+
+            <TextView
+                android:id="@+id/tv_feed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="피드" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lo_mypage"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:padding="5dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/menu_line_mypage"/>
+
+            <TextView
+                android:id="@+id/tv_mypage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:text="마이페이지" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

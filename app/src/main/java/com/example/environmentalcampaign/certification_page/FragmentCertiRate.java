@@ -73,7 +73,7 @@ public class FragmentCertiRate extends Fragment {
             campaignCode = bundle.getString("campaignCode");
         }
 
-        maxRate = 80; // 나중에 구현해야 함.
+        maxRate = 100; // 나중에 구현해야 함.
         tv_rateInfo.setText(String.valueOf(maxRate));
         tv_currentRate.setText(rate + "%");
 

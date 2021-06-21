@@ -57,13 +57,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="100% 달성시 포인트를 획득할 수 있어요."/>
+                    android:text="80% 달성시 포인트를 획득할 수 있어요."/>
 
                 <ProgressBar
                     android:id="@+id/progressBar"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:progress="40"
-                    android:progressTint="#FF2B56"
+                    android:progressTint="#67D4BF"
                     android:secondaryProgress="100"
                     android:secondaryProgressTint="#AAAAAA"
                     android:layout_width="match_parent"
@@ -88,8 +88,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
-                            android:background="@drawable/edge_pink"
-                            android:textColor="#FF2B56"
+                            android:background="@drawable/edge_green"
+                            android:textColor="#67D4BF"
                             android:textStyle="bold"
                             android:text="현재"/>
 
@@ -97,7 +97,7 @@
                             android:id="@+id/tv_currentRate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="#FF2B56"
+                            android:textColor="#67D4BF"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:text="40%"/>
