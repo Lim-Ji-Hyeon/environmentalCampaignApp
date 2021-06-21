@@ -368,7 +368,9 @@ public class CampaignInformation extends FragmentActivity {
             bundle3.putString("datetime", datetime);
             fragmentReview.setArguments(bundle3);
 //        }
-        getSupportFragmentManager().beginTransaction().add(R.id.tabcontent, fragmentInfo).commit();
+        if((!fragmentInfo.isAdded())&&(tabLayout.getSelectedTabPosition() == 0)) {
+            getSupportFragmentManager().beginTransaction().add(R.id.tabcontent, fragmentInfo).commit();
+        }
     }
 
     // String을 byte[]로 변환
@@ -479,6 +481,15 @@ public class CampaignInformation extends FragmentActivity {
                                             sparticipantsN = n;
                                             tv_participantsN.setText( n + "명");
 
+                                            SearchViewItem searchViewItem = new SearchViewItem();
+                                            searchViewItem.setCampaignCode(myCampaignItem.getCampaignCode());
+                                            searchViewItem.setCampaignLogo(logo);
+                                            searchViewItem.setCampaignName(myCampaignItem.getTitle());
+                                            searchViewItem.setFrequency(campaignItem.getFrequency());
+                                            searchViewItem.setParticipantsN(sparticipantsN);
+
+                                            myCampaignRef.child("Search").child(myCampaignItem.getCampaignCode()).setValue(searchViewItem);
+
                                             // DB 갱신
                                             databaseReference.child("campaign").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                                 @Override
@@ -496,15 +507,6 @@ public class CampaignInformation extends FragmentActivity {
                                             });
                                         }
                                     });
-
-                                    SearchViewItem searchViewItem = new SearchViewItem();
-                                    searchViewItem.setCampaignCode(myCampaignItem.getCampaignCode());
-                                    searchViewItem.setCampaignLogo(logo);
-                                    searchViewItem.setCampaignName(myCampaignItem.getTitle());
-                                    searchViewItem.setFrequency(campaignItem.getFrequency());
-                                    searchViewItem.setParticipantsN(sparticipantsN);
-
-                                    myCampaignRef.child("Search").child(myCampaignItem.getCampaignCode()).setValue(searchViewItem);
 
                                 }
                             }
