@@ -1,9 +1,11 @@
 package com.example.environmentalcampaign.home;
 
+import android.os.Build;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.environmentalcampaign.R;
@@ -23,5 +25,6 @@ public class ViewHolderPage extends RecyclerView.ViewHolder {
         this.data = data;
 
         iv_cardnews.setImageDrawable(data.getImage());
+
     }
 }

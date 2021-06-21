@@ -3,6 +3,7 @@ package com.example.environmentalcampaign.home;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -60,11 +62,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ImageView image;
         TextView title;
 
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         public RecyclerViewHolder(@NonNull View itemView) {
             super(itemView);
             campaignCode = itemView.findViewById(R.id.tv_campaignCode);
             image = itemView.findViewById(R.id.card_image);
             title = itemView.findViewById(R.id.card_text);
+            image.setClipToOutline(true);
 
             // recyclerView에 있는 image를 클릭했을 때 CampaignInformation Activity로 넘어간다.
             image.setOnClickListener(new View.OnClickListener() {
@@ -78,56 +82,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             });
         }
     }
-
-//    List<String> titles;
-//    List<Integer> images;
-//    Context context;
-//    LayoutInflater inflater;
-//
-//    public RecyclerViewAdapter(Context ctx, List<String> titles, List<Integer> images){
-//        this.titles = titles;
-//        this.images = images;
-//        this.inflater = LayoutInflater.from(ctx);
-//    }
-//
-//    @NonNull
-//    @Override
-//    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        View view = inflater.inflate(R.layout.custom_grid_layout, parent, false);
-//        return new ViewHolder(view);
-//    }
-//
-//    @Override
-//    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        holder.title.setText(titles.get(position));
-//        holder.image.setImageResource(images.get(position));
-//    }
-//
-//    @Override
-//    public int getItemCount() {
-//        return titles.size();
-//    }
-//
-//    public class ViewHolder extends RecyclerView.ViewHolder {
-//
-//        TextView title;
-//        ImageView image;
-//
-//        public ViewHolder(@NonNull View itemView) {
-//            super(itemView);
-//            title = itemView.findViewById(R.id.card_text);
-//            image = itemView.findViewById(R.id.card_image);
-//
-//            // recyclerView에 있는 image를 클릭했을 때 CampaignInformation Activity로 넘어간다.
-//            image.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent intent = new Intent(view.getContext(), CampaignInformation.class);
-//                    view.getContext().startActivity(intent);
-//                }
-//            });
-//        }
-//    }
 
     // String을 byte[]로 변환
     public static byte[] binaryStringToByteArray(String s) {

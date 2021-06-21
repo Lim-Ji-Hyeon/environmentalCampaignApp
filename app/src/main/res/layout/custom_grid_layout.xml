@@ -31,12 +31,14 @@
                 android:text="캠페인 코드"/>
 
             <ImageView
+                android:scaleType="centerCrop"
                 android:id="@+id/card_image"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:src="@drawable/dolphin"
-                android:scaleType="fitCenter"
-                android:background="@drawable/edge"/>
+                android:background="@drawable/background_rounding" />
+
+<!--            android:scaleType="fitCenter"-->
 
             <TextView
                 android:id="@+id/card_text"

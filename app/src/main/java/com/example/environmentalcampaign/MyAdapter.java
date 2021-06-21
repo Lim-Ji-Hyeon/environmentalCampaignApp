@@ -3,6 +3,7 @@ package com.example.environmentalcampaign;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import com.bumptech.glide.Glide;
 import com.example.environmentalcampaign.certification_page.Certi_Info;
@@ -97,6 +99,7 @@ public class MyAdapter extends BaseAdapter {
         complete = (TextView)convertView.findViewById(R.id.tv_complete_logo);
         lo_complete_logo = (LinearLayout)convertView.findViewById(R.id.lo_complete_logo);
         if(completeLogo) { lo_complete_logo.setVisibility(View.GONE); }
+
 
         // Data set(listViewItemList)에서 position에 위치한 데이터 참조 획득
         MyCampaignItem listViewItem = sample.get(position);

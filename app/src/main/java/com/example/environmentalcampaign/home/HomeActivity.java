@@ -90,6 +90,7 @@ public class HomeActivity extends AppCompatActivity {
         layoutIndicator = findViewById(R.id.layoutIndicators);
 
         ArrayList<DataPage> list = new ArrayList<>();
+        list.add(new DataPage(ContextCompat.getDrawable(this, R.drawable.home_mainpager1)));
         list.add(new DataPage(ContextCompat.getDrawable(this, R.drawable.tumbler_campaign)));
         list.add(new DataPage(ContextCompat.getDrawable(this, R.drawable.zero_waste)));
         list.add(new DataPage(ContextCompat.getDrawable(this, R.drawable.world_eco_day)));
@@ -209,6 +210,8 @@ public class HomeActivity extends AppCompatActivity {
         realtime_date = findViewById(R.id.realtime_date);
         realtime_publisher = findViewById(R.id.realtime_publisher);
         realtimeArrayList = new ArrayList<>();
+
+        realtime_image.setClipToOutline(true);
 
         realtimeReference = database.getReference("environmentalCampaign").child("Feed");
 
