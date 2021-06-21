@@ -97,8 +97,8 @@
 
         <LinearLayout
             android:id="@+id/lo_realtime"
-            android:layout_margin="15dp"
-            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:padding="5dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -113,14 +113,9 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:text="실시간 인증글"
-                android:textColor="#ffffff"
+                android:textColor="#000000"
                 android:textSize="24sp"
-                android:textStyle="bold" />
-
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/realtime_feed"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content" />-->
+                android:textStyle="bold"/>
 
 
             <LinearLayout

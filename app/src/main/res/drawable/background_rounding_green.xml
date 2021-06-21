@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <!--배경색-->
-    <solid android:color="#67D4BF"/>
+    <solid android:color="#B8E6E1"/>
 
     <!--둥근 모서리-->
     <corners android:radius="20dp"/>
 
     <!--stroke 선으로 테두리를 그린다.-->
-    <stroke android:width="1dp" android:color="#67D4BF"/>
+    <stroke android:width="1dp" android:color="#B8E6E1"/>
 
     <!-- padding의 크기가 테두리 두께-->
     <padding android:left="1dp" android:right="1dp" android:bottom="1dp" android:top="1dp"/>

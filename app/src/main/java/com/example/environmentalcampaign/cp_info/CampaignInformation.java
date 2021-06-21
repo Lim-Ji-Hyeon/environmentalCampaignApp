@@ -56,12 +56,12 @@ public class CampaignInformation extends FragmentActivity {
     TextView tv_cp_name, tv_frequency, tv_period, tv_participantsN, tv_reCampaignN;
     TextView tv_participation;
 
-    private FirebaseDatabase database;
-    private DatabaseReference databaseReference;
+    private FirebaseDatabase database, database1;
+    private DatabaseReference databaseReference, databaseReference1;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
 
-    public CampaignItem campaignItem, campaignItem1;
+    public CampaignItem campaignItem;
     String datetime, uid;
 
     // 북마크를 위한 변수
@@ -74,6 +74,8 @@ public class CampaignInformation extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_campaign_information);
+
+        database1 = FirebaseDatabase.getInstance();
 
         fragmentInfo = new FragmentInfo();
         fragmentWay = new FragmentWay();
@@ -159,6 +161,7 @@ public class CampaignInformation extends FragmentActivity {
         tv_participantsN = (TextView)findViewById(R.id.tv_participantsN);
         tv_reCampaignN = (TextView)findViewById(R.id.tv_reCampaignN);
 
+
         // 참가중인 캠페인인지 확인
         database.getReference("environmentalCampaign").addValueEventListener(new ValueEventListener() {
             @Override
@@ -217,19 +220,20 @@ public class CampaignInformation extends FragmentActivity {
 
         // 북마크 표시하기
         bookmark = findViewById(R.id.iv_bookmark);
+        databaseReference1 = database1.getReference("environmentalCampaign").child("Campaign").child(datetime);
 
         bookmark.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 if (bookmarkButtonPush == true){
                     bookmark.setImageResource(R.drawable.bookmark);
-                    onBookmarkClicked(databaseReference.child("campaign"));
+                    onBookmarkClicked(databaseReference1.child("campaign"));
 
-                    FirebaseDatabase.getInstance().getReference("environmentalCampaign").child("BookMark").child(uid).child(datetime).removeValue();
+                    database1.getReference("environmentalCampaign").child("BookMark").child(uid).child(datetime).removeValue();
 
                 }else{
                     bookmark.setImageResource(R.drawable.bookmark_check);
-                    onBookmarkClicked(databaseReference.child("campaign"));
+                    onBookmarkClicked(databaseReference1.child("campaign"));
 
                     RecyclerViewItem brecyclerviewItem = new RecyclerViewItem();
                     brecyclerviewItem.setTitle(title);
@@ -237,7 +241,7 @@ public class CampaignInformation extends FragmentActivity {
                     brecyclerviewItem.setReCampaignN(reCampaignN);
                     brecyclerviewItem.setCampaignCode(datetime);
 
-                    FirebaseDatabase.getInstance().getReference("environmentalCampaign").child("BookMark").child(uid).child(datetime).setValue(brecyclerviewItem);
+                    database1.getReference("environmentalCampaign").child("BookMark").child(uid).child(datetime).setValue(brecyclerviewItem);
                 }
             }
         });
@@ -638,7 +642,7 @@ public class CampaignInformation extends FragmentActivity {
         postRef.runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
-                campaignItem1 = mutableData.getValue(CampaignItem.class);
+                CampaignItem campaignItem1 = mutableData.getValue(CampaignItem.class);
                 if (campaignItem1 == null) {
                     return Transaction.success(mutableData);
                 }
