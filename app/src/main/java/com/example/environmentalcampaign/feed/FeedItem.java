@@ -14,6 +14,8 @@ public class FeedItem {
     private int heartN; //좋아요 개수
     private String uid; //사용자 아이디
     public Map<String, Boolean> heartTotalN = new HashMap<>();
+    private int warningN;
+    public Map<String, Boolean> warningTotalN = new HashMap<>();
 
     public FeedItem(){}
 
@@ -41,6 +43,10 @@ public class FeedItem {
 
     public void setHeartN(int heartN) { this.heartN = heartN; }
 
+    public int getWarningN() { return warningN; }
+
+    public void setWarningN(int warningN) { this.warningN = warningN; }
+
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
@@ -49,6 +55,8 @@ public class FeedItem {
         result.put("contents", contents);
         result.put("heartN", heartN);
         result.put("heartTotalN", heartTotalN);
+        result.put("warningN", warningN);
+        result.put("warningTotalN", warningTotalN);
         return result;
     }
 }

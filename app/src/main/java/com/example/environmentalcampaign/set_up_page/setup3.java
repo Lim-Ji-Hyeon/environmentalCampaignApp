@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -28,6 +27,7 @@ import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.cp_info.CampaignInformation;
 import com.example.environmentalcampaign.cp_info.CampaignItem;
 import com.example.environmentalcampaign.home.RecyclerViewItem;
+import com.example.environmentalcampaign.search_page.SearchViewItem;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -58,7 +58,7 @@ public class setup3 extends AppCompatActivity {
     private final int GALLERY_CODE4 = 444;
 
     private FirebaseDatabase database;
-    private DatabaseReference temporaryRef, databaseReference;
+    private DatabaseReference temporaryRef, databaseReference, searchDatabaseRef;
     FirebaseStorage storage;
     String uid, datetime;
 
@@ -257,6 +257,15 @@ public class setup3 extends AppCompatActivity {
 
                 SetUpCampaignItem setUpCampaignItem = new SetUpCampaignItem();
                 setUpCampaignItem.setCampaignCode(datetime);
+
+                SearchViewItem searchViewItem = new SearchViewItem();
+                searchViewItem.setParticipantsN(campaignItem.getParticipantsN());
+                searchViewItem.setFrequency(campaignItem.getFrequency());
+                searchViewItem.setCampaignName(campaignItem.getTitle());
+                searchViewItem.setCampaignLogo(campaignItem.getLogo());
+                searchViewItem.setCampaignCode(datetime);
+                database.getReference("environmentalCampaign").child("Search").child(datetime).setValue(searchViewItem);
+
 
                 // 데이터베이스에 삽입
                 databaseReference = database.getReference("environmentalCampaign");

@@ -6,6 +6,8 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder>{
 
     private ArrayList<RecyclerViewItem> recyclerViewItems;
     private Context context;
@@ -45,12 +47,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .load(recyclerViewItems.get(position).getImage())
                 .into(holder.image);
         holder.campaignCode.setText(recyclerViewItems.get(position).getCampaignCode());
-        //holder.image.setImageDrawable(byteArrayToDrawable(binaryStringToByteArray(recyclerViewItems.get(position).getImage())));
         holder.title.setText(recyclerViewItems.get(position).getTitle());
     }
 
     @Override
     public int getItemCount() { return (recyclerViewItems != null ? recyclerViewItems.size() : 0); }
+
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 

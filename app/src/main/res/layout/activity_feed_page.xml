@@ -17,32 +17,6 @@
         android:text="광                    고"
         android:textSize="24sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="15dp">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="#33AAAAAA"
-            android:padding="10dp"
-            app:srcCompat="@drawable/search" />
-
-        <EditText
-            android:id="@+id/et_search"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:background="#33AAAAAA"
-            android:ems="10"
-            android:hint="원하는 캠페인만 검색해보세요!"
-            android:inputType="textPersonName"
-            android:textSize="14sp" />
-
-    </LinearLayout>
-
 
     <ScrollView
         android:layout_width="match_parent"

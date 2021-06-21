@@ -100,6 +100,7 @@ public class Second_Certification_Page extends AppCompatActivity {
     Button gallery_btn;
 
     private int heartN=0;
+    private int warningN = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -214,6 +215,7 @@ public class Second_Certification_Page extends AppCompatActivity {
                 feedItem.setDate(getTime);
                 feedItem.setContents(contents);
                 feedItem.setHeartN(heartN);
+                feedItem.setWarningN(warningN);
 
                 FeedCommentItem feedCommentItem = new FeedCommentItem();
                 feedCommentItem.setUid(publisher);
@@ -227,6 +229,7 @@ public class Second_Certification_Page extends AppCompatActivity {
                 mDatabaseRef.child("Certification").child(publisher).child(campaignCode).child(getTime).setValue(certi_info);
                 mDatabaseRef.child("Feed").child(getTime).setValue(feedItem);
                 mDatabaseRef.child("Campaign").child(campaignCode).child("certifications").child(getTime).setValue(feedItem);
+
                 // 인증횟수 +1
                 mDatabaseRef.child("MyCampaign").child(publisher).child(campaignCode).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

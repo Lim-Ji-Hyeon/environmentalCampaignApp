@@ -31,13 +31,6 @@
             android:background="@android:color/transparent"
             app:srcCompat="@drawable/sharp_navigate_before_black_18dp" />
 
-<!--        <SearchView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1"-->
-<!--            app:queryHint="캠페인 검색">-->
-
-<!--        </SearchView>-->
 
         <ImageView
             android:layout_width="40dp"
@@ -66,16 +59,16 @@
         android:layout_weight="5"
         android:background="@drawable/edge">
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical">-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/searchCampaign"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-<!--        </LinearLayout>-->
+        </LinearLayout>
     </ScrollView>
 
 

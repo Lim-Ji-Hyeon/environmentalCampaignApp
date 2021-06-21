@@ -64,7 +64,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 FeedItem feedItem = snapshot.getValue(FeedItem.class);
-                if(feeditems.get(position).getHeartN() != feedItem.getHeartN()) {
+                if(feeditems.get(position).getHeartN() != feedItem.getHeartN() || feeditems.get(position).getWarningN() != feedItem.getWarningN()) {
                     feeditems.set(position, feedItem);
                 }
             }

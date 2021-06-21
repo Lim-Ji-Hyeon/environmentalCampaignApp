@@ -37,6 +37,7 @@ public class FeedPage extends AppCompatActivity {
     private RecyclerView feedRecyclerView;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
