@@ -25,6 +25,5 @@ public class ViewHolderPage extends RecyclerView.ViewHolder {
         this.data = data;
 
         iv_cardnews.setImageDrawable(data.getImage());
-
     }
 }
