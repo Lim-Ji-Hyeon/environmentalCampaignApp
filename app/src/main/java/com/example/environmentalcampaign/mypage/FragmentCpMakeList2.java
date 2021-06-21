@@ -1,6 +1,7 @@
 package com.example.environmentalcampaign.mypage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,12 +11,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.environmentalcampaign.MyCompleteAdapter;
 import com.example.environmentalcampaign.R;
+import com.example.environmentalcampaign.cp_info.CampaignInformation;
 import com.example.environmentalcampaign.cp_info.MyCampaignItem;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignItem;
 import com.google.firebase.auth.FirebaseAuth;
@@ -121,6 +124,19 @@ public class FragmentCpMakeList2 extends Fragment {
 
         adapter = new MyCompleteAdapter(arrayList, getContext());
         listView.setAdapter(adapter);
+
+        // 리스트뷰를 클릭하면 캠페인 정보 페이지로 넘어간다.
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // campaign information으로 넘어간다.
+                Intent intent = new Intent(getContext(), CampaignInformation.class);
+                CompleteCampaignItem item = (CompleteCampaignItem)adapter.getItem(i);
+                intent.putExtra("campaignCode", item.getCampaignCode());
+                intent.putExtra("signal", "mypage");
+                startActivity(intent);
+            }
+        });
         return rootView;
     }
 }

@@ -435,17 +435,12 @@ public class CampaignInformation extends FragmentActivity {
                                             reCampaignAvg();
 
                                             // DB 갱신
-                                            databaseReference.child("participants").child(uid).addValueEventListener(new ValueEventListener() {
+                                            databaseReference.child("participants").child(uid).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                                 @Override
-                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    ParticipantItem participantItem = snapshot.getValue(ParticipantItem.class);
+                                                public void onSuccess(DataSnapshot dataSnapshot) {
+                                                    ParticipantItem participantItem = dataSnapshot.getValue(ParticipantItem.class);
                                                     participantItem.setReCount(reCount + 1);
                                                     databaseReference.child("participants").child(uid).setValue(participantItem);
-                                                }
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError error) {
-                                                    // DB를 가져오던 중 에러 발생 시
-                                                    Log.e("ParticipantsRefresh", String.valueOf(error.toException())); //에러문 출력
                                                 }
                                             });
                                         }
@@ -485,10 +480,10 @@ public class CampaignInformation extends FragmentActivity {
                                             tv_participantsN.setText( n + "명");
 
                                             // DB 갱신
-                                            databaseReference.child("campaign").addValueEventListener(new ValueEventListener() {
+                                            databaseReference.child("campaign").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                                 @Override
-                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                    campaignItem = snapshot.getValue(CampaignItem.class);
+                                                public void onSuccess(DataSnapshot dataSnapshot) {
+                                                    campaignItem = dataSnapshot.getValue(CampaignItem.class);
                                                     campaignItem.setParticipantsN(n);
                                                     databaseReference.child("campaign").setValue(campaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
@@ -497,11 +492,6 @@ public class CampaignInformation extends FragmentActivity {
                                                             reCampaignAvg();
                                                         }
                                                     });
-                                                }
-                                                @Override
-                                                public void onCancelled(@NonNull DatabaseError error) {
-                                                    // DB를 가져오던 중 에러 발생 시
-                                                    Log.e("CampaignItemRefresh", String.valueOf(error.toException())); //에러문 출력
                                                 }
                                             });
                                         }
