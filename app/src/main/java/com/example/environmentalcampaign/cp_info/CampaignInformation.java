@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.example.environmentalcampaign.R;
 import com.example.environmentalcampaign.feed.FeedItem;
 import com.example.environmentalcampaign.home.RecyclerViewItem;
+import com.example.environmentalcampaign.search_page.SearchViewItem;
 import com.example.environmentalcampaign.set_up_page.SetUpCampaignPage;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.tabs.TabLayout;
@@ -69,6 +70,8 @@ public class CampaignInformation extends FragmentActivity {
     int bookmarkN;
     String logo, title;
     double reCampaignN;
+
+    int sparticipantsN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -467,6 +470,9 @@ public class CampaignInformation extends FragmentActivity {
                                     myCampaignItem.setComplete(false);
                                     myCampaignItem.setReviewComplete(false);
                                     myCampaignItem.setCertiCompleteCount(0);
+
+
+
                                     myCampaignRef.child("MyCampaign").child(uid).child(datetime).setValue(myCampaignItem).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
@@ -475,6 +481,7 @@ public class CampaignInformation extends FragmentActivity {
                                             // 참가 인원 수정하기
                                             String s = tv_participantsN.getText().toString();
                                             int n = Integer.parseInt(s.substring(0, s.length()-1)) + 1;
+                                            sparticipantsN = n;
                                             tv_participantsN.setText( n + "명");
 
                                             // DB 갱신
@@ -499,6 +506,16 @@ public class CampaignInformation extends FragmentActivity {
                                             });
                                         }
                                     });
+
+                                    SearchViewItem searchViewItem = new SearchViewItem();
+                                    searchViewItem.setCampaignCode(myCampaignItem.getCampaignCode());
+                                    searchViewItem.setCampaignLogo(logo);
+                                    searchViewItem.setCampaignName(myCampaignItem.getTitle());
+                                    searchViewItem.setFrequency(campaignItem.getFrequency());
+                                    searchViewItem.setParticipantsN(sparticipantsN);
+
+                                    myCampaignRef.child("Search").child(myCampaignItem.getCampaignCode()).setValue(searchViewItem);
+
                                 }
                             }
                             @Override
